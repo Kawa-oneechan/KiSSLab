@@ -43,6 +43,8 @@ namespace KiSSLab
 		public static bool Hilight;
 		public Cell HilightedCell;
 
+		private string[] lastOpened;
+
 		//[System.Runtime.InteropServices.DllImport("Shell32.dll")]
 		//private static extern int SHChangeNotify(int eventId, int flags, IntPtr item1, IntPtr item2);
 
@@ -90,6 +92,7 @@ namespace KiSSLab
 			var file = new ToolStripMenuItem("&File");
 			file.DropDownItems.AddRange(new ToolStripItem[] {
 				new ToolStripMenuItem("&Open", global::KiSSLab.Properties.Resources.Open, Open_Click, Keys.Control | Keys.O),
+				new ToolStripMenuItem("&Reopen", global::KiSSLab.Properties.Resources.Open, (s, e) => { OpenDoll(lastOpened[0], lastOpened[1]); }, Keys.Control | Keys.R),
 				new ToolStripSeparator(),
 				new ToolStripMenuItem("E&xit", global::KiSSLab.Properties.Resources.Exit, (s, e) => { this.Close(); }, Keys.Alt | Keys.F4),
 
@@ -626,6 +629,8 @@ namespace KiSSLab
 				Scene.RunEvent(Scene.Events["initialize"]);
 				DrawScene();
 			}
+
+			lastOpened = new[] { source, configFile };
 		}
 	}
 

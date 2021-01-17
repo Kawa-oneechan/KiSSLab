@@ -329,6 +329,11 @@ namespace KiSSLab
 
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
+			if (e.Button == MouseButtons.Right)
+			{
+				eX = (eX / 8) * 8;
+				eY = (eY / 8) * 8;
+			}
 			var eLocation = new Point(eX, eY);
 			
 			var cell = default(Cell);
@@ -355,6 +360,11 @@ namespace KiSSLab
 
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
+			if (e.Button == MouseButtons.Right)
+			{
+				eX = (eX / 8) * 8;
+				eY = (eY / 8) * 8;
+			}
 			var eLocation = new Point(eX, eY);
 
 			if (held != null)

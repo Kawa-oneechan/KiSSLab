@@ -1,0 +1,9 @@
+bin/
+lettie/
+obj/
+sauce/
+*.cachefile
+*.suo
+*.user
+*.zip
+desktop.ini

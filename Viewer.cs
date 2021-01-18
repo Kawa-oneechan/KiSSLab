@@ -210,6 +210,21 @@ namespace KiSSLab
 					Checked = (i == Zoom),
 				});
 			}
+			tools.Items.AddRange(new ToolStripItem[] {
+				new ToolStripSeparator(),
+				new ToolStripButton("Show editor", global::KiSSLab.Properties.Resources.Properties, (s, e) =>
+				{
+					var me = (ToolStripButton)s;
+					me.Checked = !me.Checked;
+					editor.Visible = me.Checked;
+					Viewer_Resize(null, null);
+					Config.Editor = me.Checked ? 1 : 0;
+				})
+				{
+					DisplayStyle = ToolStripItemDisplayStyle.Image,
+					Checked = Config.Editor == 1,
+				},
+			});
 			tools.GripStyle = ToolStripGripStyle.Hidden;
 			tools.Padding = new Padding(8, 0, 8, 0);
 			//((ToolStripButton)tools.Items.Find("×" + Zoom.ToString(), false)[0]).Checked = true;
@@ -238,7 +253,7 @@ namespace KiSSLab
 			{
 				Dock = DockStyle.Right,
 				Width = 320,
-				Visible = true,
+				Visible = Config.Editor == 1,
 			};
 			screenContainer = new Panel()
 			{

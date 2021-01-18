@@ -24,6 +24,8 @@ namespace Kawa.Configuration
 		public static int ZoomLevel { get; set; }
 		[Setting("")]
 		public static string AutoLoad { get; set; }
+		[Setting(0)]
+		public static int Editor { get; set; }
 
 		public static string Path { get; set; }
 

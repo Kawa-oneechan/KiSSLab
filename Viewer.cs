@@ -305,10 +305,12 @@ namespace KiSSLab
 
 		void Viewer_KeyUp(object sender, KeyEventArgs e)
 		{
-			if (e.Control && (e.KeyValue >= 48 && e.KeyValue <= 57))
+			if (e.Control && (e.KeyValue >= 48 && e.KeyValue <= 48 + Scene.Sets))
 			{
+				((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
 				Set = e.KeyValue - 49;
 				if (Set == -1) Set = 9;
+				((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;
 				DrawScene();
 			}
 		}

@@ -22,7 +22,7 @@ namespace Kawa.Configuration
 		public static int WindowState { get; set; }
 		[Setting(1)]
 		public static int ZoomLevel { get; set; }
-		[Setting("lettie")]
+		[Setting("")]
 		public static string AutoLoad { get; set; }
 
 		public static string Path { get; set; }

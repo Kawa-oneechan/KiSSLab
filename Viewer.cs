@@ -78,6 +78,8 @@ namespace KiSSLab
 			this.Move += (s, e) => { if (this.WindowState != FormWindowState.Normal) return; Config.WindowLeft = this.Location.X; Config.WindowTop = this.Location.Y; };
 			this.ResizeEnd += (s, e) => { if (this.WindowState != FormWindowState.Normal) return; Config.WindowWidth = this.ClientSize.Width; Config.WindowHeight = this.ClientSize.Height; };
 			this.FormClosing += (s, e) => { Config.Save(); };
+			if (Config.ZoomLevel < 1 || Config.ZoomLevel > 3)
+				Config.ZoomLevel = 1;
 			Zoom = Config.ZoomLevel;
 			if (!string.IsNullOrWhiteSpace(Config.AutoLoad))
 				args = new string[] { Config.AutoLoad };

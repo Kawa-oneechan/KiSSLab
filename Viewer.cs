@@ -94,7 +94,7 @@ namespace KiSSLab
 			var file = new ToolStripMenuItem("&File");
 			file.DropDownItems.AddRange(new ToolStripItem[] {
 				new ToolStripMenuItem("&Open", global::KiSSLab.Properties.Resources.Open, Open_Click, Keys.Control | Keys.O),
-				new ToolStripMenuItem("&Reopen", global::KiSSLab.Properties.Resources.Open, (s, e) => { OpenDoll(lastOpened[0], lastOpened[1]); }, Keys.Control | Keys.R),
+				new ToolStripMenuItem("&Reopen", global::KiSSLab.Properties.Resources.Reset, (s, e) => { OpenDoll(lastOpened[0], lastOpened[1]); }, Keys.Control | Keys.R),
 				new ToolStripSeparator(),
 				new ToolStripMenuItem("E&xit", global::KiSSLab.Properties.Resources.Exit, (s, e) => { this.Close(); }, Keys.Alt | Keys.F4),
 
@@ -103,7 +103,7 @@ namespace KiSSLab
 			var edit = new ToolStripMenuItem("&Edit");
 			edit.DropDownItems.AddRange(new ToolStripItem[] {
 				new ToolStripMenuItem("&Copy cell", global::KiSSLab.Properties.Resources.Copy, (s, e) => { Clipboard.SetImage(HilightedCell.Image); }, Keys.Control | Keys.C),
-				new ToolStripMenuItem("&Reset position", global::KiSSLab.Properties.Resources.Copy, (s, e) => { Reset_Click(null, null); }, Keys.Control | Keys.C),
+				new ToolStripMenuItem("&Reset position", global::KiSSLab.Properties.Resources.Reset, (s, e) => { Reset_Click(null, null); }, Keys.Control | Keys.Shift | Keys.R),
 			});
 			menu.Items.Add(edit);
 			var help = new ToolStripMenuItem("&Help");
@@ -160,7 +160,7 @@ namespace KiSSLab
 			}
 			tools.Items.AddRange(new ToolStripItem[] {
 				new ToolStripSeparator(),
-				new ToolStripButton("Next palette", global::KiSSLab.Properties.Resources.CycleSets, (s, e) =>
+				new ToolStripButton("Next palette", global::KiSSLab.Properties.Resources.Colors, (s, e) =>
 				{
 					((ToolStripButton)tools.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
 					Scene.Palette++;
@@ -240,7 +240,6 @@ namespace KiSSLab
 				Width = 320,
 				Visible = true,
 			};
-			editor.UpdateColors();
 			screenContainer = new Panel()
 			{
 				AutoScroll = true,
@@ -248,17 +247,15 @@ namespace KiSSLab
 			};
 			screenContainer.Controls.Add(screen);
 			this.Controls.Add(screenContainer);
-			this.Controls.Add(editor);
 			this.Controls.Add(tools);
+			this.Controls.Add(editor);
 			this.Controls.Add(menu);
 			this.Controls.Add(status);
 			this.Resize += new EventHandler(Viewer_Resize);
 			this.KeyUp += new KeyEventHandler(Viewer_KeyUp);
 			this.KeyPreview = true;
-			//this.ClientSize = new Size(screen.Width + 16 + editor.Width, screen.Height + 8 + menu.Height + tools.Height + status.Height);
 
 			Viewer_Resize(null, null);
-
 			UpdateColors();
 
 			debug = new Panel()

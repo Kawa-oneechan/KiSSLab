@@ -32,7 +32,7 @@ namespace KiSSLab
 		private Panel screenContainer;
 		private PictureBox screen;
 		private Bitmap bitmap;
-		private Object held;
+		private Object held, dropped;
 		private Point heldOffset, fix;
 		private Panel debug;
 
@@ -130,6 +130,7 @@ namespace KiSSLab
 						((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
 						Set++;
 						if (Set == Scene.Sets) Set = 0;
+						if (dropped != null) dropped.LastCollidedWith = null;
 						DrawScene();
 						((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;
 					})
@@ -144,6 +145,7 @@ namespace KiSSLab
 					{
 						((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
 						Set = int.Parse(((ToolStripButton)s).Text);
+						if (dropped != null) dropped.LastCollidedWith = null;
 						DrawScene();
 						((ToolStripButton)s).Checked = true;
 					}, "s" + i.ToString()
@@ -433,7 +435,10 @@ namespace KiSSLab
 			Scene.Release(held);
 
 			if (held != null)
+			{
+				dropped = held;
 				held = null;
+			}
 		}
 
 		private void Screen_Paint(object sender, PaintEventArgs e)

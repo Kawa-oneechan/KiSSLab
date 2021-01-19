@@ -33,8 +33,11 @@ namespace KiSSLab
 			var TabArea = this.DisplayRectangle;
 
 			var br = new SolidBrush(DarkUI.Config.Colors.LightBlueBorder);
-			var TabControlArea = new Rectangle(this.ClientRectangle.Left, this.ClientRectangle.Top + 21, this.ClientRectangle.Width, this.ClientRectangle.Height - 21);
+			var TabControlArea = new Rectangle(this.ClientRectangle.Left, this.ClientRectangle.Top + 21, this.ClientRectangle.Width - 1, this.ClientRectangle.Height - 22);
 			g.FillRectangle(br, TabControlArea);
+			g.DrawRectangle(new Pen(DarkUI.Config.Colors.DarkBlueBorder, 1), TabControlArea);
+			TabControlArea.Inflate(-3, -3);
+			g.DrawRectangle(new Pen(DarkUI.Config.Colors.DarkBlueBorder, 1), TabControlArea);
 			TabControlArea = this.ClientRectangle;
 
 			var rsaved = g.Clip;
@@ -55,12 +58,20 @@ namespace KiSSLab
 		{
 			var recBounds = this.GetTabRect(nIndex);
 			var tabTextArea = (RectangleF)this.GetTabRect(nIndex);
-			recBounds.Inflate(0, -2);
+			recBounds.Inflate(-2, -2);
 
 			var bSelected = (this.SelectedIndex == nIndex);
 
 			var br = new SolidBrush(bSelected ? DarkUI.Config.Colors.LightBlueBorder : this.Parent.BackColor);
 			g.FillRectangle(br, recBounds);
+			if (bSelected)
+			{
+				var brd = new Pen(DarkUI.Config.Colors.DarkBlueBorder, 1);
+				g.DrawLine(brd, recBounds.Left, recBounds.Top, recBounds.Left, recBounds.Bottom);
+				g.DrawLine(brd, recBounds.Left + 1, recBounds.Top - 1, recBounds.Right - 1, recBounds.Top - 1);
+				g.DrawLine(brd, recBounds.Right, recBounds.Top, recBounds.Right, recBounds.Bottom);
+				g.DrawLine(new Pen(br, 1), recBounds.Left + 1, recBounds.Bottom, recBounds.Right - 1, recBounds.Bottom);
+			}
 			
 			if ((tabPage.ImageIndex >= 0) && (ImageList != null) && (ImageList.Images[tabPage.ImageIndex] != null))
 			{

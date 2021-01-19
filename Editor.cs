@@ -12,7 +12,7 @@ using Kawa.SExpressions;
 
 namespace KiSSLab
 {
-	public class Editor : Control
+	public partial class Editor : Control
 	{
 		private Viewer viewer;
 		private PropertyGrid cell, obj;
@@ -104,52 +104,7 @@ namespace KiSSLab
 			this.cells.Items.AddRange(scene.Cells.ToArray());
 			this.cells.SelectedIndex = 0;
 
-			this.events.Nodes.Clear();
-
-			Func<DarkTreeNode, List<object>, bool> decode = null;
-			decode = (n, e) =>
-			{
-				foreach (var cmd in e.Cast<List<object>>())
-				{
-					var newNode = new DarkTreeNode();
-					n.Nodes.Add(newNode);
-					var form = cmd[0] as Symbol;
-					if (form == "moverel")
-					{
-						newNode.Text = string.Format("(moverel \"{0}\" \"{1}\" {2} {3})", cmd[1], cmd[2], cmd[3], cmd[4]);
-					}
-					else if (form == "timer")
-					{
-						newNode.Text = string.Format("(timer {0} {1}{2})", cmd[1], (cmd[2] is List<object>) ? "⭝" : (cmd[2] is string) ? string.Format("\"{0}\"", cmd[2]) : cmd[2], (cmd.Count == 4 && cmd[3] is Symbol && cmd[3].ToString() == "repeat") ? " repeat" : "");
-						if (cmd[2] is List<object>)
-							decode(newNode, cmd[2] as List<object>);
-					}
-					else
-						newNode.Text = string.Format("(???: {0})", cmd[0]);
-				}
-				return true;
-			};
-
-			foreach (var e in scene.Events)
-			{
-				var ev = e.Key.Split('|');
-				var evNode = new DarkTreeNode();
-				if (ev[0] == "collide" || ev[0] == "in")
-					evNode.Text = string.Format("({0} \"{1}\" \"{2}\")", ev[0], ev[1], ev[2]);
-				else if (ev[0] == "alarm") //one int or string param
-				{
-					var evHash = ev[1].GetHashCode();
-					int.TryParse(ev[1].ToString(), out evHash);
-					evNode.Text = string.Format("({0} {1})", ev[0], Viewer.Scene.HashCodes[evHash]);
-				}
-				else if (ev[0] == "initialize") //no param
-					evNode.Text = string.Format("({0})", ev[0]);
-				else
-					evNode.Text = string.Format("(???: {0})", ev[0]);
-				evNode.Tag = e.Value;
-				decode(evNode, e.Value);
-				this.events.Nodes.Add(evNode);
-			}
+			Decode(scene);
 		}
 
 		public void Pick(Object obj, Cell cell)

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using DarkUI.Controls;
 using Kawa.SExpressions;
 
 namespace KiSSLab
@@ -74,6 +75,28 @@ namespace KiSSLab
 					if (moveRelWhat == null || moveRelTo == null)
 						continue;
 					moveRelWhat.Position = new Point(moveRelTo.Position.X + moveRelByX, moveRelTo.Position.Y + moveRelByY);
+				}
+				else if (form == "unmap" || form == "map" || form == "altmap")
+				{
+					object mapThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
+					if (mapThis == null)
+						mapThis = Objects.FirstOrDefault(o => o.ID == cmd[1].ToString());
+					if (mapThis == null)
+						continue;
+					if (form == "altmap")
+					{
+						if (mapThis is Cell)
+							((Cell)mapThis).Visible = !((Cell)mapThis).Visible;
+						else if (mapThis is Object)
+							((Object)mapThis).Visible = !((Object)mapThis).Visible;
+					}
+					else
+					{
+						if (mapThis is Cell)
+							((Cell)mapThis).Visible = form == "map";
+						else if (mapThis is Object)
+							((Object)mapThis).Visible = form == "map";
+					}
 				}
 				else if (form == "timer")
 				{
@@ -162,6 +185,63 @@ namespace KiSSLab
 			if (somethingHappened)
 				Viewer.DrawScene();
 
+		}
+	}
+
+	public partial class Editor
+	{
+		public void Decode(Scene scene)
+		{
+			this.events.Nodes.Clear();
+
+			Func<DarkTreeNode, List<object>, bool> decode = null;
+			decode = (n, e) =>
+			{
+				foreach (var cmd in e.Cast<List<object>>())
+				{
+					var newNode = new DarkTreeNode();
+					n.Nodes.Add(newNode);
+					var form = cmd[0] as Symbol;
+					if (form == "moverel")
+					{
+						newNode.Text = string.Format("(moverel \"{0}\" \"{1}\" {2} {3})", cmd[1], cmd[2], cmd[3], cmd[4]);
+					}
+					else if (form == "timer")
+					{
+						newNode.Text = string.Format("(timer {0} {1}{2})", cmd[1], (cmd[2] is List<object>) ? "⭝" : (cmd[2] is string) ? string.Format("\"{0}\"", cmd[2]) : cmd[2], (cmd.Count == 4 && cmd[3] is Symbol && cmd[3].ToString() == "repeat") ? " repeat" : "");
+						if (cmd[2] is List<object>)
+							decode(newNode, cmd[2] as List<object>);
+					}
+					else if (form == "map" || form == "unmap" || form == "altmap")
+					{
+						newNode.Text = string.Format("({0} {1})", form, (cmd[1] is string) ? string.Format("\"{0}\"", cmd[1]) : cmd[1]);
+					}
+					else
+						newNode.Text = string.Format("(???: {0})", cmd[0]);
+				}
+				return true;
+			};
+
+			foreach (var e in scene.Events)
+			{
+				var ev = e.Key.Split('|');
+				var evNode = new DarkTreeNode();
+				if (ev[0] == "collide" || ev[0] == "in")
+					evNode.Text = string.Format("({0} \"{1}\" \"{2}\")", ev[0], ev[1], ev[2]);
+				else if (ev[0] == "alarm") //one int or string param
+				{
+					var evHash = ev[1].GetHashCode();
+					int.TryParse(ev[1].ToString(), out evHash);
+					evNode.Text = string.Format("({0} {1})", ev[0], Viewer.Scene.HashCodes[evHash]);
+				}
+				else if (ev[0] == "initialize") //no param
+					evNode.Text = string.Format("({0})", ev[0]);
+				else
+					evNode.Text = string.Format("(???: {0})", ev[0]);
+				evNode.Tag = e.Value;
+				decode(evNode, e.Value);
+				this.events.Nodes.Add(evNode);
+			}
 		}
 	}
 }

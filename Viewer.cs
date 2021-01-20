@@ -17,6 +17,7 @@ namespace KiSSLab
 		private Bitmap bitmap;
 		private Object held, dropped;
 		private Point heldOffset, fix;
+		private Point lastClick;
 		private Panel debug;
 
 		public static Scene Scene;
@@ -221,6 +222,7 @@ namespace KiSSLab
 				eY = (eY / 8) * 8;
 			}
 			var eLocation = new Point(eX, eY);
+			lastClick = eLocation;
 			
 			var cell = default(Cell);
 			var obj = Scene.GetObjectFromPoint(eLocation, out cell);
@@ -312,6 +314,13 @@ namespace KiSSLab
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
 			var eLocation = new Point(eX, eY);
+			if (eLocation.Equals(lastClick))
+			{
+				var cell = default(Cell);
+				var obj = Scene.GetObjectFromPoint(eLocation, out cell);
+				Scene.Click(cell);
+				Scene.Viewer.DrawScene();
+			}
 
 			if (held == null)
 				return;

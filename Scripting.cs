@@ -45,6 +45,11 @@ namespace KiSSLab
 				{
 					addEvent(string.Format("initialize"), result);
 				}
+				else if (trigForm == "click")
+				{
+					var clickOn = trigger[1] as string;
+					addEvent(string.Format("click|{0}", clickOn), result);
+				}
 				else if (trigForm == "alarm")
 				{
 					if (!(trigger[1] is int || trigger[1] is string || trigger[1] is Symbol))
@@ -146,6 +151,10 @@ namespace KiSSLab
 				if (Tools.Overlap(held.Position, other.Position, held.Bounds, other.Bounds))
 				{
 					var maybe = string.Format("collide|{0}|{1}", held.ID, other.ID);
+
+					if (other.ID == "body")
+						Clipboard.SetText(string.Format("((collide \"{0}\" \"{1}\") (moverel \"{0}\" \"{1}\" {2} {3}))", held.ID, other.ID, held.Position.X - other.Position.X, held.Position.Y - other.Position.Y));
+
 					if (Events.ContainsKey(maybe))
 					{
 						if (!Tools.PixelOverlap(held, other))
@@ -185,6 +194,19 @@ namespace KiSSLab
 			if (somethingHappened)
 				Viewer.DrawScene();
 
+		}
+
+		public void Click(Cell cell)
+		{
+			var maybe = string.Format("click|{0}", cell.ID);
+			if (Events.ContainsKey(maybe))
+				RunEvent(Events[maybe]);
+			else
+			{
+				maybe = string.Format("click|{0}", cell.Object.ID);
+				if (Events.ContainsKey(maybe))
+					RunEvent(Events[maybe]);
+			}
 		}
 	}
 
@@ -228,6 +250,10 @@ namespace KiSSLab
 				var evNode = new DarkTreeNode();
 				if (ev[0] == "collide" || ev[0] == "in")
 					evNode.Text = string.Format("({0} \"{1}\" \"{2}\")", ev[0], ev[1], ev[2]);
+				else if (ev[0] == "click") //one string param
+				{
+					evNode.Text = string.Format("({0} \"{1}\")", ev[0], ev[1]);
+				}
 				else if (ev[0] == "alarm") //one int or string param
 				{
 					var evHash = ev[1].GetHashCode();

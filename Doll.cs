@@ -119,6 +119,7 @@ namespace KiSSLab
 							var fix = 0;
 							var newPos = false;
 							var newFix = false;
+							var mapped = true;
 
 							for (var i = 0; i < celItem.Count; i++)
 							{
@@ -175,6 +176,10 @@ namespace KiSSLab
 								{
 									i++;
 									on = celItem[i] as string;
+								}
+								else if (form == "unmapped")
+								{
+									mapped = false;
 								}
 							}
 
@@ -271,9 +276,9 @@ namespace KiSSLab
 							{
 								Image = image,
 								ImageFilename = file + ".png",
-								Visible = true,
+								Visible = mapped,
 								ID = id,
-								Opacity = alpha
+								Opacity = alpha,
 							};
 							foreach (var s in on)
 							{

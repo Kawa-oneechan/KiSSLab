@@ -56,7 +56,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="Config.cs" />
+    <Compile Include="ConfigPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigPicker.Designer.cs">
+      <DependentUpon>ConfigPicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Doll.cs" />
     <Compile Include="Editor.cs">
       <SubType>Component</SubType>
@@ -64,11 +76,17 @@
     <Compile Include="MyTab.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Scripting.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Scripting.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SExpressions.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="Viewer.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Viewer.Designer.cs">
+      <DependentUpon>Viewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Mix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

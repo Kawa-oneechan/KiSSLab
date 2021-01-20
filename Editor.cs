@@ -20,7 +20,7 @@ namespace KiSSLab
 		private DarkComboBox cells, objects;
 		private DarkTreeView events;
 
-		public Editor(Viewer viewer)
+		public void Construct(Viewer viewer)
 		{
 			this.cell = new PropertyGrid()
 			{

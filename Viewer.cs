@@ -12,25 +12,8 @@ using Microsoft.Win32;
 
 namespace KiSSLab
 {
-	static class Program
+	public partial class Viewer : DarkForm
 	{
-		[STAThread]
-		static void Main(string[] args)
-		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Viewer(args));
-		}
-	}
-
-	public class Viewer : DarkForm
-	{
-		private Editor editor;
-		private DarkMenuStrip menu;
-		private DarkToolStrip tools;
-		private DarkStatusStrip status;
-		private Panel screenContainer;
-		private PictureBox screen;
 		private Bitmap bitmap;
 		private Object held, dropped;
 		private Point heldOffset, fix;
@@ -64,6 +47,8 @@ namespace KiSSLab
 			}
 			*/
 
+			InitializeComponent();
+
 			Config.Path = @"Kawa\KiSS Thing";
 			Config.Load();
 
@@ -75,74 +60,23 @@ namespace KiSSLab
 			else
 				this.Location = new Point(Config.WindowLeft, Config.WindowTop);
 			this.WindowState = (FormWindowState)windowState;
-			this.Move += (s, e) => { if (this.WindowState != FormWindowState.Normal) return; Config.WindowLeft = this.Location.X; Config.WindowTop = this.Location.Y; };
-			this.ResizeEnd += (s, e) => { if (this.WindowState != FormWindowState.Normal) return; Config.WindowWidth = this.ClientSize.Width; Config.WindowHeight = this.ClientSize.Height; };
-			this.FormClosing += (s, e) => { Config.Save(); };
 			if (Config.ZoomLevel < 1 || Config.ZoomLevel > 3)
 				Config.ZoomLevel = 1;
 			Zoom = Config.ZoomLevel;
 			if (!string.IsNullOrWhiteSpace(Config.AutoLoad))
 				args = new string[] { Config.AutoLoad };
 
-
 			this.Text = Application.ProductName;
-			this.Font = new Font("Segoe UI", 9);
 			this.DoubleBuffered = true;
 			this.Icon = global::KiSSLab.Properties.Resources.app;
 
-			menu = new DarkMenuStrip();
-			var file = new ToolStripMenuItem("&File");
-			file.DropDownItems.AddRange(new ToolStripItem[] {
-				new ToolStripMenuItem("&Open", global::KiSSLab.Properties.Resources.Open, Open_Click, Keys.Control | Keys.O),
-				new ToolStripMenuItem("&Reopen", global::KiSSLab.Properties.Resources.Reset, (s, e) => { OpenDoll(lastOpened[0], lastOpened[1]); }, Keys.Control | Keys.R),
-				new ToolStripSeparator(),
-				new ToolStripMenuItem("E&xit", global::KiSSLab.Properties.Resources.Exit, (s, e) => { this.Close(); }, Keys.Alt | Keys.F4),
+			highlightToolStripButton.Checked = Hilight;
 
-			});
-			menu.Items.Add(file);
-			var edit = new ToolStripMenuItem("&Edit");
-			edit.DropDownItems.AddRange(new ToolStripItem[] {
-				new ToolStripMenuItem("&Copy cell", global::KiSSLab.Properties.Resources.Copy, (s, e) => { Clipboard.SetImage(HilightedCell.Image); }, Keys.Control | Keys.C),
-				new ToolStripMenuItem("&Reset position", global::KiSSLab.Properties.Resources.Reset, (s, e) => { Reset_Click(null, null); }, Keys.Control | Keys.Shift | Keys.R),
-			});
-			menu.Items.Add(edit);
-			var help = new ToolStripMenuItem("&Help");
-			help.DropDownItems.AddRange(new ToolStripItem[] {
-				new ToolStripMenuItem("&About", null, (s, e) => { (new About()).ShowDialog(this); }),
-			});
-			menu.Items.Add(help);
-			tools = new DarkToolStrip();
-			tools.Items.AddRange(new ToolStripItem[]
-			{
-					new ToolStripButton("Open", global::KiSSLab.Properties.Resources.Open, Open_Click) { DisplayStyle = ToolStripItemDisplayStyle.Image },
-					new ToolStripSeparator(),
-					new ToolStripButton("Highlight current cell", global::KiSSLab.Properties.Resources.Highlight, (s, e) =>
-					{
-						Hilight = ((ToolStripButton)s).Checked;
-						DrawScene();
-					})
-					{
-						CheckOnClick = true,
-						Checked = Hilight,
-						DisplayStyle = ToolStripItemDisplayStyle.Image
-					},
-					new ToolStripSeparator(),
-					new ToolStripButton("Next set", global::KiSSLab.Properties.Resources.CycleSets, (s, e) =>
-					{
-						((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
-						Set++;
-						if (Set == Scene.Sets) Set = 0;
-						if (dropped != null) dropped.LastCollidedWith = null;
-						DrawScene();
-						((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;
-					})
-					{
-						DisplayStyle = ToolStripItemDisplayStyle.Image,
-					},
-			});
+			var after = tools.Items.IndexOf(nextSetToolStripButton);
 			for (var i = 0; i < 10; i++)
 			{
-				tools.Items.Add(new ToolStripButton(
+				after++;
+				tools.Items.Insert(after, new ToolStripButton(
 					i.ToString(), null, (s, e) =>
 					{
 						((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
@@ -158,23 +92,11 @@ namespace KiSSLab
 					Checked = (i == 0),
 				});
 			}
-			tools.Items.AddRange(new ToolStripItem[] {
-				new ToolStripSeparator(),
-				new ToolStripButton("Next palette", global::KiSSLab.Properties.Resources.Colors, (s, e) =>
-				{
-					((ToolStripButton)tools.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
-					Scene.Palette++;
-					if (Scene.Palette == Scene.Palettes) Scene.Palette = 0;
-					DrawScene();
-					((ToolStripButton)tools.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
-				})
-				{
-					DisplayStyle = ToolStripItemDisplayStyle.Image,
-				},
-			});
+			after = tools.Items.IndexOf(nextPalToolStripButton);
 			for (var i = 0; i < 10; i++)
 			{
-				tools.Items.Add(new ToolStripButton(
+				after++;
+				tools.Items.Insert(after, new ToolStripButton(
 					i.ToString(), null, (s, e) =>
 					{
 						((ToolStripButton)tools.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
@@ -189,10 +111,11 @@ namespace KiSSLab
 					Checked = (i == 0),
 				});
 			}
-			tools.Items.Add(new ToolStripSeparator());
+			after++;
 			for (var i = 1; i <= 3; i++)
 			{
-				tools.Items.Add(new ToolStripButton(
+				after++;
+				tools.Items.Insert(after, new ToolStripButton(
 					string.Format("×{0}", i), null, (s, e) =>
 					{
 						((ToolStripButton)tools.Items.Find("z" + Zoom.ToString(), false)[0]).Checked = false;
@@ -210,65 +133,17 @@ namespace KiSSLab
 					Checked = (i == Zoom),
 				});
 			}
-			tools.Items.AddRange(new ToolStripItem[] {
-				new ToolStripSeparator(),
-				new ToolStripButton("Show editor", global::KiSSLab.Properties.Resources.Properties, (s, e) =>
-				{
-					var me = (ToolStripButton)s;
-					me.Checked = !me.Checked;
-					editor.Visible = me.Checked;
-					Viewer_Resize(null, null);
-					Config.Editor = me.Checked ? 1 : 0;
-				})
-				{
-					DisplayStyle = ToolStripItemDisplayStyle.Image,
-					Checked = Config.Editor == 1,
-				},
-			});
-			tools.GripStyle = ToolStripGripStyle.Hidden;
-			tools.Padding = new Padding(8, 0, 8, 0);
-			//((ToolStripButton)tools.Items.Find("×" + Zoom.ToString(), false)[0]).Checked = true;
+			editorToolStripButton.Checked = Config.Editor == 1;
 
-			status = new DarkStatusStrip()
-			{
-				Padding = new Padding(0),
-			};
-
-			status.Items.AddRange(new[] {
-				new ToolStripStatusLabel() { AutoSize = false, TextAlign = ContentAlignment.MiddleLeft,  Width = 160, BorderStyle = Border3DStyle.Sunken },
-				new ToolStripStatusLabel() { AutoSize = false, TextAlign = ContentAlignment.MiddleLeft, Width = 80 },
-				new ToolStripStatusLabel() { AutoSize = false, Width = 20 },
-				new ToolStripStatusLabel() { AutoSize = false, TextAlign = ContentAlignment.MiddleLeft, Width = 40 },
-			});
+			/*
 			screen = new PictureBox()
 			{
 				ClientSize = new Size(480, 400),
 				BorderStyle = BorderStyle.FixedSingle,
 			};
-			screen.MouseDown += new MouseEventHandler(Screen_MouseDown);
-			screen.MouseMove += new MouseEventHandler(Screen_MouseMove);
-			screen.MouseUp += new MouseEventHandler(Screen_MouseUp);
-			screen.Paint += new PaintEventHandler(Screen_Paint);
-			editor = new Editor(this)
-			{
-				Dock = DockStyle.Right,
-				Width = 320,
-				Visible = Config.Editor == 1,
-			};
-			screenContainer = new Panel()
-			{
-				AutoScroll = true,
-				Dock = DockStyle.Fill,
-			};
-			screenContainer.Controls.Add(screen);
-			this.Controls.Add(screenContainer);
-			this.Controls.Add(tools);
-			this.Controls.Add(editor);
-			this.Controls.Add(menu);
-			this.Controls.Add(status);
-			this.Resize += new EventHandler(Viewer_Resize);
-			this.KeyUp += new KeyEventHandler(Viewer_KeyUp);
-			this.KeyPreview = true;
+			*/
+			editor.Visible = Config.Editor == 1;
+			editor.Construct(this);
 
 			Viewer_Resize(null, null);
 			UpdateColors();
@@ -284,25 +159,6 @@ namespace KiSSLab
 			Tools.PointDebug = debug;
 
 			bitmap = new Bitmap(480, 400);
-			/*
-			var r = new Random();
-			for (var y = 0; y < bitmap.Height; y += 4)
-			{
-				for (var x = 0; x < bitmap.Width;)
-				{
-					var c = r.Next(2, 16) * 7;
-					var l = r.Next(1, 4) * 4;
-					for (var x2 = x; x2 < x + l && x2 < bitmap.Width; x2++)
-					{
-						bitmap.SetPixel(x2, y, Color.FromArgb(c, c, c));
-						bitmap.SetPixel(x2, y + 1, Color.FromArgb(c, c, c));
-						bitmap.SetPixel(x2, y + 2, Color.FromArgb(c, c, c));
-						bitmap.SetPixel(x2, y + 3, Color.FromArgb(c, c, c));
-					}
-					x += l;
-				}
-			}
-			*/
 
 			if (args.Length == 1)
 			{
@@ -675,89 +531,80 @@ namespace KiSSLab
 
 			lastOpened = new[] { source, configFile };
 		}
-	}
 
-	public class ConfigPicker : DarkDialog
-	{
-		private DarkListView list;
-		public string Choice;
-
-		public ConfigPicker(string[] configs)
+		private void Viewer_Move(object sender, EventArgs e)
 		{
-			Choice = configs[0]; //default
-			this.Text = "Select a configuration";
-			this.Font = new Font("Segoe UI", 9);
-			this.ClientSize = new Size(343, 274);
-			this.StartPosition = FormStartPosition.CenterParent;
-			this.FormBorderStyle = FormBorderStyle.FixedDialog;
-			this.ControlBox = this.MinimizeBox = this.MaximizeBox = false;
-
-			var panel = new Panel()
-			{
-				Dock = DockStyle.Fill,
-				Padding = new Padding(15, 15, 15, 56),
-			};
-			this.Controls.Add(panel);
-			//this.Padding = new Padding(8);
-			list = new DarkListView()
-			{
-				Dock = DockStyle.Fill,
-			};
-			foreach (var config in configs)
-			{
-				list.Items.Add(new DarkListItem() { Text = config });
-			}
-			list.SelectItem(0);
-			list.SelectedIndicesChanged += (s, e) => { Choice = list.Items[list.SelectedIndices[0]].Text; };
-			list.DoubleClick += (s, e) => { Choice = list.Items[list.SelectedIndices[0]].Text; Close(); };
-			//list.Items.AddRange(configs);
-			//list.SelectedIndex = 0;
-			//list.Click += (s, e) => { Choice = list.SelectedItem.ToString(); };
-			//list.DoubleClick += (s, e) => { Choice = list.SelectedItem.ToString(); Close();	};
-			panel.Controls.Add(list);
+			if (this.WindowState != FormWindowState.Normal)
+				return;
+			Config.WindowLeft = this.Location.X;
+			Config.WindowTop = this.Location.Y;
 		}
-	}
 
-	public class About : DarkDialog
-	{
-		public string Choice;
-
-		public About()
+		private void Viewer_ResizeEnd(object sender, EventArgs e)
 		{
-			this.Text = string.Format("About {0}", Application.ProductName);
-			this.Font = new Font("Segoe UI", 9);
-			this.ClientSize = new Size(343, 274);
-			this.StartPosition = FormStartPosition.CenterParent;
-			this.FormBorderStyle = FormBorderStyle.FixedDialog;
-			this.ControlBox = this.MinimizeBox = this.MaximizeBox = false;
+			if (this.WindowState != FormWindowState.Normal)
+				return;
+			Config.WindowWidth = this.ClientSize.Width;
+			Config.WindowHeight = this.ClientSize.Height;
+		}
 
-			var panel = new Panel()
-			{
-				Dock = DockStyle.Fill,
-				Padding = new Padding(15, 15, 15, 56),
-			};
+		private void Viewer_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			Config.Save();
+		}
 
-			var header = new DarkLabel()
-			{
-				Font = new Font(this.Font.FontFamily, 18f),
-				Text = Application.ProductName,
-				Dock = DockStyle.Top,
-				Height = 100,
-				TextAlign = ContentAlignment.BottomCenter,
-				Image = (new Icon(global::KiSSLab.Properties.Resources.app, new Size(64, 64))).ToBitmap(),
-				ImageAlign = ContentAlignment.TopCenter,
-				Padding = new Padding(0,0 ,0, 8),
-			};
-			var rest = new DarkLabel()
-			{
-				Text = string.Format("Because KiSS/GS is old and busted, I guess.\r\n\r\nVersion {0}\r\n\r\n© 2021 Firrhna Productions", Application.ProductVersion),
-				Dock = DockStyle.Fill,
-				TextAlign = ContentAlignment.TopCenter,
-			};
-			panel.Controls.Add(rest);
-			panel.Controls.Add(header);
+		private void Exit_Click(object sender, EventArgs e)
+		{
+			this.Close();
+		}
 
-			this.Controls.Add(panel);
+		private void ReOpen_Click(object sender, EventArgs e)
+		{
+			OpenDoll(lastOpened[0], lastOpened[1]);
+		}
+
+		private void CopyCell_Click(object sender, EventArgs e)
+		{
+			Clipboard.SetImage(HilightedCell.Image);
+		}
+
+		private void About_Click(object sender, EventArgs e)
+		{
+			(new About()).ShowDialog(this);
+		}
+
+		private void Highlight_Click(object sender, EventArgs e)
+		{
+			Hilight = ((ToolStripButton)sender).Checked;
+			DrawScene();
+		}
+
+		private void NextSet_Click(object sender, EventArgs e)
+		{
+			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
+			Set++;
+			if (Set == Scene.Sets) Set = 0;
+			if (dropped != null) dropped.LastCollidedWith = null;
+			DrawScene();
+			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;
+		}
+
+		private void NextPal_Click(object sender, EventArgs e)
+		{
+			((ToolStripButton)tools.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
+			Scene.Palette++;
+			if (Scene.Palette == Scene.Palettes) Scene.Palette = 0;
+			DrawScene();
+			((ToolStripButton)tools.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
+		}
+
+		private void ShowEditor_Click(object sender, EventArgs e)
+		{
+			var me = (ToolStripButton)sender;
+			me.Checked = !me.Checked;
+			editor.Visible = me.Checked;
+			Viewer_Resize(null, null);
+			Config.Editor = me.Checked ? 1 : 0;
 		}
 	}
 }

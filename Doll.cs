@@ -181,7 +181,20 @@ namespace KiSSLab
 							//try to preload the image
 							try
 							{
-								image = Mix.GetBitmap(file + ".png");
+								//copy the loaded image to a new object so the handle gets disposed.
+								//this lets you edit cell images while the doll is still open!
+								using (var imgFromFile = Mix.GetBitmap(file + ".png"))
+								{
+									image = new Bitmap(imgFromFile.Width, imgFromFile.Height, imgFromFile.PixelFormat);
+									var r = new Rectangle(0, 0, imgFromFile.Width, imgFromFile.Height);
+									var lockBits = imgFromFile.LockBits(r, ImageLockMode.ReadWrite, imgFromFile.PixelFormat);
+									var pixels = new byte[lockBits.Stride * lockBits.Height];
+									System.Runtime.InteropServices.Marshal.Copy(lockBits.Scan0, pixels, 0, pixels.Length);
+									imgFromFile.UnlockBits(lockBits);
+									lockBits = image.LockBits(r, ImageLockMode.ReadWrite, image.PixelFormat);
+									System.Runtime.InteropServices.Marshal.Copy(pixels, 0, lockBits.Scan0, pixels.Length);
+									image.UnlockBits(lockBits);
+								}
 							}
 							catch (System.IO.FileNotFoundException ex)
 							{

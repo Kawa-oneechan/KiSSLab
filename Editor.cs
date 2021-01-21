@@ -14,13 +14,12 @@ namespace KiSSLab
 {
 	public partial class Editor : Control
 	{
-		private Viewer viewer;
 		private PropertyGrid cell, obj;
 		private MyTab tabs;
 		private DarkComboBox cells, objects;
 		private DarkTreeView events;
 
-		public void Construct(Viewer viewer)
+		public Editor()
 		{
 			this.cell = new PropertyGrid()
 			{
@@ -36,8 +35,6 @@ namespace KiSSLab
 			};
 			this.cell.PropertyValueChanged += new PropertyValueChangedEventHandler(cel_PropertyValueChanged);
 			this.obj.PropertyValueChanged += new PropertyValueChangedEventHandler(cel_PropertyValueChanged);
-
-			this.viewer = viewer;
 
 			tabs = new MyTab()
 			{
@@ -55,6 +52,7 @@ namespace KiSSLab
 				Dock = DockStyle.Top,
 				DropDownStyle = ComboBoxStyle.DropDownList,
 			};
+
 			objPanel.Controls.Add(this.objects);
 			this.objects.SelectedIndexChanged += (s, e) => { this.obj.SelectedObject = this.objects.SelectedItem; };
 			tabs.TabPages[0].Controls.Add(this.obj);
@@ -114,7 +112,7 @@ namespace KiSSLab
 			if (cell != null)
 			{
 				cells.SelectedItem = cell;
-				viewer.HilightedCell = cell;
+				((Viewer)this.Parent).HilightedCell = cell;
 			}
 		}
 
@@ -138,7 +136,7 @@ namespace KiSSLab
 
 		void cel_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
-			this.viewer.DrawScene();
+			((Viewer)this.Parent).DrawScene();
 		}
 	}
 

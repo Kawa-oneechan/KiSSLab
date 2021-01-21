@@ -144,7 +144,6 @@ namespace KiSSLab
 			};
 			*/
 			editor.Visible = Config.Editor == 1;
-			editor.Construct(this);
 
 			Viewer_Resize(null, null);
 			UpdateColors();
@@ -316,9 +315,7 @@ namespace KiSSLab
 			var eLocation = new Point(eX, eY);
 			if (eLocation.Equals(lastClick))
 			{
-				var cell = default(Cell);
-				var obj = Scene.GetObjectFromPoint(eLocation, out cell);
-				Scene.Click(cell);
+				Scene.Click(HilightedCell);
 				Scene.Viewer.DrawScene();
 			}
 

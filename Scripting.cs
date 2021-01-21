@@ -208,13 +208,10 @@ namespace KiSSLab
 					RunEvent(Events[maybe]);
 			}
 		}
-	}
 
-	public partial class Editor
-	{
-		public void Decode(Scene scene)
+		public void Decode(DarkTreeView list)
 		{
-			this.events.Nodes.Clear();
+			list.Nodes.Clear();
 
 			Func<DarkTreeNode, List<object>, bool> decode = null;
 			decode = (n, e) =>
@@ -244,7 +241,7 @@ namespace KiSSLab
 				return true;
 			};
 
-			foreach (var e in scene.Events)
+			foreach (var e in Events)
 			{
 				var ev = e.Key.Split('|');
 				var evNode = new DarkTreeNode();
@@ -266,7 +263,7 @@ namespace KiSSLab
 					evNode.Text = string.Format("(???: {0})", ev[0]);
 				evNode.Tag = e.Value;
 				decode(evNode, e.Value);
-				this.events.Nodes.Add(evNode);
+				list.Nodes.Add(evNode);
 			}
 		}
 	}

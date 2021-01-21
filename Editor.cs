@@ -12,83 +12,12 @@ using Kawa.SExpressions;
 
 namespace KiSSLab
 {
-	public partial class Editor : Control
+	public partial class Editor : UserControl
 	{
-		private PropertyGrid cell, obj;
-		private MyTab tabs;
-		private DarkComboBox cells, objects;
-		private DarkTreeView events;
-
 		public Editor()
 		{
-			this.cell = new PropertyGrid()
-			{
-				Dock = DockStyle.Fill,
-				ToolbarVisible = false,
-				PropertySort = PropertySort.Alphabetical,
-			};
-			this.obj = new PropertyGrid()
-			{
-				Dock = DockStyle.Fill,
-				ToolbarVisible = false,
-				PropertySort = PropertySort.Alphabetical,
-			};
-			this.cell.PropertyValueChanged += new PropertyValueChangedEventHandler(cel_PropertyValueChanged);
-			this.obj.PropertyValueChanged += new PropertyValueChangedEventHandler(cel_PropertyValueChanged);
+			InitializeComponent();
 
-			tabs = new MyTab()
-			{
-				Dock = DockStyle.Fill,
-			};
-
-			tabs.TabPages.Add("Objects");
-			var objPanel = new Panel()
-			{
-				Dock = DockStyle.Top,
-				Height = 30,
-			};
-			this.objects = new DarkComboBox()
-			{
-				Dock = DockStyle.Top,
-				DropDownStyle = ComboBoxStyle.DropDownList,
-			};
-
-			objPanel.Controls.Add(this.objects);
-			this.objects.SelectedIndexChanged += (s, e) => { this.obj.SelectedObject = this.objects.SelectedItem; };
-			tabs.TabPages[0].Controls.Add(this.obj);
-			tabs.TabPages[0].Controls.Add(objPanel);
-			tabs.TabPages[0].Padding = new Padding(4);
-			tabs.TabPages[0].BackColor = SystemColors.Window;
-
-			tabs.TabPages.Add("Cells");
-			var celPanel = new Panel()
-			{
-				Dock = DockStyle.Top,
-				Height = 30,
-			};
-			this.cells = new DarkComboBox()
-			{
-				Dock = DockStyle.Top,
-				DropDownStyle = ComboBoxStyle.DropDownList,
-			};
-			celPanel.Controls.Add(this.cells);
-			this.cells.SelectedIndexChanged += (s, e) => { this.cell.SelectedObject = this.cells.SelectedItem; };
-			tabs.TabPages[1].Controls.Add(this.cell);
-			tabs.TabPages[1].Controls.Add(celPanel);
-			tabs.TabPages[1].Padding = new Padding(4);
-			tabs.TabPages[1].BackColor = SystemColors.Window;
-
-			tabs.TabPages.Add("Events");
-			this.events = new DarkTreeView()
-			{
-				Dock = DockStyle.Fill,
-				//BorderStyle = BorderStyle.None
-			};
-			tabs.TabPages[2].Controls.Add(this.events);
-			tabs.TabPages[2].Padding = new Padding(4);
-			tabs.TabPages[2].BackColor = SystemColors.Window;
-
-			this.Controls.Add(tabs);
 			tabs.SelectedIndex = 3;
 		}
 
@@ -102,7 +31,7 @@ namespace KiSSLab
 			this.cells.Items.AddRange(scene.Cells.ToArray());
 			this.cells.SelectedIndex = 0;
 
-			Decode(scene);
+			scene.Decode(this.events);
 		}
 
 		public void Pick(Object obj, Cell cell)
@@ -112,7 +41,7 @@ namespace KiSSLab
 			if (cell != null)
 			{
 				cells.SelectedItem = cell;
-				((Viewer)this.Parent).HilightedCell = cell;
+				((Viewer)this.ParentForm).HilightedCell = cell;
 			}
 		}
 
@@ -121,9 +50,8 @@ namespace KiSSLab
 		{
 			this.BackColor = Colors.GreyBackground;
 
-			tabs.TabPages[0].BackColor = Colors.GreyBackground;
-			tabs.TabPages[1].BackColor = Colors.GreyBackground;
-			tabs.TabPages[2].BackColor = Colors.GreyBackground;
+			foreach (var t in tabs.TabPages.OfType<TabPage>())
+				t.BackColor = Colors.GreyBackground;
 
 			this.cell.BackColor = this.obj.BackColor = Colors.GreyBackground;
 			this.cell.ViewBackColor = this.obj.ViewBackColor = Colors.LightBackground;
@@ -136,7 +64,17 @@ namespace KiSSLab
 
 		void cel_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
-			((Viewer)this.Parent).DrawScene();
+			((Viewer)this.ParentForm).DrawScene();
+		}
+
+		private void objects_SelectedItemChanged(object sender, EventArgs e)
+		{
+			this.obj.SelectedObject = this.objects.SelectedItem;
+		}
+
+		private void cells_SelectedItemChanged(object sender, EventArgs e)
+		{
+			this.cell.SelectedObject = this.cells.SelectedItem;
 		}
 	}
 

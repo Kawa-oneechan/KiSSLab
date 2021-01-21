@@ -71,15 +71,16 @@
     </Compile>
     <Compile Include="Doll.cs" />
     <Compile Include="Editor.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor.Designer.cs">
+      <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="MyTab.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Scripting.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Scripting.cs" />
     <Compile Include="SExpressions.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="Viewer.cs">

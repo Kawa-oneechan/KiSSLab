@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace KiSSLab
 		public static bool Hilight;
 		public Cell HilightedCell;
 
+		private HighPrecisionTimer.MultimediaTimer AlarmTimer;
 		private string[] lastOpened;
 
 		//[System.Runtime.InteropServices.DllImport("Shell32.dll")]
@@ -449,10 +451,30 @@ namespace KiSSLab
 		}
 #endregion
 
+		private delegate void SafeCallDelegate();
+		private void RefreshScreen()
+		{
+			if (screen.InvokeRequired)
+			{
+				var d = new SafeCallDelegate(RefreshScreen);
+				screen.Invoke(d, new object[] { });
+			}
+			else
+			{
+				screen.Refresh();
+			}
+		}
+
+		private bool drawing;
+
 		public void DrawScene()
 		{
 			if (Scene == null)
 				return;
+			if (drawing)
+				return;
+
+			drawing = true;
 			Scene.DrawToBitmap(bitmap);
 			if (Hilight && HilightedCell != null)
 			{
@@ -469,7 +491,10 @@ namespace KiSSLab
 					g.DrawRectangle(dotted, new Rectangle(obj.Position.X + cell.Offset.X, obj.Position.Y + cell.Offset.Y, cell.Image.Width - 1, cell.Image.Height - 1));
 				}
 			}
-			screen.Refresh();
+
+			//screen.Refresh();
+			RefreshScreen();
+			drawing = false;
 		}
 
 		public void OpenDoll(string source, string configFile)
@@ -493,12 +518,6 @@ namespace KiSSLab
 					configPicker.ShowDialog(this);
 					configFile = configPicker.Choice;
 				}
-			}
-
-			if (Scene != null)
-			{
-				foreach (var timer in Scene.Timers)
-					timer.Value.Stop();
 			}
 
 			Scene = new Scene(this, configFile);
@@ -532,7 +551,57 @@ namespace KiSSLab
 				DrawScene();
 			}
 
+			AlarmTimer = new HighPrecisionTimer.MultimediaTimer();
+			AlarmTimer.Interval = 5;
+			//AlarmTimer.Tick += new EventHandler(AlarmTimer_Tick);
+			AlarmTimer.Elapsed += new EventHandler(AlarmTimer_Tick);
+			AlarmTimer.Start();
+
 			lastOpened = new[] { source, configFile };
+		}
+
+		void AlarmTimer_Tick(object sender, EventArgs e)
+		{
+			var oneDied = false;
+			foreach (var t in Scene.Timers)
+			{
+				var timer = t.Value;
+				if (timer != null)
+				{
+					if (timer.TimeLeft > 0)
+					{
+						timer.TimeLeft--;
+						continue;
+					}
+
+					var act = timer.Action;
+					if (act is List<object>)
+					{
+						Scene.RunEvent((List<object>)act);
+					}
+					else
+					{
+						var alarmID = string.Format("alarm|{0}", act.GetHashCode());
+						if (Scene.Events.ContainsKey(alarmID))
+						{
+							Scene.RunEvent(Scene.Events[alarmID]);
+						}
+					}
+					Scene.Viewer.DrawScene();
+
+					if (timer.Repeat)
+						timer.TimeLeft = timer.Interval;
+					else
+						oneDied = true;
+					break;
+				}
+			}
+			if (oneDied)
+			{
+				var dead = Scene.Timers.Where(t => t.Value.TimeLeft == 0).ToList();
+				foreach (var deadOne in dead)
+					Scene.Timers.Remove(deadOne.Key);
+			}
 		}
 
 		private void Viewer_Move(object sender, EventArgs e)

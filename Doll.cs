@@ -31,6 +31,7 @@ namespace KiSSLab
 		private float[][] matrix;
 
 		private ImageAttributes attrs;
+		private Graphics gfx;
 
 		public Scene(Viewer viewer, string configFile)
 		{
@@ -352,25 +353,25 @@ namespace KiSSLab
 				attrs.SetRemapTable(colorMap);
 			}
 
-			using (var gfx = Graphics.FromImage(bitmap))
+			if (gfx == null)
+				gfx = Graphics.FromImage(bitmap);
+
+			gfx.Clear(BackgroundColor);
+			if (BackgroundBrush != null)
+				gfx.FillRectangle(BackgroundBrush, 0, 0, ScreenWidth, ScreenHeight);
+			foreach (var cell in Cells.Reverse<Cell>())
 			{
-				gfx.Clear(BackgroundColor);
-				if (BackgroundBrush != null)
-					gfx.FillRectangle(BackgroundBrush, 0, 0, ScreenWidth, ScreenHeight);
-				foreach (var cell in Cells.Reverse<Cell>())
-				{
-					var obj = cell.Object;
-					if (!cell.OnSet) continue;
-					if (!cell.Visible) continue;
-					if (!obj.Visible) continue;
+				var obj = cell.Object;
+				if (!cell.OnSet) continue;
+				if (!cell.Visible) continue;
+				if (!obj.Visible) continue;
 
-					if (cell.Opacity == 0)
-						continue;
-					matrix[3][3] = cell.Opacity / 256.0f;
-					attrs.SetColorMatrix(new ColorMatrix(matrix));
+				if (cell.Opacity == 0)
+					continue;
+				matrix[3][3] = cell.Opacity / 256.0f;
+				attrs.SetColorMatrix(new ColorMatrix(matrix));
 
-					gfx.DrawImage(cell.Image, new Rectangle(cell.Object.Position.X + cell.Offset.X, cell.Object.Position.Y + cell.Offset.Y, cell.Image.Width, cell.Image.Height), 0, 0, cell.Image.Width, cell.Image.Height, GraphicsUnit.Pixel, attrs);
-				}
+				gfx.DrawImage(cell.Image, new Rectangle(cell.Object.Position.X + cell.Offset.X, cell.Object.Position.Y + cell.Offset.Y, cell.Image.Width, cell.Image.Height), 0, 0, cell.Image.Width, cell.Image.Height, GraphicsUnit.Pixel, attrs);
 			}
 		}
 	}

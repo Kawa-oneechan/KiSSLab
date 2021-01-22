@@ -76,6 +76,7 @@
     <Compile Include="Editor.Designer.cs">
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="MultimediaTimer.cs" />
     <Compile Include="MyTab.cs">
       <SubType>Component</SubType>
     </Compile>

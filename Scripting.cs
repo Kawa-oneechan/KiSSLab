@@ -9,6 +9,14 @@ using Kawa.SExpressions;
 
 namespace KiSSLab
 {
+	public class Timer
+	{
+		public int Interval { get; set; }
+		public int TimeLeft { get; set; }
+		public bool Repeat { get; set; }
+		public object Action { get; set; }
+	}
+
 	public partial class Scene
 	{
 		public Dictionary<string, List<object>> Events { get; set; }
@@ -54,7 +62,7 @@ namespace KiSSLab
 				{
 					if (!(trigger[1] is int || trigger[1] is string || trigger[1] is Symbol))
 					{
-						MessageBox.Show(string.Format("Malformed \"alarm\" event. An integer or string ID is expected, but got a {0}.", trigger[1].GetType().Name), Application.ProductName);
+						DarkUI.Forms.DarkMessageBox.ShowError(string.Format("Malformed \"alarm\" event. An integer or string ID is expected, but got a {0}.", trigger[1].GetType().Name), Application.ProductName);
 						continue;
 					}
 					var timerID = trigger[1].GetHashCode();
@@ -108,33 +116,16 @@ namespace KiSSLab
 					var delay = (int)cmd[1];
 					if (!(cmd[2] is int || cmd[2] is string || cmd[2] is Symbol))
 					{
-						MessageBox.Show(string.Format("Malformed \"timer\" command. An integer or string ID is expected, but got a {0}.", cmd[2].GetType().Name), Application.ProductName);
-						continue;
+					//	MessageBox.Show(string.Format("Malformed \"timer\" command. An integer or string ID is expected, but got a {0}.", cmd[2].GetType().Name), Application.ProductName);
+					//	continue;
 					}
 					var timerID = cmd[2].GetHashCode();
 					if (!Timers.ContainsKey(timerID))
 						Timers.Add(timerID, new Timer());
 					var timer = Timers[timerID];
-					timer.Tag = cmd[2];
-					timer.Tick += (s, e) =>
-					{
-						if (!(cmd.Count == 4 && cmd[3] is Symbol && cmd[3].ToString() == "repeat"))
-							((Timer)s).Stop();
-						var tag = ((Timer)s).Tag;
-						if (tag is List<object>)
-						{
-							RunEvent((List<object>)tag);
-						}
-						else
-						{
-							var alarmID = string.Format("alarm|{0}", tag.GetHashCode());
-							if (Events.ContainsKey(alarmID))
-								RunEvent(Events[alarmID]);
-						}
-						Viewer.DrawScene();
-					};
-					timer.Interval = delay;
-					timer.Start();
+					timer.Action = cmd[2];
+					timer.Interval = timer.TimeLeft = delay;
+					timer.Repeat = (cmd.Count == 4 && cmd[3] is Symbol && cmd[3].ToString() == "repeat");
 				}
 			}
 			return true;

@@ -211,6 +211,8 @@ namespace KiSSLab
 		{
 			if (Scene == null)
 				return;
+			if (drawing)
+				return;
 
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
@@ -242,6 +244,8 @@ namespace KiSSLab
 		private void Screen_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (Scene == null)
+				return;
+			if (drawing)
 				return;
 
 			var eX = e.X / Zoom;
@@ -307,6 +311,8 @@ namespace KiSSLab
 		private void Screen_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (Scene == null)
+				return;
+			if (drawing)
 				return;
 
 			var eX = e.X / Zoom;

@@ -187,11 +187,8 @@ namespace KiSSLab
 			}
 			else if (e.Control && e.KeyValue == 9)
 			{
-				((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
-				Set++;
-				if (Set == Scene.Sets) Set = 0;
-				((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;
-				DrawScene();
+				e.Handled = true;
+				NextSet_Click(null, null);
 			}
 		}
 

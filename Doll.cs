@@ -393,7 +393,6 @@ namespace KiSSLab
 		[Browsable(false)]
 		public Object Object { get; set; }
 		public string ID { get; set; }
-		[System.ComponentModel.Editor(typeof(AlphaEditor), typeof(System.Drawing.Design.UITypeEditor))]
 		public int Opacity { get; set; }
 
 		public Cell()

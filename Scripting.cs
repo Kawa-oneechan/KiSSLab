@@ -149,7 +149,7 @@ namespace KiSSLab
 					var maybe = string.Format("collide|{0}|{1}", held.ID, other.ID);
 
 					if (other.ID == "body")
-						Clipboard.SetText(string.Format("((collide \"{0}\" \"{1}\") (moverel \"{0}\" \"{1}\" {2} {3}))", held.ID, other.ID, held.Position.X - other.Position.X, held.Position.Y - other.Position.Y));
+						Clipboard.SetText(string.Format("((collide \"{0}\" \"{1}\") (moverel {2} {3}))", held.ID, other.ID, held.Position.X - other.Position.X, held.Position.Y - other.Position.Y));
 
 					if (Events.ContainsKey(maybe))
 					{

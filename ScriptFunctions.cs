@@ -20,6 +20,15 @@ namespace KiSSLab
 			return ret;
 		}
 
+		[ScriptFunction("=")]
+		public object SetVar(params object[] cmd)
+		{
+			var key = Evaluate<Symbol>(cmd[1]);
+			var val = Evaluate(cmd[2]);
+			scriptVariables[key] = val;
+			return key;
+		}
+
 		[ScriptFunction]
 		public object Random(params object[] cmd)
 		{
@@ -33,12 +42,17 @@ namespace KiSSLab
 		[ScriptFunction]
 		public object MoveRel(params object[] cmd)
 		{
+			if (cmd[1] is int)
+			{
+				cmd = new[] { cmd[0], (Symbol)"#a", (Symbol)"#b", cmd[1], cmd[2] };
+			}
+
 			var str = Evaluate(cmd[1]).ToString();
 			var moveRelWhat = Objects.FirstOrDefault(o => o.ID == str);
 			str = Evaluate(cmd[2]).ToString();
 			var moveRelTo = Objects.FirstOrDefault(o => o.ID == str);
-			var moveRelByX = Evaluate<int>(cmd[3]); //(int)cmd[3];
-			var moveRelByY = Evaluate<int>(cmd[4]); //(int)cmd[4];
+			var moveRelByX = Evaluate<int>(cmd[3]);
+			var moveRelByY = Evaluate<int>(cmd[4]);
 			if (!(moveRelWhat == null || moveRelTo == null))
 				moveRelWhat.Position = new Point(moveRelTo.Position.X + moveRelByX, moveRelTo.Position.Y + moveRelByY);
 			return null;

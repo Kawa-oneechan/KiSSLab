@@ -25,6 +25,7 @@ namespace KiSSLab
 
 		private Random rand = new Random();
 		private Dictionary<string, object> scriptFunctions;
+		private Dictionary<Symbol, object> scriptVariables;
 
 		void LoadEvents(List<object> eventsNode)
 		{
@@ -40,6 +41,7 @@ namespace KiSSLab
 					name = method.Name.ToLowerInvariant();
 				scriptFunctions.Add(name, method);
 			}
+			scriptVariables = new Dictionary<Symbol, object>();
 
 			Func<string, List<object>, bool> addEvent = null;
 			addEvent = (s, e) =>
@@ -105,6 +107,8 @@ namespace KiSSLab
 			else if (thing is Symbol)
 			{
 				//Handle variables
+				if (scriptVariables.ContainsKey((Symbol)thing))
+					return scriptVariables[(Symbol)thing];
 				return thing;
 			}
 			return thing;
@@ -140,6 +144,8 @@ namespace KiSSLab
 					continue;
 				if (Tools.Overlap(held.Position, other.Position, held.Bounds, other.Bounds))
 				{
+					scriptVariables["#a"] = held.ID;
+					scriptVariables["#b"] = other.ID;
 					var maybe = string.Format("collide|{0}|{1}", held.ID, other.ID);
 
 					if (other.ID == "body")
@@ -208,12 +214,20 @@ namespace KiSSLab
 			{
 				foreach (var cmd in e.Cast<List<object>>())
 				{
+					//TODO: improve this... attribute bullshit on the ScriptFunctions?
 					var newNode = new DarkTreeNode();
 					n.Nodes.Add(newNode);
 					var form = cmd[0] as Symbol;
 					if (form == "moverel")
 					{
-						newNode.Text = string.Format("(moverel \"{0}\" \"{1}\" {2} {3})", cmd[1], cmd[2], cmd[3], cmd[4]);
+						if (cmd[1] is int)
+							newNode.Text = string.Format("(moverel #a #b {0} {1})", cmd[1], cmd[2]);
+						else
+							newNode.Text = string.Format("(moverel \"{0}\" \"{1}\" {2} {3})", cmd[1], cmd[2], cmd[3], cmd[4]);
+					}
+					else if (form == "=")
+					{
+						newNode.Text = string.Format("(= {0} {1})", cmd[1], cmd[2]);
 					}
 					else if (form == "timer")
 					{

@@ -371,7 +371,12 @@ namespace KiSSLab
 				matrix[3][3] = cell.Opacity / 256.0f;
 				attrs.SetColorMatrix(new ColorMatrix(matrix));
 
-				gfx.DrawImage(cell.Image, new Rectangle(cell.Object.Position.X + cell.Offset.X, cell.Object.Position.Y + cell.Offset.Y, cell.Image.Width, cell.Image.Height), 0, 0, cell.Image.Width, cell.Image.Height, GraphicsUnit.Pixel, attrs);
+				try
+				{
+					gfx.DrawImage(cell.Image, new Rectangle(cell.Object.Position.X + cell.Offset.X, cell.Object.Position.Y + cell.Offset.Y, cell.Image.Width, cell.Image.Height), 0, 0, cell.Image.Width, cell.Image.Height, GraphicsUnit.Pixel, attrs);
+				}
+				catch (Exception)
+				{ }
 			}
 		}
 	}

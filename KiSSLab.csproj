@@ -81,6 +81,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="ScriptFunctions.cs" />
     <Compile Include="Scripting.cs" />
     <Compile Include="SExpressions.cs" />
     <Compile Include="Tools.cs" />

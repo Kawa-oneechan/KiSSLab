@@ -23,8 +23,24 @@ namespace KiSSLab
 		public Dictionary<int, Timer> Timers { get; set; }
 		public Dictionary<int, string> HashCodes;
 
+		private Random rand = new Random();
+		private Dictionary<string, object> scriptFunctions;
+
 		void LoadEvents(List<object> eventsNode)
 		{
+			scriptFunctions = new Dictionary<string, object>();
+			var methods = typeof(Scene).GetMethods();
+			foreach (var method in methods)
+			{
+				var attribs = method.GetCustomAttributes(true).OfType<ScriptFunctionAttribute>().ToArray();
+				if (attribs.Length == 0)
+					continue;
+				var name = ((ScriptFunctionAttribute)attribs[0]).As;
+				if (string.IsNullOrEmpty(name))
+					name = method.Name.ToLowerInvariant();
+				scriptFunctions.Add(name, method);
+			}
+
 			Func<string, List<object>, bool> addEvent = null;
 			addEvent = (s, e) =>
 			{
@@ -74,59 +90,42 @@ namespace KiSSLab
 			}
 		}
 
+		public object Evaluate(object thing)
+		{
+			if (thing is List<object>)
+			{
+				var cmd = (List<object>)thing;
+				var form = (cmd[0] as Symbol).ToString(); ;
+
+				if (scriptFunctions.ContainsKey(form))
+				{
+					return ((System.Reflection.MethodInfo)scriptFunctions[form]).Invoke(this, new[] { cmd.ToArray() });
+				}
+			}
+			else if (thing is Symbol)
+			{
+				//Handle variables
+				return thing;
+			}
+			return thing;
+		}
+
+		public T Evaluate<T>(object thing)
+		{
+			var ret = Evaluate(thing);
+			if (!(ret is T))
+			{
+				throw new InvalidCastException(string.Format("Evaluate<{0}> got a {1} instead.", typeof(T).Name, ret.GetType().Name));
+			}
+			return (T)ret;
+		}
+
 		public bool RunEvent(List<object> ev)
 		{
+			object ret = null;
 			foreach (var cmd in ev.Cast<List<object>>())
 			{
-				var form = cmd[0] as Symbol;
-				if (form == "moverel")
-				{
-					var moveRelWhat = Objects.FirstOrDefault(o => o.ID == cmd[1].ToString());
-					var moveRelTo = Objects.FirstOrDefault(o => o.ID == cmd[2].ToString());
-					var moveRelByX = (int)cmd[3];
-					var moveRelByY = (int)cmd[4];
-					if (moveRelWhat == null || moveRelTo == null)
-						continue;
-					moveRelWhat.Position = new Point(moveRelTo.Position.X + moveRelByX, moveRelTo.Position.Y + moveRelByY);
-				}
-				else if (form == "unmap" || form == "map" || form == "altmap")
-				{
-					object mapThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
-					if (mapThis == null)
-						mapThis = Objects.FirstOrDefault(o => o.ID == cmd[1].ToString());
-					if (mapThis == null)
-						continue;
-					if (form == "altmap")
-					{
-						if (mapThis is Cell)
-							((Cell)mapThis).Visible = !((Cell)mapThis).Visible;
-						else if (mapThis is Object)
-							((Object)mapThis).Visible = !((Object)mapThis).Visible;
-					}
-					else
-					{
-						if (mapThis is Cell)
-							((Cell)mapThis).Visible = form == "map";
-						else if (mapThis is Object)
-							((Object)mapThis).Visible = form == "map";
-					}
-				}
-				else if (form == "timer")
-				{
-					var delay = (int)cmd[1];
-					if (!(cmd[2] is int || cmd[2] is string || cmd[2] is Symbol))
-					{
-					//	MessageBox.Show(string.Format("Malformed \"timer\" command. An integer or string ID is expected, but got a {0}.", cmd[2].GetType().Name), Application.ProductName);
-					//	continue;
-					}
-					var timerID = cmd[2].GetHashCode();
-					if (!Timers.ContainsKey(timerID))
-						Timers.Add(timerID, new Timer());
-					var timer = Timers[timerID];
-					timer.Action = cmd[2];
-					timer.Interval = timer.TimeLeft = delay;
-					timer.Repeat = (cmd.Count == 4 && cmd[3] is Symbol && cmd[3].ToString() == "repeat");
-				}
+				ret = Evaluate(cmd);
 			}
 			return true;
 		}
@@ -255,6 +254,18 @@ namespace KiSSLab
 				evNode.Tag = e.Value;
 				decode(evNode, e.Value);
 				list.Nodes.Add(evNode);
+			}
+		}
+
+		public class ScriptFunctionAttribute : Attribute
+		{
+			public string As { get; private set; }
+			public ScriptFunctionAttribute()
+			{
+			}
+			public ScriptFunctionAttribute(string name)
+			{
+				As = name;
 			}
 		}
 	}

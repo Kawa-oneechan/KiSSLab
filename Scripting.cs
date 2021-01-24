@@ -61,6 +61,7 @@ namespace KiSSLab
 				var trigger = ev[0] as List<object>;
 				var result = ev.Skip(1).ToList();//[0] as List<object>;
 				var trigForm = trigger[0] as Symbol;
+				//TODO: improve this.
 				if (trigForm == "collide" || trigForm == "in")
 				{
 					var collideA = trigger[1] as string;
@@ -74,7 +75,27 @@ namespace KiSSLab
 				else if (trigForm == "click")
 				{
 					var clickOn = trigger[1] as string;
-					addEvent(string.Format("click|{0}", clickOn), result);
+					addEvent(string.Format("catch|{0}", clickOn), result);
+				}
+				else if (trigForm == "catch")
+				{
+					var clickOn = trigger[1] as string;
+					addEvent(string.Format("catch|{0}", clickOn), result);
+				}
+				else if (trigForm == "fixcatch")
+				{
+					var clickOn = trigger[1] as string;
+					addEvent(string.Format("fixcatch|{0}", clickOn), result);
+				}
+				else if (trigForm == "release")
+				{
+					var clickOn = trigger[1] as string;
+					addEvent(string.Format("release|{0}", clickOn), result);
+				}
+				else if (trigForm == "fixrelease")
+				{
+					var clickOn = trigger[1] as string;
+					addEvent(string.Format("fixrelease|{0}", clickOn), result);
 				}
 				else if (trigForm == "alarm")
 				{
@@ -134,10 +155,25 @@ namespace KiSSLab
 			return true;
 		}
 
-		public void Release(Part held)
+		public void Release(Part held, Cell cell)
 		{
-			var somethingHappened = false;
+			//var somethingHappened = false;
 			var somethingCollided = false;
+
+			if (cell != null)
+			{
+				var maybe = string.Format("release|{0}", cell.ID);
+				if (held != null)
+					maybe = string.Format("{0}|{1}", held.Locked ? "fixrelease" : "release", held.ID);
+				if (Events.ContainsKey(maybe))
+				{
+					RunEvent(Events[maybe]);
+					return;
+				}
+			}
+			if (held == null)
+				return;
+
 			foreach (var other in Parts)
 			{
 				if (other == held)
@@ -164,7 +200,7 @@ namespace KiSSLab
 
 						held.LastCollidedWith = other;
 						somethingCollided = true;
-						somethingHappened = true;
+						//somethingHappened = true;
 						if (RunEvent(Events[maybe]))
 							break;
 					}
@@ -179,7 +215,7 @@ namespace KiSSLab
 
 						held.LastCollidedWith = other;
 						somethingCollided = true;
-						somethingHappened = true;
+						//somethingHappened = true;
 						if (RunEvent(Events[maybe]))
 							break;
 					}
@@ -187,9 +223,20 @@ namespace KiSSLab
 			}
 			if (!somethingCollided)
 				held.LastCollidedWith = null;
-			if (somethingHappened)
-				Viewer.DrawScene();
+			//if (somethingHappened)
+				//Viewer.DrawScene();
 
+		}
+
+		public void Catch(Part held, Cell cell)
+		{
+			var maybe = string.Format("catch|{0}", cell.ID);
+			if (Events.ContainsKey(maybe))
+				RunEvent(Events[maybe]);
+			maybe = string.Format("{0}|{1}", held.Locked ? "fixcatch" : "catch", held.ID);
+			if (Events.ContainsKey(maybe))
+				RunEvent(Events[maybe]);
+			Viewer.DrawScene();
 		}
 
 		public void Click(Cell cell)

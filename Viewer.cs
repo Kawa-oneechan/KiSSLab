@@ -228,12 +228,17 @@ namespace KiSSLab
 			var part = Scene.GetPartFromPoint(eLocation, out cell);
 			editor.Pick(part, cell);
 			if (Hilight) DrawScene();
-			if (part != null && !part.Locked)
+
+			if (part != null)
 			{
-				held = part;
-				heldOffset = new Point(eX - part.Position.X, eY - part.Position.Y);
-				if (held.Fix > 0) held.Fix--;
-				fix = new Point(part.Position.X, part.Position.Y);
+				Scene.Catch(part, cell);
+				if (!part.Locked)
+				{
+					held = part;
+					heldOffset = new Point(eX - part.Position.X, eY - part.Position.Y);
+					if (held.Fix > 0) held.Fix--;
+					fix = new Point(part.Position.X, part.Position.Y);
+				}
 			}
 			else
 			{
@@ -303,7 +308,7 @@ namespace KiSSLab
 			if (part == null)
 				Cursor = Cursors.Default;
 			else if (part.Locked)
-				Cursor = Cursors.No;
+				Cursor = Cursors.Default;
 			else
 				Cursor = Cursors.Hand;
 		}
@@ -320,20 +325,25 @@ namespace KiSSLab
 			var eLocation = new Point(eX, eY);
 			if (eLocation.Equals(lastClick) && HilightedCell != null)
 			{
-				Scene.Click(HilightedCell);
-				Scene.Viewer.DrawScene();
+				//Scene.Click(HilightedCell);
 			}
 
 			if (held == null)
+			{
+				Scene.Release(null, HilightedCell);
+				Scene.Viewer.DrawScene();
 				return;
-
-			Scene.Release(held);
+			}
+	
+			Scene.Release(held, HilightedCell);
 
 			if (held != null)
 			{
 				dropped = held;
 				held = null;
 			}
+
+			Scene.Viewer.DrawScene();
 		}
 
 		private void Screen_Paint(object sender, PaintEventArgs e)

@@ -41,8 +41,15 @@ namespace KiSSLab
 					var pA = new Point(oA.Position.X + cA.Offset.X, oA.Position.Y + cA.Offset.Y);
 					var pB = new Point(oB.Position.X + cB.Offset.X, oB.Position.Y + cB.Offset.Y);
 
-					if (!Overlap(pA, pB, cA.Image.Size, cB.Image.Size))
+					try
+					{
+						if (!Overlap(pA, pB, cA.Image.Size, cB.Image.Size))
+							continue;
+					}
+					catch (Exception)
+					{
 						continue;
+					}
 
 					var hitbox1 = new Rectangle(pA, cA.Image.Size);
 					var hitbox2 = new Rectangle(pB, cB.Image.Size);

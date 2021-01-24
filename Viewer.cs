@@ -318,7 +318,7 @@ namespace KiSSLab
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
 			var eLocation = new Point(eX, eY);
-			if (eLocation.Equals(lastClick))
+			if (eLocation.Equals(lastClick) && HilightedCell != null)
 			{
 				Scene.Click(HilightedCell);
 				Scene.Viewer.DrawScene();
@@ -442,7 +442,7 @@ namespace KiSSLab
 				dd.BackColor = Colors.GreyBackground;
 				dd.ForeColor = Colors.LightText;
 			}
-			screenContainer.BackColor = Colors.GreyBackground;
+			screenContainer.BackColor = Colors.DarkBackground;
 		}
 
 		protected override void WndProc(ref Message m)

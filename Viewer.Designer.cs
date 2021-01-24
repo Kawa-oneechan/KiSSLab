@@ -74,9 +74,9 @@
 			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.editor = new KiSSLab.Editor();
 			this.screenContainer = new System.Windows.Forms.Panel();
 			this.screen = new System.Windows.Forms.PictureBox();
+			this.editor = new KiSSLab.Editor();
 			this.menu.SuspendLayout();
 			this.tools.SuspendLayout();
 			this.status.SuspendLayout();
@@ -95,7 +95,7 @@
 			this.menu.Location = new System.Drawing.Point(0, 0);
 			this.menu.Name = "menu";
 			this.menu.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
-			this.menu.Size = new System.Drawing.Size(640, 24);
+			this.menu.Size = new System.Drawing.Size(860, 24);
 			this.menu.TabIndex = 0;
 			this.menu.Text = "darkMenuStrip2";
 			// 
@@ -114,8 +114,6 @@
 			// 
 			// openToolStripMenuItem
 			// 
-			this.openToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.openToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.openToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Open;
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
 			this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
@@ -125,8 +123,6 @@
 			// 
 			// reopenToolStripMenuItem
 			// 
-			this.reopenToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.reopenToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.reopenToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Reset;
 			this.reopenToolStripMenuItem.Name = "reopenToolStripMenuItem";
 			this.reopenToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
@@ -136,16 +132,12 @@
 			// 
 			// toolStripSeparator1
 			// 
-			this.toolStripSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.toolStripSeparator1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 1);
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
-			this.exitToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.exitToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.exitToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Exit;
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
 			this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
@@ -166,8 +158,6 @@
 			// 
 			// copyCellToolStripMenuItem
 			// 
-			this.copyCellToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.copyCellToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.copyCellToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Copy;
 			this.copyCellToolStripMenuItem.Name = "copyCellToolStripMenuItem";
 			this.copyCellToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
@@ -177,8 +167,6 @@
 			// 
 			// resetPositionToolStripMenuItem
 			// 
-			this.resetPositionToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.resetPositionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.resetPositionToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Reset;
 			this.resetPositionToolStripMenuItem.Name = "resetPositionToolStripMenuItem";
 			this.resetPositionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
@@ -199,8 +187,6 @@
 			// 
 			// aboutToolStripMenuItem
 			// 
-			this.aboutToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
 			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
 			this.aboutToolStripMenuItem.Text = "&About";
@@ -226,7 +212,7 @@
 			this.tools.Location = new System.Drawing.Point(0, 24);
 			this.tools.Name = "tools";
 			this.tools.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
-			this.tools.Size = new System.Drawing.Size(640, 26);
+			this.tools.Size = new System.Drawing.Size(860, 26);
 			this.tools.TabIndex = 1;
 			this.tools.Text = "darkToolStrip1";
 			// 
@@ -341,10 +327,10 @@
             this.toolStripStatusLabel2,
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel4});
-			this.status.Location = new System.Drawing.Point(0, 365);
+			this.status.Location = new System.Drawing.Point(0, 525);
 			this.status.Name = "status";
 			this.status.Padding = new System.Windows.Forms.Padding(0, 5, 0, 3);
-			this.status.Size = new System.Drawing.Size(640, 35);
+			this.status.Size = new System.Drawing.Size(860, 35);
 			this.status.SizingGrip = false;
 			this.status.TabIndex = 2;
 			this.status.Text = "darkStatusStrip1";
@@ -381,23 +367,15 @@
 			this.toolStripStatusLabel4.Text = " ";
 			this.toolStripStatusLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// editor
-			// 
-			this.editor.Dock = System.Windows.Forms.DockStyle.Right;
-			this.editor.Location = new System.Drawing.Point(320, 50);
-			this.editor.Name = "editor";
-			this.editor.Size = new System.Drawing.Size(320, 315);
-			this.editor.TabIndex = 3;
-			this.editor.Text = "editor1";
-			// 
 			// screenContainer
 			// 
 			this.screenContainer.AutoScroll = true;
+			this.screenContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
 			this.screenContainer.Controls.Add(this.screen);
 			this.screenContainer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.screenContainer.Location = new System.Drawing.Point(0, 50);
 			this.screenContainer.Name = "screenContainer";
-			this.screenContainer.Size = new System.Drawing.Size(320, 315);
+			this.screenContainer.Size = new System.Drawing.Size(540, 475);
 			this.screenContainer.TabIndex = 4;
 			// 
 			// screen
@@ -413,9 +391,19 @@
 			this.screen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Screen_MouseMove);
 			this.screen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Screen_MouseUp);
 			// 
+			// editor
+			// 
+			this.editor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+			this.editor.Dock = System.Windows.Forms.DockStyle.Right;
+			this.editor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.editor.Location = new System.Drawing.Point(540, 50);
+			this.editor.Name = "editor";
+			this.editor.Size = new System.Drawing.Size(320, 475);
+			this.editor.TabIndex = 3;
+			// 
 			// Viewer
 			// 
-			this.ClientSize = new System.Drawing.Size(640, 400);
+			this.ClientSize = new System.Drawing.Size(860, 560);
 			this.Controls.Add(this.screenContainer);
 			this.Controls.Add(this.editor);
 			this.Controls.Add(this.tools);
@@ -424,6 +412,7 @@
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.KeyPreview = true;
 			this.MainMenuStrip = this.menu;
+			this.MinimumSize = new System.Drawing.Size(0, 570);
 			this.Name = "Viewer";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Viewer_FormClosing);
 			this.ResizeEnd += new System.EventHandler(this.Viewer_ResizeEnd);

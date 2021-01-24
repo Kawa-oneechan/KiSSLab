@@ -21,8 +21,6 @@ namespace KiSSLab
 		{
 			InitializeComponent();
 
-			tabs.SelectedIndex = 3;
-
 			cellMapCheckBoxes = new DarkCheckBox[10];
 			for (var i = 0; i < 10; i++)
 			{
@@ -53,8 +51,6 @@ namespace KiSSLab
 			{
 				cellMapCheckBoxes[i].Enabled = cellMapCheckBoxes[i].Checked = false;
 			}
-
-			scene.Decode(this.events);
 		}
 
 		public void Pick(Part part, Cell cell)
@@ -71,13 +67,13 @@ namespace KiSSLab
 		#region More darkmode lightswitch
 		public void UpdateColors()
 		{
-			this.BackColor = Colors.GreyBackground;
+			this.BackColor = Colors.DarkBackground;
 
-			foreach (var t in tabs.TabPages.OfType<TabPage>())
+			foreach (var s in this.Controls.OfType<DarkSectionPanel>())
 			{
-				t.BackColor = Colors.GreyBackground;
+				s.BackColor = Colors.GreyBackground;
 
-				foreach (var p in t.Controls.OfType<FlowLayoutPanel>())
+				foreach (var p in s.Controls.OfType<FlowLayoutPanel>())
 				{
 					foreach (var c in p.Controls.OfType<DarkLabel>())
 					{
@@ -107,17 +103,6 @@ namespace KiSSLab
 			partPosYTextBox.Text = part.Position.Y.ToString();
 			partFixTextBox.Text = part.Fix.ToString();
 			partVisibleCheckBox.Checked = part.Visible;
-
-			partCellsListView.Items.Clear();
-			foreach (var componentCell in part.Cells)
-				partCellsListView.Items.Add(new DarkListItem()
-				{
-					Text = componentCell.ID,
-					Tag = componentCell,
-					//Icon = (Bitmap)componentCell.Image.GetThumbnailImage(16, 16, null, IntPtr.Zero),
-				});
-			partCellsListView.SelectItem(0);
-
 			locked = false;
 		}
 
@@ -147,12 +132,6 @@ namespace KiSSLab
 			((Viewer)this.ParentForm).DrawScene();
 		}
 
-		private void partCellsListView_DoubleClick(object sender, EventArgs e)
-		{
-			tabs.SelectedIndex = 1;
-			cells.SelectedItem = partCellsListView.Items[partCellsListView.SelectedIndices[0]].Tag;
-		}
-
 		private void cells_SelectedItemChanged(object sender, EventArgs e)
 		{
 			locked = true;
@@ -164,7 +143,6 @@ namespace KiSSLab
 			cellOpacityTrackBar.Value = cell.Opacity;
 			for (var i = 0; i < 10; i++)
 				cellMapCheckBoxes[i].Checked = cell.OnSets[i];
-			cellPreviewPanel.BackgroundImage = cell.Image;
 			locked = false;
 		}
 

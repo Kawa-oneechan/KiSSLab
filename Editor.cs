@@ -38,12 +38,12 @@ namespace KiSSLab
 
 		public void SetScene(Scene scene)
 		{
-			objPosXTextBox.Maximum = scene.ScreenWidth;
-			objPosYTextBox.Maximum = scene.ScreenHeight;
+			partPosXTextBox.Maximum = scene.ScreenWidth;
+			partPosYTextBox.Maximum = scene.ScreenHeight;
 
-			this.objects.Items.Clear();
-			this.objects.Items.AddRange(scene.Objects.ToArray());
-			this.objects.SelectedIndex = 0;
+			this.parts.Items.Clear();
+			this.parts.Items.AddRange(scene.Parts.ToArray());
+			this.parts.SelectedIndex = 0;
 
 			this.cells.Items.Clear();
 			this.cells.Items.AddRange(scene.Cells.ToArray());
@@ -57,10 +57,10 @@ namespace KiSSLab
 			scene.Decode(this.events);
 		}
 
-		public void Pick(Object obj, Cell cell)
+		public void Pick(Part part, Cell cell)
 		{
-			if (obj != null)
-				objects.SelectedItem = obj;
+			if (part != null)
+				parts.SelectedItem = part;
 			if (cell != null)
 			{
 				cells.SelectedItem = cell;
@@ -98,59 +98,59 @@ namespace KiSSLab
 		}
 		#endregion
 
-		private void objects_SelectedItemChanged(object sender, EventArgs e)
+		private void parts_SelectedItemChanged(object sender, EventArgs e)
 		{
 			locked = true;
-			var obj = (Object)this.objects.SelectedItem;
-			objIDTextBox.Text = obj.ID;
-			objPosXTextBox.Text = obj.Position.X.ToString();
-			objPosYTextBox.Text = obj.Position.Y.ToString();
-			objFixTextBox.Text = obj.Fix.ToString();
-			objVisibleCheckBox.Checked = obj.Visible;
+			var part = (Part)this.parts.SelectedItem;
+			partIDTextBox.Text = part.ID;
+			partPosXTextBox.Text = part.Position.X.ToString();
+			partPosYTextBox.Text = part.Position.Y.ToString();
+			partFixTextBox.Text = part.Fix.ToString();
+			partVisibleCheckBox.Checked = part.Visible;
 
-			objCellsListView.Items.Clear();
-			foreach (var componentCell in obj.Cells)
-				objCellsListView.Items.Add(new DarkListItem()
+			partCellsListView.Items.Clear();
+			foreach (var componentCell in part.Cells)
+				partCellsListView.Items.Add(new DarkListItem()
 				{
 					Text = componentCell.ID,
 					Tag = componentCell,
 					//Icon = (Bitmap)componentCell.Image.GetThumbnailImage(16, 16, null, IntPtr.Zero),
 				});
-			objCellsListView.SelectItem(0);
+			partCellsListView.SelectItem(0);
 
 			locked = false;
 		}
 
-		private void objPosXTextBox_ValueChanged(object sender, EventArgs e)
+		private void partPosTextBox_ValueChanged(object sender, EventArgs e)
 		{
 			if (locked) return;
-			var obj = (Object)this.objects.SelectedItem;
-			obj.Position = new Point((int)objPosXTextBox.Value, (int)objPosYTextBox.Value);
+			var part = (Part)this.parts.SelectedItem;
+			part.Position = new Point((int)partPosXTextBox.Value, (int)partPosYTextBox.Value);
 			((Viewer)this.ParentForm).DrawScene();
 		}
 
-		private void objFixTextBox_KeyPress(object sender, KeyPressEventArgs e)
+		private void partFixTextBox_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (locked) return;
 			if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
 				e.Handled = true;
-			var obj = (Object)this.objects.SelectedItem;
-			var f = string.IsNullOrWhiteSpace(objFixTextBox.Text) ? "0" : objFixTextBox.Text;
-			obj.Fix = int.Parse(f);
+			var part = (Part)this.parts.SelectedItem;
+			var f = string.IsNullOrWhiteSpace(partFixTextBox.Text) ? "0" : partFixTextBox.Text;
+			part.Fix = int.Parse(f);
 		}
 
-		private void objVisibleCheckBox_CheckedChanged(object sender, EventArgs e)
+		private void partVisibleCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (locked) return;
-			var obj = (Object)this.objects.SelectedItem;
-			obj.Visible = objVisibleCheckBox.Checked;
+			var part = (Part)this.parts.SelectedItem;
+			part.Visible = partVisibleCheckBox.Checked;
 			((Viewer)this.ParentForm).DrawScene();
 		}
 
-		private void objCellsListView_DoubleClick(object sender, EventArgs e)
+		private void partCellsListView_DoubleClick(object sender, EventArgs e)
 		{
 			tabs.SelectedIndex = 1;
-			cells.SelectedItem = objCellsListView.Items[objCellsListView.SelectedIndices[0]].Tag;
+			cells.SelectedItem = partCellsListView.Items[partCellsListView.SelectedIndices[0]].Tag;
 		}
 
 		private void cells_SelectedItemChanged(object sender, EventArgs e)
@@ -168,7 +168,7 @@ namespace KiSSLab
 			locked = false;
 		}
 
-		private void cellOffXTextBox_ValueChanged(object sender, EventArgs e)
+		private void cellOffTextBox_ValueChanged(object sender, EventArgs e)
 		{
 			if (locked) return;
 			var cell = (Cell)this.cells.SelectedItem;

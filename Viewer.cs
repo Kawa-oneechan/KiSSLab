@@ -16,7 +16,7 @@ namespace KiSSLab
 	public partial class Viewer : DarkForm
 	{
 		private Bitmap bitmap;
-		private Object held, dropped;
+		private Part held, dropped;
 		private Point heldOffset, fix;
 		private Point lastClick;
 		private Panel debug;
@@ -225,15 +225,15 @@ namespace KiSSLab
 			lastClick = eLocation;
 			
 			var cell = default(Cell);
-			var obj = Scene.GetObjectFromPoint(eLocation, out cell);
-			editor.Pick(obj, cell);
+			var part = Scene.GetPartFromPoint(eLocation, out cell);
+			editor.Pick(part, cell);
 			if (Hilight) DrawScene();
-			if (obj != null && !obj.Locked)
+			if (part != null && !part.Locked)
 			{
-				held = obj;
-				heldOffset = new Point(eX - obj.Position.X, eY - obj.Position.Y);
+				held = part;
+				heldOffset = new Point(eX - part.Position.X, eY - part.Position.Y);
 				if (held.Fix > 0) held.Fix--;
-				fix = new Point(obj.Position.X, obj.Position.Y);
+				fix = new Point(part.Position.X, part.Position.Y);
 			}
 			else
 			{
@@ -283,16 +283,16 @@ namespace KiSSLab
 			}
 
 			var cell = default(Cell);
-			var obj = Scene.GetObjectFromPoint(eLocation, out cell);
-			var statusObj = obj;
-			if (statusObj == null && HilightedCell != null)
-				statusObj = HilightedCell.Object;
-			if (statusObj != null)
+			var part = Scene.GetPartFromPoint(eLocation, out cell);
+			var statusPart = part;
+			if (statusPart == null && HilightedCell != null)
+				statusPart = HilightedCell.Part;
+			if (statusPart != null)
 			{
-				status.Items[0].Text = statusObj.ID;
-				status.Items[1].Text = string.Format("{0} by {1}", statusObj.Position.X, statusObj.Position.Y);
-				status.Items[2].Image = (statusObj.Locked || statusObj.Fix > 0) ? global::KiSSLab.Properties.Resources.Lock : global::KiSSLab.Properties.Resources.Unlock;
-				status.Items[3].Text = statusObj.Fix.ToString();
+				status.Items[0].Text = statusPart.ID;
+				status.Items[1].Text = string.Format("{0} by {1}", statusPart.Position.X, statusPart.Position.Y);
+				status.Items[2].Image = (statusPart.Locked || statusPart.Fix > 0) ? global::KiSSLab.Properties.Resources.Lock : global::KiSSLab.Properties.Resources.Unlock;
+				status.Items[3].Text = statusPart.Fix.ToString();
 			}
 			else
 			{
@@ -300,9 +300,9 @@ namespace KiSSLab
 				status.Items[2].Image = null;
 			}
 
-			if (obj == null)
+			if (part == null)
 				Cursor = Cursors.Default;
-			else if (obj.Locked)
+			else if (part.Locked)
 				Cursor = Cursors.No;
 			else
 				Cursor = Cursors.Hand;
@@ -368,8 +368,8 @@ namespace KiSSLab
 		{
 			if (HilightedCell == null)
 				return;
-			var obj = HilightedCell.Object;
-			obj.Position = obj.InitialPosition;
+			var part = HilightedCell.Part;
+			part.Position = part.InitialPosition;
 			DrawScene();
 		}
 
@@ -487,14 +487,14 @@ namespace KiSSLab
 				using (var g = Graphics.FromImage(bitmap))
 				{
 					var cell = HilightedCell;
-					var obj = cell.Object;
+					var part = cell.Part;
 					var color = Color.Lime;
-					if (obj.Locked)
+					if (part.Locked)
 						color = Color.Red;
-					else if (obj.Fix > 0)
+					else if (part.Fix > 0)
 						color = Color.Blue;
 					var dotted = new Pen(color, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dot };
-					g.DrawRectangle(dotted, new Rectangle(obj.Position.X + cell.Offset.X, obj.Position.Y + cell.Offset.Y, cell.Image.Width - 1, cell.Image.Height - 1));
+					g.DrawRectangle(dotted, new Rectangle(part.Position.X + cell.Offset.X, part.Position.Y + cell.Offset.Y, cell.Image.Width - 1, cell.Image.Height - 1));
 				}
 			}
 

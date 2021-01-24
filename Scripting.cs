@@ -134,11 +134,11 @@ namespace KiSSLab
 			return true;
 		}
 
-		public void Release(Object held)
+		public void Release(Part held)
 		{
 			var somethingHappened = false;
 			var somethingCollided = false;
-			foreach (var other in Objects)
+			foreach (var other in Parts)
 			{
 				if (other == held)
 					continue;
@@ -199,7 +199,7 @@ namespace KiSSLab
 				RunEvent(Events[maybe]);
 			else
 			{
-				maybe = string.Format("click|{0}", cell.Object.ID);
+				maybe = string.Format("click|{0}", cell.Part.ID);
 				if (Events.ContainsKey(maybe))
 					RunEvent(Events[maybe]);
 			}

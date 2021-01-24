@@ -16,7 +16,7 @@ namespace KiSSLab
 	{
 		public Viewer Viewer { get; private set; }
 
-		public List<Object> Objects { get; set; }
+		public List<Part> Parts { get; set; }
 		public List<Cell> Cells { get; set; }
 
 		public int ScreenWidth { get; private set; }
@@ -37,7 +37,7 @@ namespace KiSSLab
 		{
 			Viewer = viewer;
 
-			Objects = new List<Object>();
+			Parts = new List<Part>();
 			Cells = new List<Cell>();
 
 			Events = new Dictionary<string, List<object>>();
@@ -209,16 +209,16 @@ namespace KiSSLab
 							}
 
 							//find the partof object
-							var part = Objects.FirstOrDefault(o => o.ID == partof);
+							var part = Parts.FirstOrDefault(o => o.ID == partof);
 							if (part == null)
 							{
-								part = new Object()
+								part = new Part()
 								{
 									ID = partof,
 									Cells = new List<Cell>(),
 									Visible = true,
 								};
-								Objects.Add(part);
+								Parts.Add(part);
 							}
 
 							if (newPos)
@@ -287,7 +287,7 @@ namespace KiSSLab
 								c.OnSets[i] = true;
 							}
 							c.Offset = new Point((int)offset[0], (int)offset[1]);
-							c.Object = part;
+							c.Part = part;
 							part.Cells.Add(c);
 							part.UpdateBounds();
 
@@ -312,27 +312,27 @@ namespace KiSSLab
 			Sets++;
 		}
 
-		public Object GetObjectFromPoint(Point point, out Cell backCel)
+		public Part GetPartFromPoint(Point point, out Cell backCel)
 		{
-			Object ret = null;
+			Part ret = null;
 			backCel = null;
 			for (var i = Cells.Count; i > 0; i--)
 			{
 				var cell = Cells[i - 1];
-				var obj = cell.Object;
+				var part = cell.Part;
 
 				if (!cell.OnSet) continue;
 				if (!cell.Visible) continue;
-				if (!obj.Visible) continue;
+				if (!part.Visible) continue;
 
-				var x = point.X - obj.Position.X - cell.Offset.X;
-				var y = point.Y - obj.Position.Y - cell.Offset.Y;
+				var x = point.X - part.Position.X - cell.Offset.X;
+				var y = point.Y - part.Position.Y - cell.Offset.Y;
 				if (x <= 0 || y <= 0 || x >= cell.Image.Width || y >= cell.Image.Height)
 					continue;
 				var color = cell.Image.GetPixel(x, y);
 				if (color.A != 0)
 				{
-					ret = obj;
+					ret = part;
 					backCel = cell;
 				}
 			}
@@ -361,10 +361,10 @@ namespace KiSSLab
 				gfx.FillRectangle(BackgroundBrush, 0, 0, ScreenWidth, ScreenHeight);
 			foreach (var cell in Cells.Reverse<Cell>())
 			{
-				var obj = cell.Object;
+				var part = cell.Part;
 				if (!cell.OnSet) continue;
 				if (!cell.Visible) continue;
-				if (!obj.Visible) continue;
+				if (!part.Visible) continue;
 
 				if (cell.Opacity == 0)
 					continue;
@@ -373,7 +373,7 @@ namespace KiSSLab
 
 				try
 				{
-					gfx.DrawImage(cell.Image, new Rectangle(cell.Object.Position.X + cell.Offset.X, cell.Object.Position.Y + cell.Offset.Y, cell.Image.Width, cell.Image.Height), 0, 0, cell.Image.Width, cell.Image.Height, GraphicsUnit.Pixel, attrs);
+					gfx.DrawImage(cell.Image, new Rectangle(cell.Part.Position.X + cell.Offset.X, cell.Part.Position.Y + cell.Offset.Y, cell.Image.Width, cell.Image.Height), 0, 0, cell.Image.Width, cell.Image.Height, GraphicsUnit.Pixel, attrs);
 				}
 				catch (Exception)
 				{ }
@@ -383,21 +383,14 @@ namespace KiSSLab
 
 	public class Cell
 	{
-		[Browsable(false)]
 		public string ImageFilename { get; set; }
-		[Description("The name of the file this cell's image was loaded from.")]
 		public string Filename { get { return ImageFilename; } }
-		[Description("Gets or sets the image making up this cell.")]
 		public Bitmap Image { get; set; }
-		[Description("The offset from the object's top-left corner to draw this cell.")]
 		public Point Offset { get; set; }
-		[Description("Determines whether this cell is visible or hidden.")]
 		public bool Visible { get; set; }
-		[Browsable(false)]
 		public bool[] OnSets { get; set; }
 		public bool OnSet { get { return OnSets[Viewer.Set]; } set { OnSets[Viewer.Set] = value; } }
-		[Browsable(false)]
-		public Object Object { get; set; }
+		public Part Part { get; set; }
 		public string ID { get; set; }
 		public int Opacity { get; set; }
 
@@ -414,14 +407,11 @@ namespace KiSSLab
 		}
 	}
 
-	public class Object
+	public class Part
 	{
-		[Browsable(false)]
 		public List<Cell> Cells { get; set; }
-		[Browsable(false)]
 		public Point[] Positions { get; set; }
 		public Point Position { get { return Positions[Viewer.Set]; } set { Positions[Viewer.Set] = value; } }
-		[Browsable(false)]
 		public Point[] InitialPositions { get; set; }
 		public Point InitialPosition { get { return InitialPositions[Viewer.Set]; } set { InitialPositions[Viewer.Set] = value; } }
 		public bool Visible { get; set; }
@@ -429,10 +419,9 @@ namespace KiSSLab
 		public int InitialFix { get; set; }
 		public bool Locked { get { return Fix >= 999; } set { Fix = value ? 999 : 0; } }
 		public string ID { get; set; }
-		[Browsable(false)]
-		public Object LastCollidedWith { get; set; }
+		public Part LastCollidedWith { get; set; }
 
-		public Object()
+		public Part()
 		{
 			InitialPositions = new Point[10];
 			Positions = new Point[10];

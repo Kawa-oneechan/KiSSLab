@@ -32,7 +32,7 @@ namespace KiSSLab
 			return true;
 		}
 
-		public static bool PixelOverlap(Object oA, Object oB)
+		public static bool PixelOverlap(Part oA, Part oB)
 		{
 			foreach (var cA in oA.Cells)
 			{

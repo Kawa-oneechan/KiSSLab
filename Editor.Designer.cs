@@ -30,20 +30,20 @@
 		{
 			this.tabs = new KiSSLab.MyTab();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.objCellsListView = new DarkUI.Controls.DarkListView();
+			this.partCellsListView = new DarkUI.Controls.DarkListView();
 			this.darkTitle4 = new DarkUI.Controls.DarkTitle();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.darkTitle1 = new DarkUI.Controls.DarkLabel();
-			this.objIDTextBox = new DarkUI.Controls.DarkTextBox();
+			this.partIDTextBox = new DarkUI.Controls.DarkTextBox();
 			this.darkLabel1 = new DarkUI.Controls.DarkLabel();
-			this.objPosXTextBox = new DarkUI.Controls.DarkNumericUpDown();
-			this.objPosYTextBox = new DarkUI.Controls.DarkNumericUpDown();
+			this.partPosXTextBox = new DarkUI.Controls.DarkNumericUpDown();
+			this.partPosYTextBox = new DarkUI.Controls.DarkNumericUpDown();
 			this.darkLabel2 = new DarkUI.Controls.DarkLabel();
-			this.objFixTextBox = new DarkUI.Controls.DarkTextBox();
-			this.objVisibleCheckBox = new DarkUI.Controls.DarkCheckBox();
+			this.partFixTextBox = new DarkUI.Controls.DarkTextBox();
+			this.partVisibleCheckBox = new DarkUI.Controls.DarkCheckBox();
 			this.darkTitle3 = new DarkUI.Controls.DarkTitle();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.objects = new DarkUI.Controls.DarkComboBox();
+			this.parts = new DarkUI.Controls.DarkComboBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.cellPreviewPanel = new System.Windows.Forms.Panel();
 			this.darkTitle5 = new DarkUI.Controls.DarkTitle();
@@ -65,8 +65,8 @@
 			this.tabs.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.objPosXTextBox)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.objPosYTextBox)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.partPosXTextBox)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.partPosYTextBox)).BeginInit();
 			this.panel1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -92,7 +92,7 @@
 			// tabPage1
 			// 
 			this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.tabPage1.Controls.Add(this.objCellsListView);
+			this.tabPage1.Controls.Add(this.partCellsListView);
 			this.tabPage1.Controls.Add(this.darkTitle4);
 			this.tabPage1.Controls.Add(this.flowLayoutPanel1);
 			this.tabPage1.Controls.Add(this.darkTitle3);
@@ -102,18 +102,18 @@
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
 			this.tabPage1.Size = new System.Drawing.Size(312, 524);
 			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "Objects";
+			this.tabPage1.Text = "Parts";
 			// 
-			// objCellsListView
+			// partCellsListView
 			// 
-			this.objCellsListView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.objCellsListView.Location = new System.Drawing.Point(4, 211);
-			this.objCellsListView.Name = "objCellsListView";
-			this.objCellsListView.ShowIcons = true;
-			this.objCellsListView.Size = new System.Drawing.Size(304, 309);
-			this.objCellsListView.TabIndex = 13;
-			this.objCellsListView.Text = "darkListView1";
-			this.objCellsListView.DoubleClick += new System.EventHandler(this.objCellsListView_DoubleClick);
+			this.partCellsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.partCellsListView.Location = new System.Drawing.Point(4, 211);
+			this.partCellsListView.Name = "partCellsListView";
+			this.partCellsListView.ShowIcons = true;
+			this.partCellsListView.Size = new System.Drawing.Size(304, 309);
+			this.partCellsListView.TabIndex = 13;
+			this.partCellsListView.Text = "darkListView1";
+			this.partCellsListView.DoubleClick += new System.EventHandler(this.partCellsListView_DoubleClick);
 			// 
 			// darkTitle4
 			// 
@@ -127,13 +127,13 @@
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.darkTitle1);
-			this.flowLayoutPanel1.Controls.Add(this.objIDTextBox);
+			this.flowLayoutPanel1.Controls.Add(this.partIDTextBox);
 			this.flowLayoutPanel1.Controls.Add(this.darkLabel1);
-			this.flowLayoutPanel1.Controls.Add(this.objPosXTextBox);
-			this.flowLayoutPanel1.Controls.Add(this.objPosYTextBox);
+			this.flowLayoutPanel1.Controls.Add(this.partPosXTextBox);
+			this.flowLayoutPanel1.Controls.Add(this.partPosYTextBox);
 			this.flowLayoutPanel1.Controls.Add(this.darkLabel2);
-			this.flowLayoutPanel1.Controls.Add(this.objFixTextBox);
-			this.flowLayoutPanel1.Controls.Add(this.objVisibleCheckBox);
+			this.flowLayoutPanel1.Controls.Add(this.partFixTextBox);
+			this.flowLayoutPanel1.Controls.Add(this.partVisibleCheckBox);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(4, 57);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -150,15 +150,15 @@
 			this.darkTitle1.Text = "ID";
 			this.darkTitle1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// objIDTextBox
+			// partIDTextBox
 			// 
-			this.objIDTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-			this.objIDTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.objIDTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.objIDTextBox.Location = new System.Drawing.Point(129, 3);
-			this.objIDTextBox.Name = "objIDTextBox";
-			this.objIDTextBox.Size = new System.Drawing.Size(170, 23);
-			this.objIDTextBox.TabIndex = 1;
+			this.partIDTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+			this.partIDTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.partIDTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.partIDTextBox.Location = new System.Drawing.Point(129, 3);
+			this.partIDTextBox.Name = "partIDTextBox";
+			this.partIDTextBox.Size = new System.Drawing.Size(170, 23);
+			this.partIDTextBox.TabIndex = 1;
 			// 
 			// darkLabel1
 			// 
@@ -170,27 +170,27 @@
 			this.darkLabel1.Text = "Position";
 			this.darkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// objPosXTextBox
+			// partPosXTextBox
 			// 
-			this.objPosXTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-			this.objPosXTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.objPosXTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.objPosXTextBox.Location = new System.Drawing.Point(129, 32);
-			this.objPosXTextBox.Name = "objPosXTextBox";
-			this.objPosXTextBox.Size = new System.Drawing.Size(82, 23);
-			this.objPosXTextBox.TabIndex = 3;
-			this.objPosXTextBox.ValueChanged += new System.EventHandler(this.objPosXTextBox_ValueChanged);
+			this.partPosXTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+			this.partPosXTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.partPosXTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.partPosXTextBox.Location = new System.Drawing.Point(129, 32);
+			this.partPosXTextBox.Name = "partPosXTextBox";
+			this.partPosXTextBox.Size = new System.Drawing.Size(82, 23);
+			this.partPosXTextBox.TabIndex = 3;
+			this.partPosXTextBox.ValueChanged += new System.EventHandler(this.partPosTextBox_ValueChanged);
 			// 
-			// objPosYTextBox
+			// partPosYTextBox
 			// 
-			this.objPosYTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-			this.objPosYTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.objPosYTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.objPosYTextBox.Location = new System.Drawing.Point(217, 32);
-			this.objPosYTextBox.Name = "objPosYTextBox";
-			this.objPosYTextBox.Size = new System.Drawing.Size(82, 23);
-			this.objPosYTextBox.TabIndex = 4;
-			this.objPosYTextBox.ValueChanged += new System.EventHandler(this.objPosXTextBox_ValueChanged);
+			this.partPosYTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+			this.partPosYTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.partPosYTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.partPosYTextBox.Location = new System.Drawing.Point(217, 32);
+			this.partPosYTextBox.Name = "partPosYTextBox";
+			this.partPosYTextBox.Size = new System.Drawing.Size(82, 23);
+			this.partPosYTextBox.TabIndex = 4;
+			this.partPosYTextBox.ValueChanged += new System.EventHandler(this.partPosTextBox_ValueChanged);
 			// 
 			// darkLabel2
 			// 
@@ -202,27 +202,27 @@
 			this.darkLabel2.Text = "Fix";
 			this.darkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// objFixTextBox
+			// partFixTextBox
 			// 
-			this.objFixTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-			this.objFixTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.flowLayoutPanel1.SetFlowBreak(this.objFixTextBox, true);
-			this.objFixTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.objFixTextBox.Location = new System.Drawing.Point(129, 61);
-			this.objFixTextBox.Name = "objFixTextBox";
-			this.objFixTextBox.Size = new System.Drawing.Size(82, 23);
-			this.objFixTextBox.TabIndex = 9;
-			this.objFixTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.objFixTextBox_KeyPress);
+			this.partFixTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+			this.partFixTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.flowLayoutPanel1.SetFlowBreak(this.partFixTextBox, true);
+			this.partFixTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.partFixTextBox.Location = new System.Drawing.Point(129, 61);
+			this.partFixTextBox.Name = "partFixTextBox";
+			this.partFixTextBox.Size = new System.Drawing.Size(82, 23);
+			this.partFixTextBox.TabIndex = 9;
+			this.partFixTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.partFixTextBox_KeyPress);
 			// 
-			// objVisibleCheckBox
+			// partVisibleCheckBox
 			// 
-			this.objVisibleCheckBox.AutoSize = true;
-			this.objVisibleCheckBox.Location = new System.Drawing.Point(3, 90);
-			this.objVisibleCheckBox.Name = "objVisibleCheckBox";
-			this.objVisibleCheckBox.Size = new System.Drawing.Size(60, 19);
-			this.objVisibleCheckBox.TabIndex = 6;
-			this.objVisibleCheckBox.Text = "Visible";
-			this.objVisibleCheckBox.CheckedChanged += new System.EventHandler(this.objVisibleCheckBox_CheckedChanged);
+			this.partVisibleCheckBox.AutoSize = true;
+			this.partVisibleCheckBox.Location = new System.Drawing.Point(3, 90);
+			this.partVisibleCheckBox.Name = "partVisibleCheckBox";
+			this.partVisibleCheckBox.Size = new System.Drawing.Size(60, 19);
+			this.partVisibleCheckBox.TabIndex = 6;
+			this.partVisibleCheckBox.Text = "Visible";
+			this.partVisibleCheckBox.CheckedChanged += new System.EventHandler(this.partVisibleCheckBox_CheckedChanged);
 			// 
 			// darkTitle3
 			// 
@@ -231,26 +231,26 @@
 			this.darkTitle3.Name = "darkTitle3";
 			this.darkTitle3.Size = new System.Drawing.Size(304, 23);
 			this.darkTitle3.TabIndex = 10;
-			this.darkTitle3.Text = "Object properties";
+			this.darkTitle3.Text = "Part properties";
 			// 
 			// panel1
 			// 
-			this.panel1.Controls.Add(this.objects);
+			this.panel1.Controls.Add(this.parts);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(4, 4);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(304, 30);
 			this.panel1.TabIndex = 0;
 			// 
-			// objects
+			// parts
 			// 
-			this.objects.Dock = System.Windows.Forms.DockStyle.Top;
-			this.objects.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-			this.objects.Location = new System.Drawing.Point(0, 0);
-			this.objects.Name = "objects";
-			this.objects.Size = new System.Drawing.Size(304, 24);
-			this.objects.TabIndex = 0;
-			this.objects.SelectedIndexChanged += new System.EventHandler(this.objects_SelectedItemChanged);
+			this.parts.Dock = System.Windows.Forms.DockStyle.Top;
+			this.parts.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+			this.parts.Location = new System.Drawing.Point(0, 0);
+			this.parts.Name = "parts";
+			this.parts.Size = new System.Drawing.Size(304, 24);
+			this.parts.TabIndex = 0;
+			this.parts.SelectedIndexChanged += new System.EventHandler(this.parts_SelectedItemChanged);
 			// 
 			// tabPage2
 			// 
@@ -347,7 +347,7 @@
 			this.cellOffXTextBox.Name = "cellOffXTextBox";
 			this.cellOffXTextBox.Size = new System.Drawing.Size(82, 23);
 			this.cellOffXTextBox.TabIndex = 16;
-			this.cellOffXTextBox.ValueChanged += new System.EventHandler(this.cellOffXTextBox_ValueChanged);
+			this.cellOffXTextBox.ValueChanged += new System.EventHandler(this.cellOffTextBox_ValueChanged);
 			// 
 			// cellOffYTextBox
 			// 
@@ -363,7 +363,7 @@
 			this.cellOffYTextBox.Name = "cellOffYTextBox";
 			this.cellOffYTextBox.Size = new System.Drawing.Size(82, 23);
 			this.cellOffYTextBox.TabIndex = 17;
-			this.cellOffYTextBox.ValueChanged += new System.EventHandler(this.cellOffXTextBox_ValueChanged);
+			this.cellOffYTextBox.ValueChanged += new System.EventHandler(this.cellOffTextBox_ValueChanged);
 			// 
 			// cellVisibleCheckBox
 			// 
@@ -465,8 +465,8 @@
 			this.tabPage1.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.objPosXTextBox)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.objPosYTextBox)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.partPosXTextBox)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.partPosYTextBox)).EndInit();
 			this.panel1.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
 			this.flowLayoutPanel2.ResumeLayout(false);
@@ -487,7 +487,7 @@
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.TabPage tabPage3;
-		private DarkUI.Controls.DarkComboBox objects;
+		private DarkUI.Controls.DarkComboBox parts;
 		private System.Windows.Forms.Panel panel2;
 		private DarkUI.Controls.DarkComboBox cells;
 		private DarkUI.Controls.DarkTreeView events;
@@ -503,15 +503,15 @@
 		private System.Windows.Forms.TrackBar cellOpacityTrackBar;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private DarkUI.Controls.DarkLabel darkTitle1;
-		private DarkUI.Controls.DarkTextBox objIDTextBox;
+		private DarkUI.Controls.DarkTextBox partIDTextBox;
 		private DarkUI.Controls.DarkLabel darkLabel1;
-		private DarkUI.Controls.DarkNumericUpDown objPosXTextBox;
-		private DarkUI.Controls.DarkNumericUpDown objPosYTextBox;
+		private DarkUI.Controls.DarkNumericUpDown partPosXTextBox;
+		private DarkUI.Controls.DarkNumericUpDown partPosYTextBox;
 		private DarkUI.Controls.DarkLabel darkLabel2;
-		private DarkUI.Controls.DarkTextBox objFixTextBox;
-		private DarkUI.Controls.DarkCheckBox objVisibleCheckBox;
+		private DarkUI.Controls.DarkTextBox partFixTextBox;
+		private DarkUI.Controls.DarkCheckBox partVisibleCheckBox;
 		private DarkUI.Controls.DarkTitle darkTitle3;
-		private DarkUI.Controls.DarkListView objCellsListView;
+		private DarkUI.Controls.DarkListView partCellsListView;
 		private DarkUI.Controls.DarkTitle darkTitle4;
 		private DarkUI.Controls.DarkTitle darkTitle6;
 		private System.Windows.Forms.Panel cellPreviewPanel;

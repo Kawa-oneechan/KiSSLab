@@ -48,9 +48,9 @@ namespace KiSSLab
 			}
 
 			var str = Evaluate(cmd[1]).ToString();
-			var moveRelWhat = Objects.FirstOrDefault(o => o.ID == str);
+			var moveRelWhat = Parts.FirstOrDefault(o => o.ID == str);
 			str = Evaluate(cmd[2]).ToString();
-			var moveRelTo = Objects.FirstOrDefault(o => o.ID == str);
+			var moveRelTo = Parts.FirstOrDefault(o => o.ID == str);
 			var moveRelByX = Evaluate<int>(cmd[3]);
 			var moveRelByY = Evaluate<int>(cmd[4]);
 			if (!(moveRelWhat == null || moveRelTo == null))
@@ -63,13 +63,13 @@ namespace KiSSLab
 		{
 			object mapThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
 			if (mapThis == null)
-				mapThis = Objects.FirstOrDefault(o => o.ID == cmd[1].ToString());
+				mapThis = Parts.FirstOrDefault(o => o.ID == cmd[1].ToString());
 			if (mapThis == null)
 				return null;
 			if (mapThis is Cell)
 				((Cell)mapThis).Visible = true;
-			else if (mapThis is Object)
-				((Object)mapThis).Visible = true;
+			else if (mapThis is Part)
+				((Part)mapThis).Visible = true;
 			return mapThis;
 		}
 
@@ -78,13 +78,13 @@ namespace KiSSLab
 		{
 			object mapThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
 			if (mapThis == null)
-				mapThis = Objects.FirstOrDefault(o => o.ID == cmd[1].ToString());
+				mapThis = Parts.FirstOrDefault(o => o.ID == cmd[1].ToString());
 			if (mapThis == null)
 				return null;
 			if (mapThis is Cell)
 				((Cell)mapThis).Visible = false;
-			else if (mapThis is Object)
-				((Object)mapThis).Visible = false;
+			else if (mapThis is Part)
+				((Part)mapThis).Visible = false;
 			return mapThis;
 		}
 
@@ -93,13 +93,13 @@ namespace KiSSLab
 		{
 			object mapThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
 			if (mapThis == null)
-				mapThis = Objects.FirstOrDefault(o => o.ID == cmd[1].ToString());
+				mapThis = Parts.FirstOrDefault(o => o.ID == cmd[1].ToString());
 			if (mapThis == null)
 				return null;
 			if (mapThis is Cell)
 				((Cell)mapThis).Visible = !((Cell)mapThis).Visible;
-			else if (mapThis is Object)
-				((Object)mapThis).Visible = !((Object)mapThis).Visible;
+			else if (mapThis is Part)
+				((Part)mapThis).Visible = !((Part)mapThis).Visible;
 			return mapThis;
 		}
 

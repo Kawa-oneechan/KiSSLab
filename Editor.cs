@@ -56,10 +56,18 @@ namespace KiSSLab
 		public void Pick(Part part, Cell cell)
 		{
 			if (part != null)
-				parts.SelectedItem = part;
+			{
+				if (parts.SelectedItem == part)
+					parts_SelectedItemChanged(null, null);
+				else
+					parts.SelectedItem = part;
+			}
 			if (cell != null)
 			{
-				cells.SelectedItem = cell;
+				if (cells.SelectedItem == cell)
+					cells_SelectedItemChanged(null, null);
+				else
+					cells.SelectedItem = cell;
 				((Viewer)this.ParentForm).HilightedCell = cell;
 			}
 		}

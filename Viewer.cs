@@ -336,7 +336,8 @@ namespace KiSSLab
 				Scene.Viewer.DrawScene();
 				return;
 			}
-	
+
+			editor.Pick(held, HilightedCell);
 			Scene.Release(held, HilightedCell);
 
 			if (held != null)

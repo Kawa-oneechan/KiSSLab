@@ -77,7 +77,6 @@
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="fmod.cs" />
-    <Compile Include="MultimediaTimer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ScriptFunctions.cs" />
     <Compile Include="Scripting.cs" />

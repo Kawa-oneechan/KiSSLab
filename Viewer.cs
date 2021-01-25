@@ -28,7 +28,7 @@ namespace KiSSLab
 		public static bool Hilight;
 		public Cell HilightedCell;
 
-		private HighPrecisionTimer.MultimediaTimer AlarmTimer;
+		private System.Windows.Forms.Timer AlarmTimer;
 		private string[] lastOpened;
 		public static SoundSystem Sound;
 
@@ -213,8 +213,6 @@ namespace KiSSLab
 		{
 			if (Scene == null)
 				return;
-			if (drawing)
-				return;
 
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
@@ -251,8 +249,6 @@ namespace KiSSLab
 		private void Screen_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (Scene == null)
-				return;
-			if (drawing)
 				return;
 
 			var eX = e.X / Zoom;
@@ -319,8 +315,8 @@ namespace KiSSLab
 		{
 			if (Scene == null)
 				return;
-			if (drawing)
-				return;
+			//if (drawing)
+			//	return;
 
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
@@ -470,30 +466,11 @@ namespace KiSSLab
 		}
 #endregion
 
-		private delegate void SafeCallDelegate();
-		private void RefreshScreen()
-		{
-			if (screen.InvokeRequired)
-			{
-				var d = new SafeCallDelegate(RefreshScreen);
-				screen.Invoke(d, new object[] { });
-			}
-			else
-			{
-				screen.Refresh();
-			}
-		}
-
-		private bool drawing;
-
 		public void DrawScene()
 		{
 			if (Scene == null)
 				return;
-			if (drawing)
-				return;
 
-			drawing = true;
 			Scene.DrawToBitmap(bitmap);
 			if (Hilight && HilightedCell != null)
 			{
@@ -511,9 +488,7 @@ namespace KiSSLab
 				}
 			}
 
-			//screen.Refresh();
-			RefreshScreen();
-			drawing = false;
+			screen.Refresh();
 		}
 
 		public void OpenDoll(string source, string configFile)
@@ -572,10 +547,10 @@ namespace KiSSLab
 				DrawScene();
 			}
 
-			AlarmTimer = new HighPrecisionTimer.MultimediaTimer();
+			AlarmTimer = new System.Windows.Forms.Timer();
 			AlarmTimer.Interval = 5;
-			//AlarmTimer.Tick += new EventHandler(AlarmTimer_Tick);
-			AlarmTimer.Elapsed += new EventHandler(AlarmTimer_Tick);
+			AlarmTimer.Tick += new EventHandler(AlarmTimer_Tick);
+			//AlarmTimer.Elapsed += new EventHandler(AlarmTimer_Tick);
 			AlarmTimer.Start();
 
 			lastOpened = new[] { source, configFile };

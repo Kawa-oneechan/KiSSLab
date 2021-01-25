@@ -30,6 +30,7 @@ namespace KiSSLab
 
 		private HighPrecisionTimer.MultimediaTimer AlarmTimer;
 		private string[] lastOpened;
+		public static SoundSystem Sound;
 
 		//[System.Runtime.InteropServices.DllImport("Shell32.dll")]
 		//private static extern int SHChangeNotify(int eventId, int flags, IntPtr item1, IntPtr item2);
@@ -161,6 +162,7 @@ namespace KiSSLab
 			Tools.PointDebug = debug;
 
 			bitmap = new Bitmap(480, 400);
+			Sound = new SoundSystem();
 
 			if (args.Length == 1)
 			{
@@ -515,6 +517,8 @@ namespace KiSSLab
 
 		public void OpenDoll(string source, string configFile)
 		{
+			Sound.StopEverything();
+
 			Mix.Initialize(source);
 			if (configFile == null)
 			{

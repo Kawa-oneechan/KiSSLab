@@ -23,7 +23,7 @@ namespace KiSSLab
 		[ScriptFunction("=")]
 		public object SetVar(params object[] cmd)
 		{
-			var key = Evaluate<Symbol>(cmd[1]);
+			var key = cmd[1] as Symbol; //Evaluate<Symbol>(cmd[1]);
 			var val = Evaluate(cmd[2]);
 			scriptVariables[key] = val;
 			return key;
@@ -36,6 +36,29 @@ namespace KiSSLab
 				return rand.Next(Evaluate<int>(cmd[1]));
 			else if (cmd.Length > 2)
 				return rand.Next(Evaluate<int>(cmd[1]), Evaluate<int>(cmd[2]));
+			return 0;
+		}
+
+		[ScriptFunction]
+		public object PlayMusic(params object[] cmd)
+		{
+			var file = Evaluate<string>(cmd[1]);
+			Viewer.Sound.PlayMusic(file);
+			return 0;
+		}
+
+		[ScriptFunction]
+		public object PlaySound(params object[] cmd)
+		{
+			var file = Evaluate<string>(cmd[1]);
+			return Viewer.Sound.PlaySound(file);
+		}
+
+		[ScriptFunction]
+		public object StopSound(params object[] cmd)
+		{
+			var sound = Evaluate<SoundSystem.Sound>(cmd[1]);
+			sound.Stop();
 			return 0;
 		}
 

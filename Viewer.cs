@@ -191,8 +191,10 @@ namespace KiSSLab
 			}
 			else if (e.Control && e.KeyValue == 9)
 			{
-				e.Handled = true;
-				NextSet_Click(null, null);
+				if (e.Shift)
+					PreviousSet_Click(null, null);
+				else
+					NextSet_Click(null, null);
 			}
 		}
 
@@ -652,6 +654,16 @@ namespace KiSSLab
 			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
 			Set++;
 			if (Set == Scene.Sets) Set = 0;
+			if (dropped != null) dropped.LastCollidedWith = null;
+			DrawScene();
+			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;
+		}
+
+		private void PreviousSet_Click(object sender, EventArgs e)
+		{
+			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
+			if (Set == 0) Set = Scene.Sets;
+			Set--;
 			if (dropped != null) dropped.LastCollidedWith = null;
 			DrawScene();
 			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;

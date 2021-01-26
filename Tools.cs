@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace KiSSLab
 {
@@ -89,5 +90,26 @@ namespace KiSSLab
 			return false;
 		}
 
+		/// <summary>
+		/// Grabs a Bitmap from the Mix system, *but* in a way that ensures no files are locked, thus allowing rapid doll development.
+		/// </summary>
+		/// <param name="file">The name of the file to grab.</param>
+		/// <returns>Not exactly the *same* Bitmap.</returns>
+		public static Bitmap GrabClonedBitmap(string file)
+		{
+			using (var jango = Kawa.Mix.Mix.GetBitmap(file))
+			{
+				var boba = new Bitmap(jango.Width, jango.Height, jango.PixelFormat);
+				var r = new Rectangle(0, 0, jango.Width, jango.Height);
+				var lockBits = jango.LockBits(r, ImageLockMode.ReadWrite, jango.PixelFormat);
+				var pixels = new byte[lockBits.Stride * lockBits.Height];
+				System.Runtime.InteropServices.Marshal.Copy(lockBits.Scan0, pixels, 0, pixels.Length);
+				jango.UnlockBits(lockBits);
+				lockBits = boba.LockBits(r, ImageLockMode.ReadWrite, boba.PixelFormat);
+				System.Runtime.InteropServices.Marshal.Copy(pixels, 0, lockBits.Scan0, pixels.Length);
+				boba.UnlockBits(lockBits);
+				return boba;
+			}
+		}
 	}
 }

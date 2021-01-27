@@ -218,7 +218,8 @@ namespace KiSSLab
 
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
-			if (e.Button == MouseButtons.Right)
+			var realLocation = new Point(eX, eY);
+			if (gridToolStripButton.Checked)
 			{
 				eX = (eX / 8) * 8;
 				eY = (eY / 8) * 8;
@@ -227,7 +228,7 @@ namespace KiSSLab
 			lastClick = eLocation;
 			
 			var cell = default(Cell);
-			var part = Scene.GetPartFromPoint(eLocation, out cell);
+			var part = Scene.GetPartFromPoint(realLocation, out cell);
 			editor.Pick(part, cell);
 			if (Hilight) DrawScene();
 
@@ -255,7 +256,8 @@ namespace KiSSLab
 
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
-			if (e.Button == MouseButtons.Right)
+			var realLocation = new Point(eX, eY);
+			if (gridToolStripButton.Checked)
 			{
 				eX = (eX / 8) * 8;
 				eY = (eY / 8) * 8;
@@ -288,13 +290,13 @@ namespace KiSSLab
 			}
 
 			var cell = default(Cell);
-			var part = Scene.GetPartFromPoint(eLocation, out cell);
+			var part = Scene.GetPartFromPoint(realLocation, out cell);
 			var statusPart = part;
 			if (statusPart == null && HilightedCell != null)
 				statusPart = HilightedCell.Part;
-			if (statusPart != null)
+			if (statusPart != null && cell != null)
 			{
-				status.Items[0].Text = statusPart.ID;
+				status.Items[0].Text = string.Format("{0} » {1}", statusPart.ID, cell.ID);
 				status.Items[1].Text = string.Format("{0} by {1}", statusPart.Position.X, statusPart.Position.Y);
 				status.Items[2].Image = (statusPart.Locked || statusPart.Fix > 0) ? global::KiSSLab.Properties.Resources.Lock : global::KiSSLab.Properties.Resources.Unlock;
 				status.Items[3].Text = statusPart.Fix.ToString();
@@ -347,6 +349,28 @@ namespace KiSSLab
 			Scene.Viewer.DrawScene();
 		}
 
+		private void Screen_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{
+				var eX = e.X / Zoom;
+				var eY = e.Y / Zoom;
+				var realLocation = new Point(eX, eY);
+
+				var cell = default(Cell);
+				var part = Scene.GetPartFromPoint(realLocation, out cell);
+				if (part == null || cell == null)
+					return;
+
+				var screenLocation = screen.PointToScreen(new Point(e.X, e.Y));
+
+				cellMenuHeader.Text = cell.ID;
+				unfixToolStripMenuItem.Enabled = part.Locked;
+				refixToolStripMenuItem.Enabled = !part.Locked;
+				cellContextMenu.Show(screenLocation);
+			}
+		}
+
 		private void Screen_Paint(object sender, PaintEventArgs e)
 		{
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -382,6 +406,22 @@ namespace KiSSLab
 			var part = HilightedCell.Part;
 			part.Position = part.InitialPosition;
 			DrawScene();
+		}
+		
+		private void Unfix_Click(object sender, EventArgs e)
+		{
+			if (HilightedCell == null)
+				return;
+			var part = HilightedCell.Part;
+			part.Fix = 0;
+		}
+
+		private void Refix_Click(object sender, EventArgs e)
+		{
+			if (HilightedCell == null)
+				return;
+			var part = HilightedCell.Part;
+			part.Fix = part.InitialFix;
 		}
 
 #region Dark mode lightshit I mean switch

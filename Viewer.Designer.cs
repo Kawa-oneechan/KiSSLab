@@ -62,6 +62,7 @@
 			this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.highlightToolStripButton = new System.Windows.Forms.ToolStripButton();
+			this.gridToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.nextSetToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -76,12 +77,19 @@
 			this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.screenContainer = new System.Windows.Forms.Panel();
 			this.screen = new System.Windows.Forms.PictureBox();
+			this.cellContextMenu = new DarkUI.Controls.DarkContextMenu();
+			this.cellMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
+			this.unfixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.refixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.resetPositionToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.editor = new KiSSLab.Editor();
+			this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
 			this.menu.SuspendLayout();
 			this.tools.SuspendLayout();
 			this.status.SuspendLayout();
 			this.screenContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.screen)).BeginInit();
+			this.cellContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menu
@@ -158,6 +166,7 @@
 			// 
 			// copyCellToolStripMenuItem
 			// 
+			this.copyCellToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.copyCellToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Copy;
 			this.copyCellToolStripMenuItem.Name = "copyCellToolStripMenuItem";
 			this.copyCellToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
@@ -167,6 +176,7 @@
 			// 
 			// resetPositionToolStripMenuItem
 			// 
+			this.resetPositionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.resetPositionToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Reset;
 			this.resetPositionToolStripMenuItem.Name = "resetPositionToolStripMenuItem";
 			this.resetPositionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
@@ -202,6 +212,7 @@
             this.openToolStripButton,
             this.toolStripSeparator2,
             this.highlightToolStripButton,
+            this.gridToolStripButton,
             this.toolStripSeparator3,
             this.nextSetToolStripButton,
             this.toolStripSeparator4,
@@ -222,7 +233,6 @@
 			this.openToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.openToolStripButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.openToolStripButton.Image = global::KiSSLab.Properties.Resources.Open;
-			this.openToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.openToolStripButton.Name = "openToolStripButton";
 			this.openToolStripButton.Size = new System.Drawing.Size(23, 23);
 			this.openToolStripButton.Text = "Open";
@@ -243,11 +253,21 @@
 			this.highlightToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.highlightToolStripButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.highlightToolStripButton.Image = global::KiSSLab.Properties.Resources.Highlight;
-			this.highlightToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.highlightToolStripButton.Name = "highlightToolStripButton";
 			this.highlightToolStripButton.Size = new System.Drawing.Size(23, 23);
 			this.highlightToolStripButton.Text = "Highlight current cell";
 			this.highlightToolStripButton.Click += new System.EventHandler(this.Highlight_Click);
+			// 
+			// gridToolStripButton
+			// 
+			this.gridToolStripButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.gridToolStripButton.CheckOnClick = true;
+			this.gridToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.gridToolStripButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.gridToolStripButton.Image = global::KiSSLab.Properties.Resources.Grid;
+			this.gridToolStripButton.Name = "gridToolStripButton";
+			this.gridToolStripButton.Size = new System.Drawing.Size(23, 23);
+			this.gridToolStripButton.Text = "Snap to Grid";
 			// 
 			// toolStripSeparator3
 			// 
@@ -263,7 +283,6 @@
 			this.nextSetToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.nextSetToolStripButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.nextSetToolStripButton.Image = global::KiSSLab.Properties.Resources.CycleSets;
-			this.nextSetToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.nextSetToolStripButton.Name = "nextSetToolStripButton";
 			this.nextSetToolStripButton.Size = new System.Drawing.Size(23, 23);
 			this.nextSetToolStripButton.Text = "Next set";
@@ -283,7 +302,6 @@
 			this.nextPalToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.nextPalToolStripButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.nextPalToolStripButton.Image = global::KiSSLab.Properties.Resources.Colors;
-			this.nextPalToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.nextPalToolStripButton.Name = "nextPalToolStripButton";
 			this.nextPalToolStripButton.Size = new System.Drawing.Size(23, 23);
 			this.nextPalToolStripButton.Text = "Next palette";
@@ -311,7 +329,6 @@
 			this.editorToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.editorToolStripButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.editorToolStripButton.Image = global::KiSSLab.Properties.Resources.Properties;
-			this.editorToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.editorToolStripButton.Name = "editorToolStripButton";
 			this.editorToolStripButton.Size = new System.Drawing.Size(23, 23);
 			this.editorToolStripButton.Text = "Show editor";
@@ -339,7 +356,7 @@
 			// 
 			this.toolStripStatusLabel1.AutoSize = false;
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(160, 22);
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(240, 22);
 			this.toolStripStatusLabel1.Text = " ";
 			this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -370,7 +387,6 @@
 			// screenContainer
 			// 
 			this.screenContainer.AutoScroll = true;
-			this.screenContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
 			this.screenContainer.Controls.Add(this.screen);
 			this.screenContainer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.screenContainer.Location = new System.Drawing.Point(0, 50);
@@ -387,9 +403,63 @@
 			this.screen.TabIndex = 0;
 			this.screen.TabStop = false;
 			this.screen.Paint += new System.Windows.Forms.PaintEventHandler(this.Screen_Paint);
+			this.screen.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Screen_MouseClick);
 			this.screen.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Screen_MouseDown);
 			this.screen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Screen_MouseMove);
 			this.screen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Screen_MouseUp);
+			// 
+			// cellContextMenu
+			// 
+			this.cellContextMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.cellContextMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.cellContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cellMenuHeader,
+            this.toolStripSeparator7,
+            this.unfixToolStripMenuItem,
+            this.refixToolStripMenuItem,
+            this.resetPositionToolStripMenuItem1});
+			this.cellContextMenu.Name = "cellContextMenu";
+			this.cellContextMenu.Size = new System.Drawing.Size(169, 99);
+			// 
+			// cellMenuHeader
+			// 
+			this.cellMenuHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.cellMenuHeader.Enabled = false;
+			this.cellMenuHeader.Font = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Bold);
+			this.cellMenuHeader.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+			this.cellMenuHeader.Name = "cellMenuHeader";
+			this.cellMenuHeader.Size = new System.Drawing.Size(168, 22);
+			this.cellMenuHeader.Text = "toolStripMenuItem1";
+			// 
+			// unfixToolStripMenuItem
+			// 
+			this.unfixToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.unfixToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.unfixToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Unlock;
+			this.unfixToolStripMenuItem.Name = "unfixToolStripMenuItem";
+			this.unfixToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+			this.unfixToolStripMenuItem.Text = "Unfix";
+			this.unfixToolStripMenuItem.Click += new System.EventHandler(this.Unfix_Click);
+			// 
+			// refixToolStripMenuItem
+			// 
+			this.refixToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.refixToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.refixToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Lock;
+			this.refixToolStripMenuItem.Name = "refixToolStripMenuItem";
+			this.refixToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+			this.refixToolStripMenuItem.Text = "Refix";
+			this.refixToolStripMenuItem.Click += new System.EventHandler(this.Refix_Click);
+			// 
+			// resetPositionToolStripMenuItem1
+			// 
+			this.resetPositionToolStripMenuItem1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.resetPositionToolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.resetPositionToolStripMenuItem1.Image = global::KiSSLab.Properties.Resources.Reset;
+			this.resetPositionToolStripMenuItem1.Name = "resetPositionToolStripMenuItem1";
+			this.resetPositionToolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
+			this.resetPositionToolStripMenuItem1.Text = "Reset position";
+			this.resetPositionToolStripMenuItem1.Click += new System.EventHandler(this.Reset_Click);
 			// 
 			// editor
 			// 
@@ -400,6 +470,14 @@
 			this.editor.Name = "editor";
 			this.editor.Size = new System.Drawing.Size(320, 475);
 			this.editor.TabIndex = 3;
+			// 
+			// toolStripSeparator7
+			// 
+			this.toolStripSeparator7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.toolStripSeparator7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.toolStripSeparator7.Margin = new System.Windows.Forms.Padding(0, 0, 0, 1);
+			this.toolStripSeparator7.Name = "toolStripSeparator7";
+			this.toolStripSeparator7.Size = new System.Drawing.Size(165, 6);
 			// 
 			// Viewer
 			// 
@@ -427,6 +505,7 @@
 			this.status.PerformLayout();
 			this.screenContainer.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.screen)).EndInit();
+			this.cellContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -451,5 +530,12 @@
 		private Editor editor;
 		private System.Windows.Forms.Panel screenContainer;
 		private System.Windows.Forms.PictureBox screen;
+		private System.Windows.Forms.ToolStripButton gridToolStripButton;
+		private DarkUI.Controls.DarkContextMenu cellContextMenu;
+		private System.Windows.Forms.ToolStripMenuItem unfixToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem refixToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem resetPositionToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem cellMenuHeader;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
 	}
 }

@@ -16,19 +16,42 @@ namespace KiSSLab
 	{
 		public Viewer Viewer { get; private set; }
 
+		public int Set
+		{
+			get { return set; }
+			set
+			{
+				if (value < 0)
+					set = 0;
+				else if (value >= Sets)
+					set = Sets - 1;
+				else
+					set = value;
+			}
+		}
+
 		public List<Part> Parts { get; set; }
 		public List<Cell> Cells { get; set; }
 
 		public int ScreenWidth { get; private set; }
 		public int ScreenHeight { get; private set; }
-		public Color BackgroundColor { get; set; }
-		public Brush BackgroundBrush { get; set; }
+
+		//public Color BackgroundColor { get; set; }
+		//public Brush BackgroundBrush { get; set; }
+		public object Background
+		{
+			get { return backgrounds[set]; }
+			set { backgrounds[set] = value; }
+		}
+
 		public int Palette { get; set; }
 		public int Palettes { get; private set; }
 		public int Sets { get; private set; }
 
+		private int set;
 		private Bitmap palette;
 		private float[][] matrix;
+		private object[] backgrounds;
 
 		private ImageAttributes attrs;
 		private Graphics gfx;
@@ -47,8 +70,9 @@ namespace KiSSLab
 
 			ScreenWidth = 480;
 			ScreenHeight = 400;
-			BackgroundColor = Color.CornflowerBlue;
-			BackgroundBrush = null;
+			//BackgroundColor = Color.CornflowerBlue;
+			//BackgroundBrush = null;
+			backgrounds = new object[10];
 
 			matrix = new[] {
 				new float[] {1, 0, 0, 0, 0},
@@ -92,17 +116,38 @@ namespace KiSSLab
 					}
 					else if (form == "background")
 					{
-						if (rest.Count == 3 && rest[0] is int && rest[1] is int && rest[2] is int)
+						if (!(rest[0] is List<object>))
 						{
-							BackgroundColor = Color.FromArgb((int)rest[0], (int)rest[1], (int)rest[2]);
+							rest = new List<object>() { rest };
 						}
-						else if (rest.Count >= 7 && rest[0] is Symbol && rest[0].ToString() == "gradient")
+						var bgs = 0;
+						foreach (var bgi in rest.OfType<List<object>>())
 						{
-							var angle = 90f;
-							if (rest.Count > 7 && rest[7] is int)
-								angle = (float)(int)rest[7];
-							BackgroundBrush = new LinearGradientBrush(new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.FromArgb((int)rest[1], (int)rest[2], (int)rest[3]), Color.FromArgb((int)rest[4], (int)rest[5], (int)rest[6]), angle);
+							object bg = null;
+							if (bgi.Count == 3 && bgi[0] is int && bgi[1] is int && bgi[2] is int)
+							{
+								bg = Color.FromArgb((int)bgi[0], (int)bgi[1], (int)bgi[2]);
+							}
+							else if (bgi.Count >= 7 && bgi[0] is Symbol && bgi[0].ToString() == "gradient")
+							{
+								var angle = 90f;
+								if (bgi.Count > 7 && bgi[7] is int)
+									angle = (float)(int)bgi[7];
+								bg = new LinearGradientBrush(new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.FromArgb((int)bgi[1], (int)bgi[2], (int)bgi[3]), Color.FromArgb((int)bgi[4], (int)bgi[5], (int)bgi[6]), angle);
+							}
+							else if (bgi.Count == 1 && bgi[0] is string)
+							{
+								bg = Tools.GrabClonedBitmap(bgi[0].ToString() + ".png");
+							}
+							backgrounds[bgs] = bg;
+							if (bgs == 0)
+							{
+								for (var i = 1; i < 10; i++)
+									backgrounds[i] = backgrounds[0];
+							}
+							bgs++;
 						}
+						
 					}
 					#region Cell parser
 					else if (form == "cells")
@@ -341,11 +386,18 @@ namespace KiSSLab
 			}
 
 			if (gfx == null)
+			{
 				gfx = Graphics.FromImage(bitmap);
+				gfx.InterpolationMode = InterpolationMode.NearestNeighbor;
+			}
 
-			gfx.Clear(BackgroundColor);
-			if (BackgroundBrush != null)
-				gfx.FillRectangle(BackgroundBrush, 0, 0, ScreenWidth, ScreenHeight);
+			if (Background is Color)
+				gfx.Clear((Color)Background);
+			else if (Background is Brush)
+				gfx.FillRectangle((Brush)Background, 0, 0, ScreenWidth, ScreenHeight);
+			else if (Background is Bitmap)
+				gfx.DrawImage((Bitmap)Background, 0, 0, ScreenWidth, ScreenHeight);
+
 			foreach (var cell in Cells.Reverse<Cell>())
 			{
 				var part = cell.Part;
@@ -376,7 +428,7 @@ namespace KiSSLab
 		public Point Offset { get; set; }
 		public bool Visible { get; set; }
 		public bool[] OnSets { get; set; }
-		public bool OnSet { get { return OnSets[Viewer.Set]; } set { OnSets[Viewer.Set] = value; } }
+		public bool OnSet { get { return OnSets[Viewer.Scene.Set]; } set { OnSets[Viewer.Scene.Set] = value; } }
 		public Part Part { get; set; }
 		public string ID { get; set; }
 		public int Opacity { get; set; }
@@ -398,9 +450,9 @@ namespace KiSSLab
 	{
 		public List<Cell> Cells { get; set; }
 		public Point[] Positions { get; set; }
-		public Point Position { get { return Positions[Viewer.Set]; } set { Positions[Viewer.Set] = value; } }
+		public Point Position { get { return Positions[Viewer.Scene.Set]; } set { Positions[Viewer.Scene.Set] = value; } }
 		public Point[] InitialPositions { get; set; }
-		public Point InitialPosition { get { return InitialPositions[Viewer.Set]; } set { InitialPositions[Viewer.Set] = value; } }
+		public Point InitialPosition { get { return InitialPositions[Viewer.Scene.Set]; } set { InitialPositions[Viewer.Scene.Set] = value; } }
 		public bool Visible { get; set; }
 		public int Fix { get; set; }
 		public int InitialFix { get; set; }

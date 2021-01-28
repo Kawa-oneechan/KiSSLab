@@ -24,7 +24,6 @@ namespace KiSSLab
 		public static Scene Scene;
 		public static int Zoom = 1;
 
-		public static int Set;
 		public static bool Hilight;
 		public Cell HilightedCell;
 
@@ -83,8 +82,8 @@ namespace KiSSLab
 				tools.Items.Insert(after, new ToolStripButton(
 					i.ToString(), null, (s, e) =>
 					{
-						((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
-						Set = int.Parse(((ToolStripButton)s).Text);
+						((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
+						Scene.Set = int.Parse(((ToolStripButton)s).Text);
 						if (dropped != null) dropped.LastCollidedWith = null;
 						DrawScene();
 						((ToolStripButton)s).Checked = true;
@@ -193,14 +192,14 @@ namespace KiSSLab
 		{
 			if (e.Control && (e.KeyValue >= 48 && e.KeyValue <= 57))
 			{
-				((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
+				((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
 				if (e.KeyValue == 48)
-					Set = 0;
+					Scene.Set = 0;
 				else
-					Set = e.KeyValue - 48;
-				if (Set >= Scene.Sets)
-					Set = Scene.Sets - 1;
-				((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;
+					Scene.Set = e.KeyValue - 48;
+				if (Scene.Set >= Scene.Sets)
+					Scene.Set = Scene.Sets - 1;
+				((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 				DrawScene();
 			}
 			else if (e.Control && e.KeyValue == 9)
@@ -585,7 +584,7 @@ namespace KiSSLab
 				((ToolStripButton)tools.Items.Find("p" + i.ToString(), false)[0]).Checked = i == 0;
 			}
 			Scene.Palette = 0;
-			Set = 0;
+			Scene.Set = 0;
 
 			bitmap = new Bitmap(Scene.ScreenWidth, Scene.ScreenHeight);
 			//screen.BackgroundImage = bitmap;
@@ -708,22 +707,26 @@ namespace KiSSLab
 
 		private void NextSet_Click(object sender, EventArgs e)
 		{
-			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
-			Set++;
-			if (Set == Scene.Sets) Set = 0;
+			((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
+			if (Scene.Set < Scene.Sets - 1)
+				Scene.Set++;
+			else
+				Scene.Set = 0;
 			if (dropped != null) dropped.LastCollidedWith = null;
 			DrawScene();
-			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;
+			((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 		}
 
 		private void PreviousSet_Click(object sender, EventArgs e)
 		{
-			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = false;
-			if (Set == 0) Set = Scene.Sets;
-			Set--;
+			((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
+			if (Scene.Set == 0)
+				Scene.Set = Scene.Sets - 1;
+			else
+				Scene.Set--;
 			if (dropped != null) dropped.LastCollidedWith = null;
 			DrawScene();
-			((ToolStripButton)tools.Items.Find("s" + Set.ToString(), false)[0]).Checked = true;
+			((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 		}
 
 		private void NextPal_Click(object sender, EventArgs e)

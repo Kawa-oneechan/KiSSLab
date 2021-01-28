@@ -30,6 +30,7 @@ namespace KiSSLab
 		private System.Windows.Forms.Timer AlarmTimer;
 		private string[] lastOpened;
 		public static SoundSystem Sound;
+		public static MyConfig Config;
 
 		//[System.Runtime.InteropServices.DllImport("Shell32.dll")]
 		//private static extern int SHChangeNotify(int eventId, int flags, IntPtr item1, IntPtr item2);
@@ -52,8 +53,7 @@ namespace KiSSLab
 
 			InitializeComponent();
 
-			Config.Path = @"Kawa\KiSS Thing";
-			Config.Load();
+			Config = new MyConfig(@"Kawa\KiSS Thing");
 
 			var windowState = Config.WindowState; //cache the real value because we be sizin' yo
 			this.ClientSize = new Size(Config.WindowWidth, Config.WindowHeight);
@@ -749,5 +749,27 @@ namespace KiSSLab
 			Viewer_Resize(null, null);
 			Config.Editor = me.Checked ? 1 : 0;
 		}
+	}
+
+	public class MyConfig : RegistryConfig
+	{
+		[Setting(-1)]
+		public int WindowLeft { get; set; }
+		[Setting(-1)]
+		public int WindowTop { get; set; }
+		[Setting(816)]
+		public int WindowWidth { get; set; }
+		[Setting(484)]
+		public int WindowHeight { get; set; }
+		[Setting(0)]
+		public int WindowState { get; set; }
+		[Setting(1)]
+		public int ZoomLevel { get; set; }
+		[Setting("")]
+		public string AutoLoad { get; set; }
+		[Setting(0)]
+		public int Editor { get; set; }
+
+		public MyConfig(string path) : base(path) { }
 	}
 }

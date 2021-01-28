@@ -122,6 +122,8 @@
 			// 
 			// openToolStripMenuItem
 			// 
+			this.openToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.openToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.openToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Open;
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
 			this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
@@ -131,6 +133,8 @@
 			// 
 			// reopenToolStripMenuItem
 			// 
+			this.reopenToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.reopenToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.reopenToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Reset;
 			this.reopenToolStripMenuItem.Name = "reopenToolStripMenuItem";
 			this.reopenToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
@@ -146,6 +150,8 @@
 			// 
 			// exitToolStripMenuItem
 			// 
+			this.exitToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.exitToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.exitToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Exit;
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
 			this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
@@ -158,14 +164,16 @@
 			this.editToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
 			this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyCellToolStripMenuItem,
+			this.unfixToolStripMenuItem,
+            this.refixToolStripMenuItem,
             this.resetPositionToolStripMenuItem});
-			this.editToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
 			this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
 			this.editToolStripMenuItem.Text = "&Edit";
 			// 
 			// copyCellToolStripMenuItem
 			// 
+			this.copyCellToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
 			this.copyCellToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.copyCellToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Copy;
 			this.copyCellToolStripMenuItem.Name = "copyCellToolStripMenuItem";
@@ -176,6 +184,7 @@
 			// 
 			// resetPositionToolStripMenuItem
 			// 
+			this.resetPositionToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
 			this.resetPositionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.resetPositionToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Reset;
 			this.resetPositionToolStripMenuItem.Name = "resetPositionToolStripMenuItem";
@@ -197,6 +206,8 @@
 			// 
 			// aboutToolStripMenuItem
 			// 
+			this.aboutToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
 			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
 			this.aboutToolStripMenuItem.Text = "&About";
@@ -414,10 +425,7 @@
 			this.cellContextMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			this.cellContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cellMenuHeader,
-            this.toolStripSeparator7,
-            this.unfixToolStripMenuItem,
-            this.refixToolStripMenuItem,
-            this.resetPositionToolStripMenuItem1});
+            this.toolStripSeparator7});
 			this.cellContextMenu.Name = "cellContextMenu";
 			this.cellContextMenu.Size = new System.Drawing.Size(169, 99);
 			// 

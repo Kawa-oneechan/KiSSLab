@@ -139,13 +139,27 @@ namespace KiSSLab
 			}
 			editorToolStripButton.Checked = Config.Editor == 1;
 
-			/*
-			screen = new PictureBox()
+			foreach (var e in editToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
 			{
-				ClientSize = new Size(480, 400),
-				BorderStyle = BorderStyle.FixedSingle,
-			};
-			*/
+				var newE = new ToolStripMenuItem()
+				{
+					Text = e.Text,
+					Image = e.Image,
+				};
+				//ugly hack lol
+				newE.Click += (s, ea) => {
+					for (var i = 0; i < editToolStripMenuItem.DropDownItems.Count; i++)
+					{
+						if (editToolStripMenuItem.DropDownItems[i].Text == ((ToolStripMenuItem)s).Text)
+						{
+							editToolStripMenuItem.DropDownItems[i].PerformClick();
+							break;
+						}
+					}
+				};
+				cellContextMenu.Items.Add(newE);
+			}
+
 			editor.Visible = Config.Editor == 1;
 
 			Viewer_Resize(null, null);
@@ -229,6 +243,11 @@ namespace KiSSLab
 			
 			var cell = default(Cell);
 			var part = Scene.GetPartFromPoint(realLocation, out cell);
+			unfixToolStripMenuItem.Enabled = part.Locked;
+			refixToolStripMenuItem.Enabled = !part.Locked;
+			cellContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(unfixToolStripMenuItem) + 2].Enabled = part.Locked;
+			cellContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(refixToolStripMenuItem) + 2].Enabled = !part.Locked;
+
 			editor.Pick(part, cell);
 			if (Hilight) DrawScene();
 
@@ -365,8 +384,6 @@ namespace KiSSLab
 				var screenLocation = screen.PointToScreen(new Point(e.X, e.Y));
 
 				cellMenuHeader.Text = cell.ID;
-				unfixToolStripMenuItem.Enabled = part.Locked;
-				refixToolStripMenuItem.Enabled = !part.Locked;
 				cellContextMenu.Show(screenLocation);
 			}
 		}

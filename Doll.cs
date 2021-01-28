@@ -257,7 +257,7 @@ namespace KiSSLab
 							}
 							if (newFix)
 							{
-								part.Fix = fix;
+								part.Fix = part.InitialFix = fix;
 							}
 
 							var c = new Cell()

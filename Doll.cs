@@ -70,8 +70,6 @@ namespace KiSSLab
 
 			ScreenWidth = 480;
 			ScreenHeight = 400;
-			//BackgroundColor = Color.CornflowerBlue;
-			//BackgroundBrush = null;
 			backgrounds = new object[10];
 
 			matrix = new[] {
@@ -138,6 +136,10 @@ namespace KiSSLab
 							else if (bgi.Count == 1 && bgi[0] is string)
 							{
 								bg = Tools.GrabClonedBitmap(bgi[0].ToString() + ".png");
+							}
+							else if (bgi.Count == 2 && bgi[0] is string && bgi[1] is Symbol && bgi[1].ToString() == "tiled")
+							{
+								bg = new TextureBrush(Tools.GrabClonedBitmap(bgi[0].ToString() + ".png"));
 							}
 							backgrounds[bgs] = bg;
 							if (bgs == 0)

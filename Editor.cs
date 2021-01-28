@@ -148,6 +148,7 @@ namespace KiSSLab
 			cellOffXTextBox.Value = cell.Offset.X;
 			cellOffYTextBox.Value = cell.Offset.Y;
 			cellVisibleCheckBox.Checked = cell.Visible;
+			cellGhostedCheckBox.Checked = cell.Ghost;
 			cellOpacityTrackBar.Value = cell.Opacity;
 			for (var i = 0; i < 10; i++)
 				cellMapCheckBoxes[i].Checked = cell.OnSets[i];
@@ -188,6 +189,13 @@ namespace KiSSLab
 				cell.OnSets[i] = cellMapCheckBoxes[i].Checked;
 			}
 			((Viewer)this.ParentForm).DrawScene();
+		}
+
+		private void cellGhostedCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			if (locked) return;
+			var cell = (Cell)this.cells.SelectedItem;
+			cell.Ghost = cellGhostedCheckBox.Checked;
 		}
 	}
 }

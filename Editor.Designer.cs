@@ -51,6 +51,7 @@
 			this.partVisibleCheckBox = new DarkUI.Controls.DarkCheckBox();
 			this.partSectionPanel = new DarkUI.Controls.DarkSectionPanel();
 			this.cellSectionPanel = new DarkUI.Controls.DarkSectionPanel();
+			this.cellGhostedCheckBox = new DarkUI.Controls.DarkCheckBox();
 			this.flowLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.cellOffXTextBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.cellOffYTextBox)).BeginInit();
@@ -71,6 +72,7 @@
 			this.flowLayoutPanel2.Controls.Add(this.cellOffXTextBox);
 			this.flowLayoutPanel2.Controls.Add(this.cellOffYTextBox);
 			this.flowLayoutPanel2.Controls.Add(this.cellVisibleCheckBox);
+			this.flowLayoutPanel2.Controls.Add(this.cellGhostedCheckBox);
 			this.flowLayoutPanel2.Controls.Add(this.cellOpacityLabel);
 			this.flowLayoutPanel2.Controls.Add(this.cellOpacityTrackBar);
 			this.flowLayoutPanel2.Controls.Add(this.darkTitle2);
@@ -78,7 +80,7 @@
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(1, 25);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(4);
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(318, 235);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(318, 240);
 			this.flowLayoutPanel2.TabIndex = 2;
 			// 
 			// cells
@@ -155,11 +157,9 @@
 			// 
 			// cellVisibleCheckBox
 			// 
-			this.cellVisibleCheckBox.AutoSize = true;
-			this.flowLayoutPanel2.SetFlowBreak(this.cellVisibleCheckBox, true);
 			this.cellVisibleCheckBox.Location = new System.Drawing.Point(7, 95);
 			this.cellVisibleCheckBox.Name = "cellVisibleCheckBox";
-			this.cellVisibleCheckBox.Size = new System.Drawing.Size(60, 19);
+			this.cellVisibleCheckBox.Size = new System.Drawing.Size(127, 23);
 			this.cellVisibleCheckBox.TabIndex = 18;
 			this.cellVisibleCheckBox.Text = "Visible";
 			this.cellVisibleCheckBox.CheckedChanged += new System.EventHandler(this.cellVisibleCheckBox_CheckedChanged);
@@ -167,7 +167,7 @@
 			// cellOpacityLabel
 			// 
 			this.cellOpacityLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.cellOpacityLabel.Location = new System.Drawing.Point(7, 117);
+			this.cellOpacityLabel.Location = new System.Drawing.Point(7, 121);
 			this.cellOpacityLabel.Name = "cellOpacityLabel";
 			this.cellOpacityLabel.Size = new System.Drawing.Size(127, 23);
 			this.cellOpacityLabel.TabIndex = 20;
@@ -177,7 +177,7 @@
 			// cellOpacityTrackBar
 			// 
 			this.cellOpacityTrackBar.LargeChange = 16;
-			this.cellOpacityTrackBar.Location = new System.Drawing.Point(140, 120);
+			this.cellOpacityTrackBar.Location = new System.Drawing.Point(140, 124);
 			this.cellOpacityTrackBar.Maximum = 255;
 			this.cellOpacityTrackBar.Name = "cellOpacityTrackBar";
 			this.cellOpacityTrackBar.Size = new System.Drawing.Size(170, 45);
@@ -187,7 +187,7 @@
 			// 
 			// darkTitle2
 			// 
-			this.darkTitle2.Location = new System.Drawing.Point(7, 168);
+			this.darkTitle2.Location = new System.Drawing.Point(7, 172);
 			this.darkTitle2.Name = "darkTitle2";
 			this.darkTitle2.Size = new System.Drawing.Size(300, 15);
 			this.darkTitle2.TabIndex = 19;
@@ -296,10 +296,9 @@
 			// 
 			// partVisibleCheckBox
 			// 
-			this.partVisibleCheckBox.AutoSize = true;
 			this.partVisibleCheckBox.Location = new System.Drawing.Point(7, 124);
 			this.partVisibleCheckBox.Name = "partVisibleCheckBox";
-			this.partVisibleCheckBox.Size = new System.Drawing.Size(60, 19);
+			this.partVisibleCheckBox.Size = new System.Drawing.Size(127, 23);
 			this.partVisibleCheckBox.TabIndex = 6;
 			this.partVisibleCheckBox.Text = "Visible";
 			this.partVisibleCheckBox.CheckedChanged += new System.EventHandler(this.partVisibleCheckBox_CheckedChanged);
@@ -325,8 +324,18 @@
 			this.cellSectionPanel.Location = new System.Drawing.Point(0, 186);
 			this.cellSectionPanel.Name = "cellSectionPanel";
 			this.cellSectionPanel.SectionHeader = "Cell properties";
-			this.cellSectionPanel.Size = new System.Drawing.Size(320, 261);
+			this.cellSectionPanel.Size = new System.Drawing.Size(320, 266);
 			this.cellSectionPanel.TabIndex = 2;
+			// 
+			// cellGhostedCheckBox
+			// 
+			this.flowLayoutPanel2.SetFlowBreak(this.cellGhostedCheckBox, true);
+			this.cellGhostedCheckBox.Location = new System.Drawing.Point(140, 95);
+			this.cellGhostedCheckBox.Name = "cellGhostedCheckBox";
+			this.cellGhostedCheckBox.Size = new System.Drawing.Size(127, 23);
+			this.cellGhostedCheckBox.TabIndex = 22;
+			this.cellGhostedCheckBox.Text = "Ghost";
+			this.cellGhostedCheckBox.CheckedChanged += new System.EventHandler(this.cellGhostedCheckBox_CheckedChanged);
 			// 
 			// Editor
 			// 
@@ -376,6 +385,7 @@
 		private DarkUI.Controls.DarkCheckBox partVisibleCheckBox;
 		private DarkUI.Controls.DarkSectionPanel partSectionPanel;
 		private DarkUI.Controls.DarkSectionPanel cellSectionPanel;
+		private DarkUI.Controls.DarkCheckBox cellGhostedCheckBox;
 
 
 

@@ -168,6 +168,7 @@ namespace KiSSLab
 							var newPos = false;
 							var newFix = false;
 							var mapped = true;
+							var ghosted = false;
 
 							for (var i = 0; i < celItem.Count; i++)
 							{
@@ -228,6 +229,10 @@ namespace KiSSLab
 								else if (form == "unmapped")
 								{
 									mapped = false;
+								}
+								else if (form == "ghost")
+								{
+									ghosted = true;
 								}
 							}
 
@@ -314,6 +319,7 @@ namespace KiSSLab
 								Visible = mapped,
 								ID = id,
 								Opacity = alpha,
+								Ghost = ghosted,
 							};
 							foreach (var s in on)
 							{
@@ -355,6 +361,7 @@ namespace KiSSLab
 				var cell = Cells[i - 1];
 				var part = cell.Part;
 
+				if (cell.Ghost) continue;
 				if (!cell.OnSet) continue;
 				if (!cell.Visible) continue;
 				if (!part.Visible) continue;
@@ -434,6 +441,7 @@ namespace KiSSLab
 		public Part Part { get; set; }
 		public string ID { get; set; }
 		public int Opacity { get; set; }
+		public bool Ghost { get; set; }
 
 		public Cell()
 		{

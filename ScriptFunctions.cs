@@ -11,12 +11,44 @@ namespace KiSSLab
 {
 	public partial class Scene
 	{
+		[ScriptFunction("+")]
+		public object Add(params object[] cmd)
+		{
+			var ret = Evaluate<int>(cmd[1]);
+			for (var i = 2; i < cmd.Length; i++)
+				ret += Evaluate<int>(cmd[i]);
+			return ret;
+		}
+
+		[ScriptFunction("-")]
+		public object Subtract(params object[] cmd)
+		{
+			var ret = Evaluate<int>(cmd[1]);
+			for (var i = 2; i < cmd.Length; i++)
+				ret -= Evaluate<int>(cmd[i]);
+			return ret;
+		}
+
 		[ScriptFunction("*")]
 		public object Multiply(params object[] cmd)
 		{
 			var ret = Evaluate<int>(cmd[1]);
 			for (var i = 2; i < cmd.Length; i++)
 				ret *= Evaluate<int>(cmd[i]);
+			return ret;
+		}
+
+		[ScriptFunction("/")]
+		public object Divide(params object[] cmd)
+		{
+			var ret = Evaluate<int>(cmd[1]);
+			for (var i = 2; i < cmd.Length; i++)
+			{
+				var d = Evaluate<int>(cmd[i]);
+				if (d == 0)
+					return 0;
+				ret /= d;
+			}
 			return ret;
 		}
 
@@ -82,6 +114,23 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
+		public object MoveTo(params object[] cmd)
+		{
+			if (cmd[1] is int)
+			{
+				cmd = new[] { cmd[0], (Symbol)"#a", cmd[1], cmd[2] };
+			}
+
+			var str = Evaluate(cmd[1]).ToString();
+			var moveWhat = Parts.FirstOrDefault(o => o.ID == str);
+			var moveToX = Evaluate<int>(cmd[2]);
+			var moveToY = Evaluate<int>(cmd[3]);
+			if (moveWhat != null)
+				moveWhat.Position = new Point(moveToX, moveToY);
+			return null;
+		}
+
+		[ScriptFunction]
 		public object Map(params object[] cmd)
 		{
 			object mapThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
@@ -124,6 +173,28 @@ namespace KiSSLab
 			else if (mapThis is Part)
 				((Part)mapThis).Visible = !((Part)mapThis).Visible;
 			return mapThis;
+		}
+
+		[ScriptFunction]
+		public object Ghost(params object[] cmd)
+		{
+			object ghostThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
+			if (ghostThis == null)
+				return null;
+			if (ghostThis is Cell)
+				((Cell)ghostThis).Ghost = true;
+			return ghostThis;
+		}
+
+		[ScriptFunction]
+		public object UnGhost(params object[] cmd)
+		{
+			object ghostThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
+			if (ghostThis == null)
+				return null;
+			if (ghostThis is Cell)
+				((Cell)ghostThis).Ghost = false;
+			return ghostThis;
 		}
 
 		[ScriptFunction]

@@ -242,10 +242,13 @@ namespace KiSSLab
 			
 			var cell = default(Cell);
 			var part = Scene.GetPartFromPoint(realLocation, out cell);
-			unfixToolStripMenuItem.Enabled = part.Locked;
-			refixToolStripMenuItem.Enabled = !part.Locked;
-			cellContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(unfixToolStripMenuItem) + 2].Enabled = part.Locked;
-			cellContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(refixToolStripMenuItem) + 2].Enabled = !part.Locked;
+			if (part != null)
+			{
+				unfixToolStripMenuItem.Enabled = part.Locked;
+				refixToolStripMenuItem.Enabled = !part.Locked;
+				cellContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(unfixToolStripMenuItem) + 2].Enabled = part.Locked;
+				cellContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(refixToolStripMenuItem) + 2].Enabled = !part.Locked;
+			}
 
 			editor.Pick(part, cell);
 			if (Hilight) DrawScene();

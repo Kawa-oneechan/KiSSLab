@@ -99,15 +99,10 @@ namespace KiSSLab
 		{
 			using (var jango = Kawa.Mix.Mix.GetBitmap(file))
 			{
-				var boba = new Bitmap(jango.Width, jango.Height, jango.PixelFormat);
-				var r = new Rectangle(0, 0, jango.Width, jango.Height);
-				var lockBits = jango.LockBits(r, ImageLockMode.ReadWrite, jango.PixelFormat);
-				var pixels = new byte[lockBits.Stride * lockBits.Height];
-				System.Runtime.InteropServices.Marshal.Copy(lockBits.Scan0, pixels, 0, pixels.Length);
-				jango.UnlockBits(lockBits);
-				lockBits = boba.LockBits(r, ImageLockMode.ReadWrite, boba.PixelFormat);
-				System.Runtime.InteropServices.Marshal.Copy(pixels, 0, lockBits.Scan0, pixels.Length);
-				boba.UnlockBits(lockBits);
+				var boba = new Bitmap(jango.Width, jango.Height);
+				var gfx = Graphics.FromImage(boba);
+				var full = new Rectangle(0, 0, jango.Width, jango.Height);
+				gfx.DrawImage(jango, full, full, GraphicsUnit.Pixel);
 				return boba;
 			}
 		}

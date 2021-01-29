@@ -356,12 +356,14 @@ namespace KiSSLab
 				//Scene.Click(HilightedCell);
 			}
 
+			/*
 			if (held == null)
 			{
 				Scene.Release(null, HilightedCell);
 				Scene.Viewer.DrawScene();
 				return;
 			}
+			*/
 
 			editor.Pick(held, HilightedCell);
 			if (e.Button == MouseButtons.Left)

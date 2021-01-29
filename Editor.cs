@@ -110,7 +110,6 @@ namespace KiSSLab
 			partPosXTextBox.Text = part.Position.X.ToString();
 			partPosYTextBox.Text = part.Position.Y.ToString();
 			partFixTextBox.Text = part.Fix.ToString();
-			partVisibleCheckBox.Checked = part.Visible;
 			locked = false;
 		}
 
@@ -130,14 +129,6 @@ namespace KiSSLab
 			var part = (Part)this.parts.SelectedItem;
 			var f = string.IsNullOrWhiteSpace(partFixTextBox.Text) ? "0" : partFixTextBox.Text;
 			part.Fix = int.Parse(f);
-		}
-
-		private void partVisibleCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			if (locked) return;
-			var part = (Part)this.parts.SelectedItem;
-			part.Visible = partVisibleCheckBox.Checked;
-			((Viewer)this.ParentForm).DrawScene();
 		}
 
 		private void cells_SelectedItemChanged(object sender, EventArgs e)

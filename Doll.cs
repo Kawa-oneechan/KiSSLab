@@ -64,6 +64,8 @@ namespace KiSSLab
 			Events = new Dictionary<string, List<object>>();
 			Timers = new Dictionary<int, Timer>();
 			scriptVariables = new Dictionary<Symbol, object>();
+			scriptVariables.Add("true", 1);
+			scriptVariables.Add("false", 0);
 
 			attrs = new ImageAttributes();
 
@@ -254,7 +256,6 @@ namespace KiSSLab
 								{
 									ID = partof,
 									Cells = new List<Cell>(),
-									Visible = true,
 								};
 								Parts.Add(part);
 							}
@@ -351,7 +352,6 @@ namespace KiSSLab
 				if (cell.Ghost) continue;
 				if (!cell.OnSet) continue;
 				if (!cell.Visible) continue;
-				if (!part.Visible) continue;
 
 				var x = point.X - part.Position.X - cell.Offset.X;
 				var y = point.Y - part.Position.Y - cell.Offset.Y;
@@ -401,8 +401,7 @@ namespace KiSSLab
 				var part = cell.Part;
 				if (!cell.OnSet) continue;
 				if (!cell.Visible) continue;
-				if (!part.Visible) continue;
-
+				
 				if (cell.Opacity == 0)
 					continue;
 				matrix[3][3] = cell.Opacity / 256.0f;
@@ -452,12 +451,22 @@ namespace KiSSLab
 		public Point Position { get { return Positions[Viewer.Scene.Set]; } set { Positions[Viewer.Scene.Set] = value; } }
 		public Point[] InitialPositions { get; set; }
 		public Point InitialPosition { get { return InitialPositions[Viewer.Scene.Set]; } set { InitialPositions[Viewer.Scene.Set] = value; } }
-		public bool Visible { get; set; }
 		public int Fix { get; set; }
 		public int InitialFix { get; set; }
 		public bool Locked { get { return Fix >= 999; } set { Fix = value ? 999 : 0; } }
 		public string ID { get; set; }
 		public Part LastCollidedWith { get; set; }
+		public bool Visible
+		{
+			get
+			{
+				return Cells.Any(c => c.Visible);
+			}
+			set
+			{
+				Cells.ForEach(c => c.Visible = value);
+			}
+		}
 
 		public Part()
 		{

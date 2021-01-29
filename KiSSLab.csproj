@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="fmod.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ScriptEvents.cs" />
     <Compile Include="ScriptFunctions.cs" />
     <Compile Include="Scripting.cs" />
     <Compile Include="SExpressions.cs" />

@@ -55,8 +55,10 @@ namespace KiSSLab
 		[ScriptFunction("=")]
 		public object SetVar(params object[] cmd)
 		{
-			var key = cmd[1] as Symbol; //Evaluate<Symbol>(cmd[1]);
+			var key = cmd[1] as Symbol;
 			var val = Evaluate(cmd[2]);
+			if (key == "true" || key == "false")
+				return key;
 			scriptVariables[key] = val;
 			return key;
 		}
@@ -72,7 +74,7 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
-		public object PlayMusic(params object[] cmd)
+		public object Music(params object[] cmd)
 		{
 			var file = Evaluate<string>(cmd[1]);
 			Viewer.Sound.PlayMusic(file);
@@ -80,7 +82,7 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
-		public object PlaySound(params object[] cmd)
+		public object Sound(params object[] cmd)
 		{
 			var file = Evaluate<string>(cmd[1]);
 			return Viewer.Sound.PlaySound(file);
@@ -94,6 +96,9 @@ namespace KiSSLab
 			return 0;
 		}
 
+		/// <summary>
+		/// Roughly equivalent to "movebyx(o1,o2,d) movebyy(o1,o2,d)"
+		/// </summary>
 		[ScriptFunction]
 		public object MoveRel(params object[] cmd)
 		{
@@ -183,21 +188,16 @@ namespace KiSSLab
 		public object Ghost(params object[] cmd)
 		{
 			object ghostThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
+			var tOrF = cmd.Length > 2 ? (Evaluate<int>(cmd[2]) > 0) : true;
 			if (ghostThis == null)
 				return null;
 			if (ghostThis is Cell)
-				((Cell)ghostThis).Ghost = true;
-			return ghostThis;
-		}
-
-		[ScriptFunction]
-		public object UnGhost(params object[] cmd)
-		{
-			object ghostThis = Cells.FirstOrDefault(o => o.ID == cmd[1].ToString());
-			if (ghostThis == null)
-				return null;
-			if (ghostThis is Cell)
-				((Cell)ghostThis).Ghost = false;
+				((Cell)ghostThis).Ghost = tOrF;
+			else if (ghostThis is Part)
+			{
+				foreach (var c in ((Part)ghostThis).Cells)
+					c.Ghost = tOrF;
+			}
 			return ghostThis;
 		}
 

@@ -177,6 +177,10 @@ namespace KiSSLab
 			bitmap = new Bitmap(480, 400);
 			Sound = new SoundSystem();
 
+			AlarmTimer = new System.Windows.Forms.Timer();
+			AlarmTimer.Interval = 5;
+			AlarmTimer.Tick += new EventHandler(AlarmTimer_Tick);
+
 			if (args.Length == 1)
 			{
 				if (args[0].EndsWith("lisp", StringComparison.CurrentCultureIgnoreCase))
@@ -255,7 +259,8 @@ namespace KiSSLab
 
 			if (part != null)
 			{
-				Scene.Catch(part, cell);
+				if (e.Button == MouseButtons.Left)
+					Scene.Catch(part, cell);
 				if (!part.Locked)
 				{
 					held = part;
@@ -359,7 +364,8 @@ namespace KiSSLab
 			}
 
 			editor.Pick(held, HilightedCell);
-			Scene.Release(held, HilightedCell);
+			if (e.Button == MouseButtons.Left)
+				Scene.Release(held, HilightedCell);
 
 			if (held != null)
 			{
@@ -608,9 +614,6 @@ namespace KiSSLab
 				DrawScene();
 			}
 
-			AlarmTimer = new System.Windows.Forms.Timer();
-			AlarmTimer.Interval = 5;
-			AlarmTimer.Tick += new EventHandler(AlarmTimer_Tick);
 			//AlarmTimer.Elapsed += new EventHandler(AlarmTimer_Tick);
 			AlarmTimer.Start();
 

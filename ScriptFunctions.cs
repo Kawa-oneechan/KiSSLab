@@ -171,7 +171,11 @@ namespace KiSSLab
 			if (mapThis is Cell)
 				((Cell)mapThis).Visible = !((Cell)mapThis).Visible;
 			else if (mapThis is Part)
-				((Part)mapThis).Visible = !((Part)mapThis).Visible;
+			{
+				foreach (var cell in ((Part)mapThis).Cells)
+					cell.Visible = !cell.Visible;
+				//((Part)mapThis).Visible = !((Part)mapThis).Visible;
+			}
 			return mapThis;
 		}
 

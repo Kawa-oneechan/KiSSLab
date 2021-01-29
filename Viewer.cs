@@ -66,7 +66,7 @@ namespace KiSSLab
 			if (Config.ZoomLevel < 1 || Config.ZoomLevel > 3)
 				Config.ZoomLevel = 1;
 			Zoom = Config.ZoomLevel;
-			if (!string.IsNullOrWhiteSpace(Config.AutoLoad))
+			if (!string.IsNullOrWhiteSpace(Config.AutoLoad) && args.Length == 0)
 				args = new string[] { Config.AutoLoad };
 
 			this.Text = Application.ProductName;

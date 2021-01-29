@@ -41,7 +41,6 @@ namespace KiSSLab
 					name = method.Name.ToLowerInvariant();
 				scriptFunctions.Add(name, method);
 			}
-			scriptVariables = new Dictionary<Symbol, object>();
 
 			Func<string, List<object>, bool> addEvent = null;
 			addEvent = (s, e) =>

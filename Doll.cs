@@ -36,8 +36,6 @@ namespace KiSSLab
 		public int ScreenWidth { get; private set; }
 		public int ScreenHeight { get; private set; }
 
-		//public Color BackgroundColor { get; set; }
-		//public Brush BackgroundBrush { get; set; }
 		public object Background
 		{
 			get { return backgrounds[set]; }
@@ -65,6 +63,7 @@ namespace KiSSLab
 
 			Events = new Dictionary<string, List<object>>();
 			Timers = new Dictionary<int, Timer>();
+			scriptVariables = new Dictionary<Symbol, object>();
 
 			attrs = new ImageAttributes();
 
@@ -262,43 +261,31 @@ namespace KiSSLab
 
 							if (newPos)
 							{
-								if (positions[0].ToString().EndsWith(":"))
+								if (positions[0] is int)
 								{
-									var skipTo = int.Parse(positions[0].ToString().Remove(1));
-									var newPositions = new List<object>();
-									for (var i = 0; i < skipTo; i++)
-									{
-										newPositions.Add(new List<object>() { 0, 0 });
-									}
-									newPositions.AddRange(positions.Skip(1));
-									positions = newPositions;
-								}
-								if (positions[0].ToString() == "*")
-								{
-									positions[0] = new List<object>() { 0, 0 };
+									//pos (12 34) --> pos ((12 34))
+									positions = new List<object>() { positions };
 								}
 
-								if (positions[0] is List<object>)
+								while (positions.Count < 10)
+									positions.Add(positions[0]);
+
+								for (var i = 0; i < 10; i++)
 								{
-									for (var i = 0; i < 10; i++)
+									if (positions[i] is Symbol && positions[i].ToString() == "*")
 									{
-										if (i >= positions.Count || positions[i].ToString() == "*" && i > 0)
-										{
-											part.Positions[i] = part.Positions[i - 1];
-											continue;
-										}
-										var pos = positions[i] as List<object>;
-										part.Positions[i] = new Point((int)pos[0], (int)pos[1]);
+										if (i == 0)
+											positions[i] = new List<object>() { 0, 0 };
+										else
+											positions[i] = positions[0];
 									}
-								}
-								else
-								{
-									var pos = positions as List<object>;
-									if (pos[0].ToString() == "*")
-										pos[0] = new List<object>() { 0, 0 };
-									for (var i = 0; i < 10; i++)
+									var pos = positions[i] as List<object>;
+									part.Positions[i] = new Point((int)pos[0], (int)pos[1]);
+									if (pos.Count > 2 && pos[2].ToString() == ">")
 									{
-										part.Positions[i] = new Point((int)pos[0], (int)pos[1]);
+										pos.RemoveAt(2);
+										for (var j = i + 1; j < 10; j++)
+											positions[j] = positions[i];
 									}
 								}
 
@@ -406,6 +393,8 @@ namespace KiSSLab
 				gfx.FillRectangle((Brush)Background, 0, 0, ScreenWidth, ScreenHeight);
 			else if (Background is Bitmap)
 				gfx.DrawImage((Bitmap)Background, 0, 0, ScreenWidth, ScreenHeight);
+			else
+				gfx.Clear(Color.CornflowerBlue);
 
 			foreach (var cell in Cells.Reverse<Cell>())
 			{

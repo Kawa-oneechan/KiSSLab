@@ -162,6 +162,10 @@ namespace KiSSLab
 		public T Evaluate<T>(object thing)
 		{
 			var ret = Evaluate(thing);
+			if (typeof(T).Name == "Boolean" && ret is int)
+			{
+				ret = (int)ret == 1;
+			}
 			if (!(ret is T))
 			{
 				throw new InvalidCastException(string.Format("Evaluate<{0}> got a {1} instead.", typeof(T).Name, ret.GetType().Name));

@@ -636,6 +636,11 @@ namespace KiSSLab
 					}
 
 					var act = timer.Action;
+					if (act == null)
+					{
+						oneDied = true;
+						break;
+					}
 					if (act is List<object>)
 					{
 						Scene.RunEvent((List<object>)act);

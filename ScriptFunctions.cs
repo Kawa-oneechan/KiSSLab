@@ -383,6 +383,13 @@ namespace KiSSLab
 			if (!Timers.ContainsKey(timerID))
 				Timers.Add(timerID, new Timer());
 			var timer = Timers[timerID];
+			if (delay <= 0)
+			{
+				timer.Action = null;
+				timer.Interval = 0;
+				timer.Repeat = false;
+				return timer;
+			}
 			timer.Action = cmd[2];
 			timer.Interval = timer.TimeLeft = delay;
 			timer.Repeat = (cmd.Length == 4 && cmd[3] is Symbol && cmd[3].ToString() == "repeat");

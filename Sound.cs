@@ -152,6 +152,7 @@ namespace KiSSLab
 					s.Channel.Stop();
 					s.InnerSound.Release();
 				}
+				sounds.Clear();
 			}
 		}
 

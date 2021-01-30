@@ -83,11 +83,55 @@ namespace KiSSLab
 			}
 		}
 
+		private bool IsSafeObject(object obj)
+		{
+			return obj is Part || obj is Cell;
+		}
+
+		private object Send(object obj, List<object> cmd)
+		{
+			var properties = obj.GetType().GetProperties();
+			for (var i = 1; i < cmd.Count; i++)
+			{
+				if (cmd[i] is Symbol && cmd[i].ToString().EndsWith(":"))
+				{
+					var propName = cmd[i].ToString();
+					propName = propName.Remove(propName.Length - 1);
+					var property = properties.FirstOrDefault(p => p.Name.Equals(propName, StringComparison.InvariantCultureIgnoreCase));
+
+					//is there more?
+					if (i + 1 < cmd.Count)
+					{
+						//followed by another potential property, so it's a getter.
+						if (cmd[i + 1] is Symbol && cmd[i + 1].ToString().EndsWith(":"))
+							continue;
+						//this must be a value to set.
+						i++;
+						var valueToSet = Evaluate(cmd[i]);
+						property.SetValue(obj, valueToSet, null);
+						return valueToSet;
+					}
+					else
+					{
+						//This is a value to *get*.
+						var valueGotten = property.GetValue(obj, null);
+						return valueGotten;
+					}
+				}
+			}
+			return null;
+		}
+
 		public object Evaluate(object thing)
 		{
 			if (thing is List<object>)
 			{
 				var cmd = (List<object>)thing;
+				if (cmd[0] is List<object>)
+				{
+					if (((List<object>)cmd[0])[0] is Symbol)
+						cmd[0] = Evaluate(cmd[0]);
+				}
 				if (cmd[0] is Symbol)
 				{
 					var form = (cmd[0] as Symbol).ToString();
@@ -98,40 +142,12 @@ namespace KiSSLab
 					else if (scriptVariables.ContainsKey(form))
 					{
 						var obj = scriptVariables[form];
-						if (obj is Part || obj is Cell) //only these for now
-						{
-							var properties = obj.GetType().GetProperties();
-							for (var i = 1; i < cmd.Count; i++)
-							{
-								if (cmd[i] is Symbol && cmd[i].ToString().EndsWith(":"))
-								{
-									var propName = cmd[i].ToString();
-									propName = propName.Remove(propName.Length - 1);
-									var property = properties.FirstOrDefault(p => p.Name.Equals(propName, StringComparison.InvariantCultureIgnoreCase));
-
-									//is there more?
-									if (i + 1 < cmd.Count)
-									{
-										//followed by another potential property, so it's a getter.
-										if (cmd[i + 1] is Symbol && cmd[i + 1].ToString().EndsWith(":"))
-											continue;
-										//this must be a value to set.
-										i++;
-										var valueToSet = Evaluate(cmd[i]);
-										property.SetValue(obj, valueToSet, null);
-										return valueToSet;
-									}
-									else
-									{
-										//This is a value to *get*.
-										var valueGotten = property.GetValue(obj, null);
-										return valueGotten;
-									}
-								}
-							}
-						}
+						if (IsSafeObject(obj))
+							cmd[0] = obj;
 					}
 				}
+				if (IsSafeObject(cmd[0]))
+					return Send(cmd[0], cmd);
 			}
 			else if (thing is Symbol)
 			{

@@ -88,11 +88,49 @@ namespace KiSSLab
 			if (thing is List<object>)
 			{
 				var cmd = (List<object>)thing;
-				var form = (cmd[0] as Symbol).ToString(); ;
-
-				if (scriptFunctions.ContainsKey(form))
+				if (cmd[0] is Symbol)
 				{
-					return ((System.Reflection.MethodInfo)scriptFunctions[form]).Invoke(this, new[] { cmd.ToArray() });
+					var form = (cmd[0] as Symbol).ToString();
+					if (scriptFunctions.ContainsKey(form))
+					{
+						return ((System.Reflection.MethodInfo)scriptFunctions[form]).Invoke(this, new[] { cmd.ToArray() });
+					}
+					else if (scriptVariables.ContainsKey(form))
+					{
+						var obj = scriptVariables[form];
+						if (obj is Part || obj is Cell) //only these for now
+						{
+							var properties = obj.GetType().GetProperties();
+							for (var i = 1; i < cmd.Count; i++)
+							{
+								if (cmd[i] is Symbol && cmd[i].ToString().EndsWith(":"))
+								{
+									var propName = cmd[i].ToString();
+									propName = propName.Remove(propName.Length - 1);
+									var property = properties.FirstOrDefault(p => p.Name.Equals(propName, StringComparison.InvariantCultureIgnoreCase));
+
+									//is there more?
+									if (i + 1 < cmd.Count)
+									{
+										//followed by another potential property, so it's a getter.
+										if (cmd[i + 1] is Symbol && cmd[i + 1].ToString().EndsWith(":"))
+											continue;
+										//this must be a value to set.
+										i++;
+										var valueToSet = Evaluate(cmd[i]);
+										property.SetValue(obj, valueToSet, null);
+										return valueToSet;
+									}
+									else
+									{
+										//This is a value to *get*.
+										var valueGotten = property.GetValue(obj, null);
+										return valueGotten;
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 			else if (thing is Symbol)

@@ -63,6 +63,164 @@ namespace KiSSLab
 			return key;
 		}
 
+		[ScriptFunction("==")]
+		public object Equal(params object[] cmd)
+		{
+			var a = Evaluate<int>(cmd[1]);
+			var b = Evaluate<int>(cmd[2]);
+			return a == b;
+		}
+
+		[ScriptFunction("!=")]
+		public object NotEqual(params object[] cmd)
+		{
+			var a = Evaluate<int>(cmd[1]);
+			var b = Evaluate<int>(cmd[2]);
+			return a != b;
+		}
+
+		[ScriptFunction("<")]
+		public object LowerThan(params object[] cmd)
+		{
+			var a = Evaluate<int>(cmd[1]);
+			var b = Evaluate<int>(cmd[2]);
+			return a < b;
+		}
+
+		[ScriptFunction("<=")]
+		public object LowerEqual(params object[] cmd)
+		{
+			var a = Evaluate<int>(cmd[1]);
+			var b = Evaluate<int>(cmd[2]);
+			return a <= b;
+		}
+
+		[ScriptFunction(">")]
+		public object GreaterThan(params object[] cmd)
+		{
+			var a = Evaluate<int>(cmd[1]);
+			var b = Evaluate<int>(cmd[2]);
+			return a > b;
+		}
+
+		[ScriptFunction(">=")]
+		public object GreaterEqual(params object[] cmd)
+		{
+			var a = Evaluate<int>(cmd[1]);
+			var b = Evaluate<int>(cmd[2]);
+			return a >= b;
+		}
+
+		[ScriptFunction("not")]
+		public object Not(params object[] cmd)
+		{
+			var a = Evaluate<bool>(cmd[1]);
+			return !a;
+		}
+
+		//and
+		
+		//or
+
+		[ScriptFunction("if")]
+		public object If(params object[] cmd)
+		{
+			var expression = Evaluate<bool>(cmd[1]);
+			if (expression)
+			{
+				for (var i = 2; i < cmd.Length; i++)
+				{
+					if (cmd[i] is Symbol && cmd[i].ToString() == "else")
+						break;
+					Evaluate(cmd[i]);
+				}
+			}
+			else
+			{
+				for (var i = 2; i < cmd.Length; i++)
+				{
+					if (cmd[i] is Symbol && cmd[i].ToString() == "else")
+					{
+						for (var j = i + 1; j < cmd.Length; j++)
+							Evaluate(cmd[j]);
+					}
+				}
+			}
+			return expression;
+		}
+
+		private object CellOrPart(object thing)
+		{
+			thing = Evaluate(thing);
+			if (thing is Part)
+				return (Part)thing;
+			if (thing is Cell)
+				return (Cell)thing;
+			var id = Evaluate<string>(thing);
+			object found = Parts.FirstOrDefault(o => o.ID == id);
+			if (found == null)
+				found = Cells.FirstOrDefault(o => o.ID == id);
+			return found;
+		}
+
+		[ScriptFunction("part")]
+		public object FindPart(params object[] cmd)
+		{
+			var thing = Evaluate(cmd[1]);
+			var thingAsPart = thing as Part;
+			if (thingAsPart == null)
+			{
+				var str = thing.ToString();
+				thingAsPart = Parts.FirstOrDefault(o => o.ID == str);
+			}
+			return thingAsPart;
+		}
+
+		[ScriptFunction("cell")]
+		public object FindCell(params object[] cmd)
+		{
+			var thing = Evaluate(cmd[1]);
+			var thingAsPart = thing as Cell;
+			if (thingAsPart == null)
+			{
+				var str = thing.ToString();
+				thingAsPart = Cells.FirstOrDefault(o => o.ID == str);
+			}
+			return thingAsPart;
+		}
+
+		/// <summary>
+		/// Returns true if a cell is mapped, or all component cells of an object are mapped, false otherwise.
+		/// </summary>
+		[ScriptFunction("mapped?")]
+		public object IsMapped(params object[] cmd)
+		{
+			object mapThis = CellOrPart(cmd[1]);
+			if (mapThis == null)
+				return null;
+			if (mapThis is Cell)
+				return ((Cell)mapThis).Visible;
+			else if (mapThis is Part)
+				return ((Part)mapThis).Cells.All(c => c.Visible);
+			return false;
+		}
+
+		/// <summary>
+		/// Returns the number of component cells of an object that are mapped.
+		/// </summary>
+		[ScriptFunction]
+		public object NumMapped(params object[] cmd)
+		{
+			object mapThis = CellOrPart(cmd[1]);
+			if (mapThis == null)
+				return null;
+			if (mapThis is Cell)
+				return ((Cell)mapThis).Visible ? 1 : 0;
+			else if (mapThis is Part)
+				return ((Part)mapThis).Cells.Count(c => c.Visible);
+			return false;
+		}
+
 		[ScriptFunction]
 		public object Random(params object[] cmd)
 		{
@@ -107,10 +265,21 @@ namespace KiSSLab
 				cmd = new[] { cmd[0], (Symbol)"#a", (Symbol)"#b", cmd[1], cmd[2] };
 			}
 
-			var str = Evaluate(cmd[1]).ToString();
-			var moveRelWhat = Parts.FirstOrDefault(o => o.ID == str);
-			str = Evaluate(cmd[2]).ToString();
-			var moveRelTo = Parts.FirstOrDefault(o => o.ID == str);
+			var maybeWhat = Evaluate(cmd[1]);
+			var maybeTo = Evaluate(cmd[2]);
+
+			var moveRelWhat = maybeWhat as Part;
+			var moveRelTo = maybeTo as Part;
+			if (moveRelWhat == null)
+			{
+				var str = maybeWhat.ToString();
+				moveRelWhat = Parts.FirstOrDefault(o => o.ID == str);
+			}
+			if (moveRelTo == null)
+			{
+				var str = maybeTo.ToString();
+				moveRelTo = Parts.FirstOrDefault(o => o.ID == str);
+			}
 			var moveRelByX = Evaluate<int>(cmd[3]);
 			var moveRelByY = Evaluate<int>(cmd[4]);
 			if (!(moveRelWhat == null || moveRelTo == null))
@@ -218,6 +387,13 @@ namespace KiSSLab
 			timer.Interval = timer.TimeLeft = delay;
 			timer.Repeat = (cmd.Length == 4 && cmd[3] is Symbol && cmd[3].ToString() == "repeat");
 			return timer;
+		}
+
+		[ScriptFunction]
+		public object Notify(params object[] cmd)
+		{
+			DarkUI.Forms.DarkMessageBox.ShowInformation(Evaluate(cmd[1]).ToString(), Application.ProductName);
+			return null;
 		}
 	}
 }

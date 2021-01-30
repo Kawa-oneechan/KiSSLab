@@ -257,10 +257,9 @@ namespace KiSSLab
 			editor.Pick(part, cell);
 			if (Hilight) DrawScene();
 
-			if (part != null)
+			if (part != null && e.Button == MouseButtons.Left)
 			{
-				if (e.Button == MouseButtons.Left)
-					Scene.Catch(part, cell);
+				Scene.Catch(part, cell);
 				if (!part.Locked)
 				{
 					held = part;

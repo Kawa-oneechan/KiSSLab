@@ -12,39 +12,39 @@ namespace KiSSLab
 	public partial class Scene
 	{
 		[ScriptFunction("+")]
-		public object Add(params object[] cmd)
+		public object Add(params object[] args)
 		{
-			var ret = Evaluate<int>(cmd[1]);
-			for (var i = 2; i < cmd.Length; i++)
-				ret += Evaluate<int>(cmd[i]);
+			var ret = Evaluate<int>(args[0]);
+			for (var i = 1; i < args.Length; i++)
+				ret += Evaluate<int>(args[i]);
 			return ret;
 		}
 
 		[ScriptFunction("-")]
-		public object Subtract(params object[] cmd)
+		public object Subtract(params object[] args)
 		{
-			var ret = Evaluate<int>(cmd[1]);
-			for (var i = 2; i < cmd.Length; i++)
-				ret -= Evaluate<int>(cmd[i]);
+			var ret = Evaluate<int>(args[0]);
+			for (var i = 1; i < args.Length; i++)
+				ret -= Evaluate<int>(args[i]);
 			return ret;
 		}
 
 		[ScriptFunction("*")]
-		public object Multiply(params object[] cmd)
+		public object Multiply(params object[] args)
 		{
-			var ret = Evaluate<int>(cmd[1]);
-			for (var i = 2; i < cmd.Length; i++)
-				ret *= Evaluate<int>(cmd[i]);
+			var ret = Evaluate<int>(args[0]);
+			for (var i = 1; i < args.Length; i++)
+				ret *= Evaluate<int>(args[i]);
 			return ret;
 		}
 
 		[ScriptFunction("/")]
-		public object Divide(params object[] cmd)
+		public object Divide(params object[] args)
 		{
-			var ret = Evaluate<int>(cmd[1]);
-			for (var i = 2; i < cmd.Length; i++)
+			var ret = Evaluate<int>(args[0]);
+			for (var i = 1; i < args.Length; i++)
 			{
-				var d = Evaluate<int>(cmd[i]);
+				var d = Evaluate<int>(args[i]);
 				if (d == 0)
 					return 0;
 				ret /= d;
@@ -53,10 +53,10 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction("=")]
-		public object SetVar(params object[] cmd)
+		public object SetVar(params object[] args)
 		{
-			var key = cmd[1] as Symbol;
-			var val = Evaluate(cmd[2]);
+			var key = args[0] as Symbol;
+			var val = Evaluate(args[1]);
 			if (key == "true" || key == "false")
 				return key;
 			scriptVariables[key] = val;
@@ -64,57 +64,57 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction("==")]
-		public object Equal(params object[] cmd)
+		public object Equal(params object[] args)
 		{
-			var a = Evaluate<int>(cmd[1]);
-			var b = Evaluate<int>(cmd[2]);
+			var a = Evaluate<int>(args[0]);
+			var b = Evaluate<int>(args[1]);
 			return a == b;
 		}
 
 		[ScriptFunction("!=")]
-		public object NotEqual(params object[] cmd)
+		public object NotEqual(params object[] args)
 		{
-			var a = Evaluate<int>(cmd[1]);
-			var b = Evaluate<int>(cmd[2]);
+			var a = Evaluate<int>(args[0]);
+			var b = Evaluate<int>(args[1]);
 			return a != b;
 		}
 
 		[ScriptFunction("<")]
-		public object LowerThan(params object[] cmd)
+		public object LowerThan(params object[] args)
 		{
-			var a = Evaluate<int>(cmd[1]);
-			var b = Evaluate<int>(cmd[2]);
+			var a = Evaluate<int>(args[0]);
+			var b = Evaluate<int>(args[1]);
 			return a < b;
 		}
 
 		[ScriptFunction("<=")]
-		public object LowerEqual(params object[] cmd)
+		public object LowerEqual(params object[] args)
 		{
-			var a = Evaluate<int>(cmd[1]);
-			var b = Evaluate<int>(cmd[2]);
+			var a = Evaluate<int>(args[0]);
+			var b = Evaluate<int>(args[1]);
 			return a <= b;
 		}
 
 		[ScriptFunction(">")]
-		public object GreaterThan(params object[] cmd)
+		public object GreaterThan(params object[] args)
 		{
-			var a = Evaluate<int>(cmd[1]);
-			var b = Evaluate<int>(cmd[2]);
+			var a = Evaluate<int>(args[0]);
+			var b = Evaluate<int>(args[1]);
 			return a > b;
 		}
 
 		[ScriptFunction(">=")]
-		public object GreaterEqual(params object[] cmd)
+		public object GreaterEqual(params object[] args)
 		{
-			var a = Evaluate<int>(cmd[1]);
-			var b = Evaluate<int>(cmd[2]);
+			var a = Evaluate<int>(args[0]);
+			var b = Evaluate<int>(args[1]);
 			return a >= b;
 		}
 
 		[ScriptFunction("not")]
-		public object Not(params object[] cmd)
+		public object Not(params object[] args)
 		{
-			var a = Evaluate<bool>(cmd[1]);
+			var a = Evaluate<bool>(args[0]);
 			return !a;
 		}
 
@@ -123,26 +123,26 @@ namespace KiSSLab
 		//or
 
 		[ScriptFunction("if")]
-		public object If(params object[] cmd)
+		public object If(params object[] args)
 		{
-			var expression = Evaluate<bool>(cmd[1]);
+			var expression = Evaluate<bool>(args[0]);
 			if (expression)
 			{
-				for (var i = 2; i < cmd.Length; i++)
+				for (var i = 1; i < args.Length; i++)
 				{
-					if (cmd[i] is Symbol && cmd[i].ToString() == "else")
+					if (args[i] is Symbol && args[i].ToString() == "else")
 						break;
-					Evaluate(cmd[i]);
+					Evaluate(args[i]);
 				}
 			}
 			else
 			{
-				for (var i = 2; i < cmd.Length; i++)
+				for (var i = 1; i < args.Length; i++)
 				{
-					if (cmd[i] is Symbol && cmd[i].ToString() == "else")
+					if (args[i] is Symbol && args[i].ToString() == "else")
 					{
-						for (var j = i + 1; j < cmd.Length; j++)
-							Evaluate(cmd[j]);
+						for (var j = i + 1; j < args.Length; j++)
+							Evaluate(args[j]);
 					}
 				}
 			}
@@ -150,32 +150,32 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
-		public object ForEach(params object[] cmd)
+		public object ForEach(params object[] args)
 		{
-			var args = cmd[1] as List<object>;
-			var list = Evaluate<List<object>>(args[0]);
-			var iterator = args[1] as Symbol;
-			var block = cmd.Skip(2).ToList();
+			var what = args[0] as List<object>;
+			var list = Evaluate<List<object>>(what[0]);
+			var iterator = what[1] as Symbol;
+			var block = args.Skip(1).ToList();
 			object ret = null;
 			foreach (var item in list)
 			{
-				SetVar(null, iterator, item);
+				SetVar(iterator, item);
 				foreach (var command in block)
 					ret = Evaluate(command);
 			}
 			return ret;
 		}
 
-		private object CelsOrPart(object thing)
+		private object CelsOrPart(object args)
 		{
-			thing = Evaluate(thing);
-			if (thing is Part)
-				return (Part)thing;
-			if (thing is Cel)
-				return (Cel)thing;
-			if (thing is List<object>)
-				return (List<object>)thing;
-			var id = Evaluate<string>(thing);
+			args = Evaluate(args);
+			if (args is Part)
+				return (Part)args;
+			if (args is Cel)
+				return (Cel)args;
+			if (args is List<object>)
+				return (List<object>)args;
+			var id = Evaluate<string>(args);
 			var cels = Cels.Where(o => o.ID == id).Cast<object>().ToList();
 			if (cels.Count == 0)
 				return Parts.FirstOrDefault(o => o.ID == id);
@@ -183,9 +183,9 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction("part")]
-		public object FindPart(params object[] cmd)
+		public object FindPart(params object[] args)
 		{
-			var thing = Evaluate(cmd[1]);
+			var thing = Evaluate(args[0]);
 			var thingAsPart = thing as Part;
 			if (thingAsPart == null)
 			{
@@ -196,9 +196,9 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction("cels")]
-		public object FindCels(params object[] cmd)
+		public object FindCels(params object[] args)
 		{
-			var thing = Evaluate(cmd[1]);
+			var thing = Evaluate(args[0]);
 			var cel = thing as Cel;
 			if (cel != null)
 				return cel;
@@ -213,9 +213,9 @@ namespace KiSSLab
 		/// Returns true if a cel is mapped, or all component cels of an object are mapped, false otherwise.
 		/// </summary>
 		[ScriptFunction("mapped?")]
-		public object IsMapped(params object[] cmd)
+		public object IsMapped(params object[] args)
 		{
-			object mapThis = CelsOrPart(cmd[1]);
+			object mapThis = CelsOrPart(args[0]);
 			if (mapThis == null)
 				return null;
 			if (mapThis is Cel)
@@ -229,9 +229,9 @@ namespace KiSSLab
 		/// Returns the number of component cels of an object that are mapped.
 		/// </summary>
 		[ScriptFunction]
-		public object NumMapped(params object[] cmd)
+		public object NumMapped(params object[] args)
 		{
-			object mapThis = CelsOrPart(cmd[1]);
+			object mapThis = CelsOrPart(args[0]);
 			if (mapThis == null)
 				return null;
 			if (mapThis is Cel)
@@ -242,34 +242,34 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
-		public object Random(params object[] cmd)
+		public object Random(params object[] args)
 		{
-			if (cmd.Length == 2)
-				return rand.Next(Evaluate<int>(cmd[1]));
-			else if (cmd.Length > 2)
-				return rand.Next(Evaluate<int>(cmd[1]), Evaluate<int>(cmd[2]));
+			if (args.Length == 1)
+				return rand.Next(Evaluate<int>(args[0]));
+			else if (args.Length > 1)
+				return rand.Next(Evaluate<int>(args[0]), Evaluate<int>(args[1]));
 			return 0;
 		}
 
 		[ScriptFunction]
-		public object Music(params object[] cmd)
+		public object Music(params object[] args)
 		{
-			var file = Evaluate<string>(cmd[1]);
+			var file = Evaluate<string>(args[0]);
 			Viewer.Sound.PlayMusic(file);
 			return 0;
 		}
 
 		[ScriptFunction]
-		public object Sound(params object[] cmd)
+		public object Sound(params object[] args)
 		{
-			var file = Evaluate<string>(cmd[1]);
+			var file = Evaluate<string>(args[0]);
 			return Viewer.Sound.PlaySound(file);
 		}
 
 		[ScriptFunction]
-		public object StopSound(params object[] cmd)
+		public object StopSound(params object[] args)
 		{
-			var sound = Evaluate<SoundSystem.Sound>(cmd[1]);
+			var sound = Evaluate<SoundSystem.Sound>(args[0]);
 			sound.Stop();
 			return 0;
 		}
@@ -278,42 +278,37 @@ namespace KiSSLab
 		/// Roughly equivalent to "movebyx(o1,o2,d) movebyy(o1,o2,d)"
 		/// </summary>
 		[ScriptFunction]
-		public object MoveRel(params object[] cmd)
+		public object MoveRel(params object[] args)
 		{
-			if (cmd[1] is int)
-			{
-				cmd = new[] { cmd[0], (Symbol)"#a", (Symbol)"#b", cmd[1], cmd[2] };
-			}
-			var moveRelWhat = (Part)FindPart(null, cmd[1]);
-			var moveRelTo = (Part)FindPart(null, cmd[2]);
-			var moveRelByX = Evaluate<int>(cmd[3]);
-			var moveRelByY = Evaluate<int>(cmd[4]);
+			if (args[0] is int)
+				args = new[] { (Symbol)"#a", (Symbol)"#b", args[0], args[1] };
+			var moveRelWhat = (Part)FindPart(args[0]);
+			var moveRelTo = (Part)FindPart(args[1]);
+			var moveRelByX = Evaluate<int>(args[2]);
+			var moveRelByY = Evaluate<int>(args[3]);
 			if (!(moveRelWhat == null || moveRelTo == null))
 				moveRelWhat.Position = new Point(moveRelTo.Position.X + moveRelByX, moveRelTo.Position.Y + moveRelByY);
 			return null;
 		}
 
 		[ScriptFunction]
-		public object MoveTo(params object[] cmd)
+		public object MoveTo(params object[] args)
 		{
-			if (cmd[1] is int)
-			{
-				cmd = new[] { cmd[0], (Symbol)"#a", cmd[1], cmd[2] };
-			}
-
-			var str = Evaluate(cmd[1]).ToString();
+			if (args[0] is int)
+				args = new[] { (Symbol)"#a", args[0], args[1] };
+			var str = Evaluate(args[0]).ToString();
 			var moveWhat = Parts.FirstOrDefault(o => o.ID == str);
-			var moveToX = Evaluate<int>(cmd[2]);
-			var moveToY = Evaluate<int>(cmd[3]);
+			var moveToX = Evaluate<int>(args[1]);
+			var moveToY = Evaluate<int>(args[2]);
 			if (moveWhat != null)
 				moveWhat.Position = new Point(moveToX, moveToY);
 			return null;
 		}
 
 		[ScriptFunction]
-		public object Map(params object[] cmd)
+		public object Map(params object[] args)
 		{
-			var mapThis = CelsOrPart(cmd[1]);
+			var mapThis = CelsOrPart(args[0]);
 			if (mapThis == null)
 				return null;
 			if (mapThis is Part)
@@ -324,9 +319,9 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
-		public object UnMap(params object[] cmd)
+		public object UnMap(params object[] args)
 		{
-			var mapThis = CelsOrPart(cmd[1]);
+			var mapThis = CelsOrPart(args[0]);
 			if (mapThis == null)
 				return null;
 			if (mapThis is Part)
@@ -337,9 +332,9 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
-		public object AltMap(params object[] cmd)
+		public object AltMap(params object[] args)
 		{
-			var mapThis = CelsOrPart(cmd[1]);
+			var mapThis = CelsOrPart(args[0]);
 			if (mapThis == null)
 				return null;
 			if (mapThis is Part)
@@ -350,32 +345,32 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
-		public object Ghost(params object[] cmd)
+		public object Ghost(params object[] args)
 		{
-			var ghostThis = CelsOrPart(cmd[1]);
+			var ghostThis = CelsOrPart(args[0]);
 			if (ghostThis == null)
 				return null;
 			if (ghostThis is Part)
 				ghostThis = ((Part)ghostThis).Cels;
-			var tOrF = cmd.Length > 2 ? (Evaluate<int>(cmd[2]) > 0) : true;
+			var tOrF = args.Length > 1 ? (Evaluate<int>(args[1]) > 0) : true;
 			foreach (var cel in (List<Cel>)ghostThis)
 				cel.Ghost = tOrF;
 			return ghostThis;
 		}
 
 		[ScriptFunction]
-		public object Timer(params object[] cmd)
+		public object Timer(params object[] args)
 		{
-			if (!(cmd[1] is int || cmd[1] is string || cmd[1] is Symbol))
+			if (!(args[0] is int || args[0] is string || args[0] is Symbol))
 			{
-				//	MessageBox.Show(string.Format("Malformed \"timer\" command. An integer or string ID is expected, but got a {0}.", cmd[2].GetType().Name), Application.ProductName);
+				//	MessageBox.Show(string.Format("Malformed \"timer\" command. An integer or string ID is expected, but got a {0}.", what[1].GetType().Name), Application.ProductName);
 				//	continue;
 			}
-			var timerID = cmd[1].GetHashCode();
+			var timerID = args[0].GetHashCode();
 			if (!Timers.ContainsKey(timerID))
 				Timers.Add(timerID, new Timer());
 			var timer = Timers[timerID];
-			var delay = Evaluate<int>(cmd[2]);
+			var delay = Evaluate<int>(args[1]);
 			if (delay <= 0)
 			{
 				timer.Action = null;
@@ -383,16 +378,17 @@ namespace KiSSLab
 				timer.Repeat = false;
 				return timer;
 			}
-			timer.Action = cmd[1];
+			timer.Action = args[0];
 			timer.Interval = timer.TimeLeft = delay;
-			timer.Repeat = (cmd.Length == 4 && cmd[3] is Symbol && cmd[3].ToString() == "repeat");
+			timer.Repeat = (args.Length == 3 && args[2] is Symbol && args[2].ToString() == "repeat");
 			return timer;
 		}
 
 		[ScriptFunction]
-		public object Notify(params object[] cmd)
+		public object Notify(params object[] args)
 		{
-			DarkUI.Forms.DarkMessageBox.ShowInformation(Evaluate(cmd[1]).ToString(), Application.ProductName);
+			//Concat up all what?
+			DarkUI.Forms.DarkMessageBox.ShowInformation(Evaluate(args[0]).ToString(), Application.ProductName);
 			return null;
 		}
 	}

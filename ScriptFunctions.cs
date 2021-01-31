@@ -149,18 +149,37 @@ namespace KiSSLab
 			return expression;
 		}
 
-		private object CelOrPart(object thing)
+		[ScriptFunction]
+		public object ForEach(params object[] cmd)
+		{
+			var args = cmd[1] as List<object>;
+			var list = Evaluate<List<object>>(args[0]);
+			var iterator = args[1] as Symbol;
+			var block = cmd.Skip(2).ToList();
+			object ret = null;
+			foreach (var item in list)
+			{
+				SetVar(null, iterator, item);
+				foreach (var command in block)
+					ret = Evaluate(command);
+			}
+			return ret;
+		}
+
+		private object CelsOrPart(object thing)
 		{
 			thing = Evaluate(thing);
 			if (thing is Part)
 				return (Part)thing;
 			if (thing is Cel)
 				return (Cel)thing;
+			if (thing is List<object>)
+				return (List<object>)thing;
 			var id = Evaluate<string>(thing);
-			object found = Parts.FirstOrDefault(o => o.ID == id);
-			if (found == null)
-				found = Cels.FirstOrDefault(o => o.ID == id);
-			return found;
+			var cels = Cels.Where(o => o.ID == id).Cast<object>().ToList();
+			if (cels.Count == 0)
+				return Parts.FirstOrDefault(o => o.ID == id);
+			return cels;
 		}
 
 		[ScriptFunction("part")]
@@ -176,17 +195,18 @@ namespace KiSSLab
 			return thingAsPart;
 		}
 
-		[ScriptFunction("cel")]
-		public object FindCel(params object[] cmd)
+		[ScriptFunction("cels")]
+		public object FindCels(params object[] cmd)
 		{
 			var thing = Evaluate(cmd[1]);
-			var thingAsPart = thing as Cel;
-			if (thingAsPart == null)
-			{
-				var str = thing.ToString();
-				thingAsPart = Cels.FirstOrDefault(o => o.ID == str);
-			}
-			return thingAsPart;
+			var cel = thing as Cel;
+			if (cel != null)
+				return cel;
+			var str = thing.ToString();
+			var cels = Cels.Where(o => o.ID == str).Cast<object>().ToList();
+			if (cels.Count == 1)
+				return cels[0];
+			return cels;
 		}
 
 		/// <summary>
@@ -195,7 +215,7 @@ namespace KiSSLab
 		[ScriptFunction("mapped?")]
 		public object IsMapped(params object[] cmd)
 		{
-			object mapThis = CelOrPart(cmd[1]);
+			object mapThis = CelsOrPart(cmd[1]);
 			if (mapThis == null)
 				return null;
 			if (mapThis is Cel)
@@ -211,7 +231,7 @@ namespace KiSSLab
 		[ScriptFunction]
 		public object NumMapped(params object[] cmd)
 		{
-			object mapThis = CelOrPart(cmd[1]);
+			object mapThis = CelsOrPart(cmd[1]);
 			if (mapThis == null)
 				return null;
 			if (mapThis is Cel)
@@ -264,22 +284,8 @@ namespace KiSSLab
 			{
 				cmd = new[] { cmd[0], (Symbol)"#a", (Symbol)"#b", cmd[1], cmd[2] };
 			}
-
-			var maybeWhat = Evaluate(cmd[1]);
-			var maybeTo = Evaluate(cmd[2]);
-
-			var moveRelWhat = maybeWhat as Part;
-			var moveRelTo = maybeTo as Part;
-			if (moveRelWhat == null)
-			{
-				var str = maybeWhat.ToString();
-				moveRelWhat = Parts.FirstOrDefault(o => o.ID == str);
-			}
-			if (moveRelTo == null)
-			{
-				var str = maybeTo.ToString();
-				moveRelTo = Parts.FirstOrDefault(o => o.ID == str);
-			}
+			var moveRelWhat = (Part)FindPart(null, cmd[1]);
+			var moveRelTo = (Part)FindPart(null, cmd[2]);
 			var moveRelByX = Evaluate<int>(cmd[3]);
 			var moveRelByY = Evaluate<int>(cmd[4]);
 			if (!(moveRelWhat == null || moveRelTo == null))
@@ -307,66 +313,53 @@ namespace KiSSLab
 		[ScriptFunction]
 		public object Map(params object[] cmd)
 		{
-			object mapThis = Cels.FirstOrDefault(o => o.ID == cmd[1].ToString());
-			if (mapThis == null)
-				mapThis = Parts.FirstOrDefault(o => o.ID == cmd[1].ToString());
+			var mapThis = CelsOrPart(cmd[1]);
 			if (mapThis == null)
 				return null;
-			if (mapThis is Cel)
-				((Cel)mapThis).Visible = true;
-			else if (mapThis is Part)
-				((Part)mapThis).Visible = true;
+			if (mapThis is Part)
+				mapThis = ((Part)mapThis).Cels;
+			foreach (var cel in (List<Cel>)mapThis)
+				cel.Visible = true;
 			return mapThis;
 		}
 
 		[ScriptFunction]
 		public object UnMap(params object[] cmd)
 		{
-			object mapThis = Cels.FirstOrDefault(o => o.ID == cmd[1].ToString());
-			if (mapThis == null)
-				mapThis = Parts.FirstOrDefault(o => o.ID == cmd[1].ToString());
+			var mapThis = CelsOrPart(cmd[1]);
 			if (mapThis == null)
 				return null;
-			if (mapThis is Cel)
-				((Cel)mapThis).Visible = false;
-			else if (mapThis is Part)
-				((Part)mapThis).Visible = false;
+			if (mapThis is Part)
+				mapThis = ((Part)mapThis).Cels;
+			foreach (var cel in (List<Cel>)mapThis)
+				cel.Visible = false;
 			return mapThis;
 		}
 
 		[ScriptFunction]
 		public object AltMap(params object[] cmd)
 		{
-			object mapThis = Cels.FirstOrDefault(o => o.ID == cmd[1].ToString());
-			if (mapThis == null)
-				mapThis = Parts.FirstOrDefault(o => o.ID == cmd[1].ToString());
+			var mapThis = CelsOrPart(cmd[1]);
 			if (mapThis == null)
 				return null;
-			if (mapThis is Cel)
-				((Cel)mapThis).Visible = !((Cel)mapThis).Visible;
-			else if (mapThis is Part)
-			{
-				foreach (var cel in ((Part)mapThis).Cels)
-					cel.Visible = !cel.Visible;
-				//((Part)mapThis).Visible = !((Part)mapThis).Visible;
-			}
+			if (mapThis is Part)
+				mapThis = ((Part)mapThis).Cels;
+			foreach (var cel in (List<Cel>)mapThis)
+				cel.Visible = !cel.Visible;
 			return mapThis;
 		}
 
 		[ScriptFunction]
 		public object Ghost(params object[] cmd)
 		{
-			object ghostThis = Cels.FirstOrDefault(o => o.ID == cmd[1].ToString());
-			var tOrF = cmd.Length > 2 ? (Evaluate<int>(cmd[2]) > 0) : true;
+			var ghostThis = CelsOrPart(cmd[1]);
 			if (ghostThis == null)
 				return null;
-			if (ghostThis is Cel)
-				((Cel)ghostThis).Ghost = tOrF;
-			else if (ghostThis is Part)
-			{
-				foreach (var c in ((Part)ghostThis).Cels)
-					c.Ghost = tOrF;
-			}
+			if (ghostThis is Part)
+				ghostThis = ((Part)ghostThis).Cels;
+			var tOrF = cmd.Length > 2 ? (Evaluate<int>(cmd[2]) > 0) : true;
+			foreach (var cel in (List<Cel>)ghostThis)
+				cel.Ghost = tOrF;
 			return ghostThis;
 		}
 

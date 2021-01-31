@@ -85,7 +85,17 @@ namespace KiSSLab
 
 		private bool IsSafeObject(object obj)
 		{
-			return obj is Part || obj is Cel;
+			var maybe = ConvertSafeListToObj(obj);
+			return obj is Part || obj is Cel || maybe is List<object>;
+		}
+
+		private List<object> ConvertSafeListToObj(object obj)
+		{
+			if (obj is List<Part>)
+				return ((List<Part>)obj).Cast<object>().ToList();
+			if (obj is List<Cel>)
+				return ((List<Cel>)obj).Cast<object>().ToList();
+			return null;
 		}
 
 		private object Send(object obj, List<object> cmd)
@@ -129,7 +139,7 @@ namespace KiSSLab
 				var cmd = (List<object>)thing;
 				if (cmd[0] is List<object>)
 				{
-					if (((List<object>)cmd[0])[0] is Symbol)
+					if (((List<object>)cmd[0]) is List<object>)
 						cmd[0] = Evaluate(cmd[0]);
 				}
 				if (cmd[0] is Symbol)
@@ -165,6 +175,10 @@ namespace KiSSLab
 			if (typeof(T).Name == "Boolean" && ret is int)
 			{
 				ret = (int)ret == 1;
+			}
+			if (typeof(T).Name == "List`1" && ret.GetType().Name == "List`1")
+			{
+				ret = ConvertSafeListToObj(ret);
 			}
 			if (!(ret is T))
 			{

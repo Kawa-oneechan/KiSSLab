@@ -318,8 +318,8 @@ namespace KiSSLab
 				return null;
 			if (mapThis is Part)
 				mapThis = ((Part)mapThis).Cels;
-			foreach (var cel in (List<Cel>)mapThis)
-				cel.Visible = true;
+			foreach (var cel in (List<object>)mapThis)
+				((Cel)cel).Visible = true;
 			return mapThis;
 		}
 
@@ -331,8 +331,8 @@ namespace KiSSLab
 				return null;
 			if (mapThis is Part)
 				mapThis = ((Part)mapThis).Cels;
-			foreach (var cel in (List<Cel>)mapThis)
-				cel.Visible = false;
+			foreach (var cel in (List<object>)mapThis)
+				((Cel)cel).Visible = false;
 			return mapThis;
 		}
 
@@ -344,8 +344,8 @@ namespace KiSSLab
 				return null;
 			if (mapThis is Part)
 				mapThis = ((Part)mapThis).Cels;
-			foreach (var cel in (List<Cel>)mapThis)
-				cel.Visible = !cel.Visible;
+			foreach (var cel in (List<object>)mapThis)
+				((Cel)cel).Visible = !((Cel)cel).Visible;
 			return mapThis;
 		}
 
@@ -366,16 +366,16 @@ namespace KiSSLab
 		[ScriptFunction]
 		public object Timer(params object[] cmd)
 		{
-			var delay = Evaluate<int>(cmd[1]); //(int)cmd[1];
-			if (!(cmd[2] is int || cmd[2] is string || cmd[2] is Symbol))
+			if (!(cmd[1] is int || cmd[1] is string || cmd[1] is Symbol))
 			{
 				//	MessageBox.Show(string.Format("Malformed \"timer\" command. An integer or string ID is expected, but got a {0}.", cmd[2].GetType().Name), Application.ProductName);
 				//	continue;
 			}
-			var timerID = cmd[2].GetHashCode();
+			var timerID = cmd[1].GetHashCode();
 			if (!Timers.ContainsKey(timerID))
 				Timers.Add(timerID, new Timer());
 			var timer = Timers[timerID];
+			var delay = Evaluate<int>(cmd[2]);
 			if (delay <= 0)
 			{
 				timer.Action = null;
@@ -383,7 +383,7 @@ namespace KiSSLab
 				timer.Repeat = false;
 				return timer;
 			}
-			timer.Action = cmd[2];
+			timer.Action = cmd[1];
 			timer.Interval = timer.TimeLeft = delay;
 			timer.Repeat = (cmd.Length == 4 && cmd[3] is Symbol && cmd[3].ToString() == "repeat");
 			return timer;

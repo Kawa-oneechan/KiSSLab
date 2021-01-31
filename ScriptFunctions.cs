@@ -176,6 +176,15 @@ namespace KiSSLab
 			if (args is List<object>)
 				return (List<object>)args;
 			var id = Evaluate<string>(args);
+			if (id.Contains('/'))
+			{
+				var objID = id.Remove(id.IndexOf('/'));
+				var celID = id.Substring(id.IndexOf('/') + 1);
+				var obj = Parts.FirstOrDefault(o => o.ID == objID);
+				if (obj == null)
+					return null;
+				return obj.Cels.Where(o => o.ID == celID).Cast<object>().ToList();
+			}
 			var cels = Cels.Where(o => o.ID == id).Cast<object>().ToList();
 			if (cels.Count == 0)
 				return Parts.FirstOrDefault(o => o.ID == id);

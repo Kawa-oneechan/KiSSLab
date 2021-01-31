@@ -30,8 +30,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The two cells or objects do not overlap, taking transparent pixels into account.
-		/// Triggers only if the cells did overlap before one of them was moved by the user.
+		/// The two cels or objects do not overlap, taking transparent pixels into account.
+		/// Triggers only if the cels did overlap before one of them was moved by the user.
 		/// </summary>
 		[ScriptEvent]
 		public string Apart(params object[] ev)
@@ -49,8 +49,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The user clicks on the object or cell.
-		/// Applies to all cells & objects except those with a maximal fix value.
+		/// The user clicks on the object or cel.
+		/// Applies to all cels & objects except those with a maximal fix value.
 		/// </summary>
 		[ScriptEvent]
 		public string Catch(params object[] ev)
@@ -59,8 +59,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The two cells or objects touch, taking transparent pixels into account.
-		/// Triggers only if the cells did not overlap before one of them was moved by the user.
+		/// The two cels or objects touch, taking transparent pixels into account.
+		/// Triggers only if the cels did not overlap before one of them was moved by the user.
 		/// </summary>
 		[ScriptEvent]
 		public string Collide(params object[] ev)
@@ -69,8 +69,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The user releases the mouse on the object or cell.
-		/// Applies only to all cells & objects except those with a maximal fix value.
+		/// The user releases the mouse on the object or cel.
+		/// Applies only to all cels & objects except those with a maximal fix value.
 		/// </summary>
 		[ScriptEvent]
 		public string Drop(params object[] ev)
@@ -88,8 +88,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The user clicks on the object or cell.
-		/// Applies only to fixed cells & objects.
+		/// The user clicks on the object or cel.
+		/// Applies only to fixed cels & objects.
 		/// </summary>
 		[ScriptEvent]
 		public string FixCatch(params object[] ev)
@@ -98,8 +98,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The user releases the object or cell.
-		/// Applies only to fixed cells & objects.
+		/// The user releases the object or cel.
+		/// Applies only to fixed cels & objects.
 		/// </summary>
 		[ScriptEvent]
 		public string FixDrop(params object[] ev)
@@ -108,7 +108,7 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The two objects or cells overlap, ignoring transparency.
+		/// The two objects or cels overlap, ignoring transparency.
 		/// Triggers only if the objects did not overlap before one of them was moved by the user.
 		/// </summary>
 		[ScriptEvent]
@@ -145,8 +145,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// Triggered when the mouse pointer moves over the cell or object.
-		/// The event is only triggered if the cell or object is not occluded by other cells (i.e. if a mouse click would invoke a "press" event)
+		/// Triggered when the mouse pointer moves over the cel or object.
+		/// The event is only triggered if the cel or object is not occluded by other cels (i.e. if a mouse click would invoke a "press" event)
 		/// </summary>
 		[ScriptEvent]
 		public string MouseIn(params object[] ev)
@@ -155,8 +155,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// Triggered when the mouse pointer moves over the cell or object.
-		/// The event is only triggered if the cell or object is not occluded by other cells (i.e. if a mouse click would invoke a "press" event)
+		/// Triggered when the mouse pointer moves over the cel or object.
+		/// The event is only triggered if the cel or object is not occluded by other cels (i.e. if a mouse click would invoke a "press" event)
 		/// </summary>
 		[ScriptEvent]
 		public string MouseOut(params object[] ev)
@@ -165,7 +165,7 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The two cells or objects do not overlap, ignoring transparency.
+		/// The two cels or objects do not overlap, ignoring transparency.
 		/// Triggers only if the objects did overlap before one of them was moved by the user.
 		/// </summary>
 		[ScriptEvent]
@@ -175,8 +175,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The user clicks on the object or cell.
-		/// Applies to all cells & objects.
+		/// The user clicks on the object or cel.
+		/// Applies to all cels & objects.
 		/// </summary>
 		[ScriptEvent]
 		public string Press(params object[] ev)
@@ -185,8 +185,8 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The user releases the object or cell.
-		/// Applies to all cells & objects.
+		/// The user releases the object or cel.
+		/// Applies to all cels & objects.
 		/// </summary>
 		[ScriptEvent]
 		public string Release(params object[] ev)
@@ -204,7 +204,7 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The two objects or cells overlap, ignoring transparency.
+		/// The two objects or cels overlap, ignoring transparency.
 		/// Triggers irrespective of the state of the two objects before movement.
 		/// </summary>
 		[ScriptEvent]
@@ -214,7 +214,7 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// The two cells or objects do not overlap, ignoring transparency.
+		/// The two cels or objects do not overlap, ignoring transparency.
 		/// Triggers irrespective of the state of the two objects before movement.
 		/// </summary>
 		[ScriptEvent]
@@ -224,7 +224,7 @@ namespace KiSSLab
 		}
 
 		/// <summary>
-		/// A previously-fixed cell or object becomes free to move.
+		/// A previously-fixed cel or object becomes free to move.
 		/// </summary>
 		[ScriptEvent("unfix")]
 		public string UnFix(params object[] ev)

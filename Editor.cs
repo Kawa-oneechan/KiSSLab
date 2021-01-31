@@ -15,21 +15,21 @@ namespace KiSSLab
 	public partial class Editor : UserControl
 	{
 		private bool locked;
-		private DarkCheckBox[] cellMapCheckBoxes;
+		private DarkCheckBox[] celMapCheckBoxes;
 
 		public Editor()
 		{
 			InitializeComponent();
 
-			cellMapCheckBoxes = new DarkCheckBox[10];
+			celMapCheckBoxes = new DarkCheckBox[10];
 			for (var i = 0; i < 10; i++)
 			{
-				var setCheck = cellMapCheckBoxes[i] = new DarkCheckBox()
+				var setCheck = celMapCheckBoxes[i] = new DarkCheckBox()
 				{
 					Text = i.ToString(),
 					AutoSize = true,
 				};
-				setCheck.CheckedChanged += new EventHandler(cellMappedCheckBox_CheckedChanged);
+				setCheck.CheckedChanged += new EventHandler(celMappedCheckBox_CheckedChanged);
 				flowLayoutPanel2.Controls.Add(setCheck);
 			}
 		}
@@ -43,17 +43,17 @@ namespace KiSSLab
 			this.parts.Items.AddRange(scene.Parts.ToArray());
 			this.parts.SelectedIndex = 0;
 
-			this.cells.Items.Clear();
-			this.cells.Items.AddRange(scene.Cells.ToArray());
-			this.cells.SelectedIndex = 0;
+			this.cels.Items.Clear();
+			this.cels.Items.AddRange(scene.Cels.ToArray());
+			this.cels.SelectedIndex = 0;
 
 			for (var i = scene.Sets; i < 10; i++)
 			{
-				cellMapCheckBoxes[i].Enabled = cellMapCheckBoxes[i].Checked = false;
+				celMapCheckBoxes[i].Enabled = celMapCheckBoxes[i].Checked = false;
 			}
 		}
 
-		public void Pick(Part part, Cell cell)
+		public void Pick(Part part, Cel cel)
 		{
 			if (part != null)
 			{
@@ -62,13 +62,13 @@ namespace KiSSLab
 				else
 					parts.SelectedItem = part;
 			}
-			if (cell != null)
+			if (cel != null)
 			{
-				if (cells.SelectedItem == cell)
-					cells_SelectedItemChanged(null, null);
+				if (cels.SelectedItem == cel)
+					cels_SelectedItemChanged(null, null);
 				else
-					cells.SelectedItem = cell;
-				((Viewer)this.ParentForm).HilightedCell = cell;
+					cels.SelectedItem = cel;
+				((Viewer)this.ParentForm).HilightedCel = cel;
 			}
 		}
 
@@ -131,62 +131,62 @@ namespace KiSSLab
 			part.Fix = int.Parse(f);
 		}
 
-		private void cells_SelectedItemChanged(object sender, EventArgs e)
+		private void cels_SelectedItemChanged(object sender, EventArgs e)
 		{
 			locked = true;
-			var cell = (Cell)this.cells.SelectedItem;
-			cellFilenameTextBox.Text = cell.ImageFilename;
-			cellOffXTextBox.Value = cell.Offset.X;
-			cellOffYTextBox.Value = cell.Offset.Y;
-			cellVisibleCheckBox.Checked = cell.Visible;
-			cellGhostedCheckBox.Checked = cell.Ghost;
-			cellOpacityTrackBar.Value = cell.Opacity;
+			var cel = (Cel)this.cels.SelectedItem;
+			celFilenameTextBox.Text = cel.ImageFilename;
+			celOffXTextBox.Value = cel.Offset.X;
+			celOffYTextBox.Value = cel.Offset.Y;
+			celVisibleCheckBox.Checked = cel.Visible;
+			celGhostedCheckBox.Checked = cel.Ghost;
+			celOpacityTrackBar.Value = cel.Opacity;
 			for (var i = 0; i < 10; i++)
-				cellMapCheckBoxes[i].Checked = cell.OnSets[i];
+				celMapCheckBoxes[i].Checked = cel.OnSets[i];
 			locked = false;
 		}
 
-		private void cellOffTextBox_ValueChanged(object sender, EventArgs e)
+		private void celOffTextBox_ValueChanged(object sender, EventArgs e)
 		{
 			if (locked) return;
-			var cell = (Cell)this.cells.SelectedItem;
-			cell.Offset = new Point((int)cellOffXTextBox.Value, (int)cellOffYTextBox.Value);
+			var cel = (Cel)this.cels.SelectedItem;
+			cel.Offset = new Point((int)celOffXTextBox.Value, (int)celOffYTextBox.Value);
 			((Viewer)this.ParentForm).DrawScene();
 		}
 
-		private void cellOpacityTrackBar_ValueChanged(object sender, EventArgs e)
+		private void celOpacityTrackBar_ValueChanged(object sender, EventArgs e)
 		{
-			cellOpacityLabel.Text = string.Format("Opacity ({0}, {1}%)", cellOpacityTrackBar.Value, (int)(cellOpacityTrackBar.Value / 2.55f));
+			celOpacityLabel.Text = string.Format("Opacity ({0}, {1}%)", celOpacityTrackBar.Value, (int)(celOpacityTrackBar.Value / 2.55f));
 			if (locked) return;
-			var cell = (Cell)this.cells.SelectedItem;
-			cell.Opacity = cellOpacityTrackBar.Value;
+			var cel = (Cel)this.cels.SelectedItem;
+			cel.Opacity = celOpacityTrackBar.Value;
 			((Viewer)this.ParentForm).DrawScene();
 		}
 
-		private void cellVisibleCheckBox_CheckedChanged(object sender, EventArgs e)
+		private void celVisibleCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (locked) return;
-			var cell = (Cell)this.cells.SelectedItem;
-			cell.Visible = cellVisibleCheckBox.Checked;
+			var cel = (Cel)this.cels.SelectedItem;
+			cel.Visible = celVisibleCheckBox.Checked;
 			((Viewer)this.ParentForm).DrawScene();
 		}
 
-		private void cellMappedCheckBox_CheckedChanged(object sender, EventArgs e)
+		private void celMappedCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (locked) return;
-			var cell = (Cell)this.cells.SelectedItem;
+			var cel = (Cel)this.cels.SelectedItem;
 			for (var i = 0; i < 10; i++)
 			{
-				cell.OnSets[i] = cellMapCheckBoxes[i].Checked;
+				cel.OnSets[i] = celMapCheckBoxes[i].Checked;
 			}
 			((Viewer)this.ParentForm).DrawScene();
 		}
 
-		private void cellGhostedCheckBox_CheckedChanged(object sender, EventArgs e)
+		private void celGhostedCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (locked) return;
-			var cell = (Cell)this.cells.SelectedItem;
-			cell.Ghost = cellGhostedCheckBox.Checked;
+			var cel = (Cel)this.cels.SelectedItem;
+			cel.Ghost = celGhostedCheckBox.Checked;
 		}
 	}
 }

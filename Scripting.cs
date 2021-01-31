@@ -85,7 +85,7 @@ namespace KiSSLab
 
 		private bool IsSafeObject(object obj)
 		{
-			return obj is Part || obj is Cell;
+			return obj is Part || obj is Cel;
 		}
 
 		private object Send(object obj, List<object> cmd)
@@ -183,7 +183,7 @@ namespace KiSSLab
 			return true;
 		}
 
-		public void Release(Part held, Cell cell)
+		public void Release(Part held, Cel cel)
 		{
 			//var somethingHappened = false;
 			var somethingCollided = false;
@@ -195,14 +195,14 @@ namespace KiSSLab
 			//DROP: applies to all with a LESS THAN MAX FIX
 			//RELEASE: always applies
 			var fix = held.Locked ? "fixdrop" : "drop";
-			var maybe = string.Format("{0}|{1}", fix, cell.ID);
+			var maybe = string.Format("{0}|{1}", fix, cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
 			}
-			maybe = string.Format("release|{0}", cell.ID);
+			maybe = string.Format("release|{0}", cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
 				RunEvent(Events[maybe]);
@@ -264,20 +264,20 @@ namespace KiSSLab
 
 		}
 
-		public void Catch(Part held, Cell cell)
+		public void Catch(Part held, Cel cel)
 		{
 			//FIXCATCH: applies to FIXED
 			//CATCH: applies to all with a LESS THAN MAX FIX
 			//PRESS: always applies
 			var fix = held.Locked ? "fixcatch" : "catch";
-			var maybe = string.Format("{0}|{1}", fix, cell.ID);
+			var maybe = string.Format("{0}|{1}", fix, cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
 			}
-			maybe = string.Format("press|{0}", cell.ID);
+			maybe = string.Format("press|{0}", cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
 				RunEvent(Events[maybe]);
@@ -285,14 +285,14 @@ namespace KiSSLab
 			}
 		}
 
-		public void Click(Cell cell)
+		public void Click(Cel cel)
 		{
-			var maybe = string.Format("click|{0}", cell.ID);
+			var maybe = string.Format("click|{0}", cel.ID);
 			if (Events.ContainsKey(maybe))
 				RunEvent(Events[maybe]);
 			else
 			{
-				maybe = string.Format("click|{0}", cell.Part.ID);
+				maybe = string.Format("click|{0}", cel.Part.ID);
 				if (Events.ContainsKey(maybe))
 					RunEvent(Events[maybe]);
 			}

@@ -35,9 +35,9 @@ namespace KiSSLab
 
 		public static bool PixelOverlap(Part oA, Part oB)
 		{
-			foreach (var cA in oA.Cells)
+			foreach (var cA in oA.Cels)
 			{
-				foreach (var cB in oB.Cells)
+				foreach (var cB in oB.Cels)
 				{
 					var pA = new Point(oA.Position.X + cA.Offset.X, oA.Position.Y + cA.Offset.Y);
 					var pB = new Point(oB.Position.X + cB.Offset.X, oB.Position.Y + cB.Offset.Y);

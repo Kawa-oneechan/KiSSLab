@@ -25,7 +25,7 @@ namespace KiSSLab
 		public static int Zoom = 1;
 
 		public static bool Hilight;
-		public Cell HilightedCell;
+		public Cel HilightedCel;
 
 		private System.Windows.Forms.Timer AlarmTimer;
 		private string[] lastOpened;
@@ -156,7 +156,7 @@ namespace KiSSLab
 						}
 					}
 				};
-				cellContextMenu.Items.Add(newE);
+				celContextMenu.Items.Add(newE);
 			}
 
 			editor.Visible = Config.Editor == 1;
@@ -244,22 +244,22 @@ namespace KiSSLab
 			var eLocation = new Point(eX, eY);
 			lastClick = eLocation;
 			
-			var cell = default(Cell);
-			var part = Scene.GetPartFromPoint(realLocation, out cell);
+			var cel = default(Cel);
+			var part = Scene.GetPartFromPoint(realLocation, out cel);
 			if (part != null)
 			{
 				unfixToolStripMenuItem.Enabled = part.Locked;
 				refixToolStripMenuItem.Enabled = !part.Locked;
-				cellContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(unfixToolStripMenuItem) + 2].Enabled = part.Locked;
-				cellContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(refixToolStripMenuItem) + 2].Enabled = !part.Locked;
+				celContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(unfixToolStripMenuItem) + 2].Enabled = part.Locked;
+				celContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(refixToolStripMenuItem) + 2].Enabled = !part.Locked;
 			}
 
-			editor.Pick(part, cell);
+			editor.Pick(part, cel);
 			if (Hilight) DrawScene();
 
 			if (part != null && e.Button == MouseButtons.Left)
 			{
-				Scene.Catch(part, cell);
+				Scene.Catch(part, cel);
 				if (!part.Locked)
 				{
 					held = part;
@@ -314,14 +314,14 @@ namespace KiSSLab
 				return;
 			}
 
-			var cell = default(Cell);
-			var part = Scene.GetPartFromPoint(realLocation, out cell);
+			var cel = default(Cel);
+			var part = Scene.GetPartFromPoint(realLocation, out cel);
 			var statusPart = part;
-			if (statusPart == null && HilightedCell != null)
-				statusPart = HilightedCell.Part;
-			if (statusPart != null && cell != null)
+			if (statusPart == null && HilightedCel != null)
+				statusPart = HilightedCel.Part;
+			if (statusPart != null && cel != null)
 			{
-				status.Items[0].Text = string.Format("{0} » {1}", statusPart.ID, cell.ID);
+				status.Items[0].Text = string.Format("{0} » {1}", statusPart.ID, cel.ID);
 				status.Items[1].Text = string.Format("{0} by {1}", statusPart.Position.X, statusPart.Position.Y);
 				status.Items[2].Image = (statusPart.Locked || statusPart.Fix > 0) ? global::KiSSLab.Properties.Resources.Lock : global::KiSSLab.Properties.Resources.Unlock;
 				status.Items[3].Text = statusPart.Fix.ToString();
@@ -350,23 +350,23 @@ namespace KiSSLab
 			var eX = e.X / Zoom;
 			var eY = e.Y / Zoom;
 			var eLocation = new Point(eX, eY);
-			if (eLocation.Equals(lastClick) && HilightedCell != null)
+			if (eLocation.Equals(lastClick) && HilightedCel != null)
 			{
-				//Scene.Click(HilightedCell);
+				//Scene.Click(HilightedCel);
 			}
 
 			/*
 			if (held == null)
 			{
-				Scene.Release(null, HilightedCell);
+				Scene.Release(null, HilightedCel);
 				Scene.Viewer.DrawScene();
 				return;
 			}
 			*/
 
-			editor.Pick(held, HilightedCell);
+			editor.Pick(held, HilightedCel);
 			if (e.Button == MouseButtons.Left)
-				Scene.Release(held, HilightedCell);
+				Scene.Release(held, HilightedCel);
 
 			if (held != null)
 			{
@@ -385,15 +385,15 @@ namespace KiSSLab
 				var eY = e.Y / Zoom;
 				var realLocation = new Point(eX, eY);
 
-				var cell = default(Cell);
-				var part = Scene.GetPartFromPoint(realLocation, out cell);
-				if (part == null || cell == null)
+				var cel = default(Cel);
+				var part = Scene.GetPartFromPoint(realLocation, out cel);
+				if (part == null || cel == null)
 					return;
 
 				var screenLocation = screen.PointToScreen(new Point(e.X, e.Y));
 
-				cellMenuHeader.Text = cell.ID;
-				cellContextMenu.Show(screenLocation);
+				celMenuHeader.Text = cel.ID;
+				celContextMenu.Show(screenLocation);
 			}
 		}
 
@@ -427,26 +427,26 @@ namespace KiSSLab
 
 		private void Reset_Click(object sender, EventArgs e)
 		{
-			if (HilightedCell == null)
+			if (HilightedCel == null)
 				return;
-			var part = HilightedCell.Part;
+			var part = HilightedCel.Part;
 			part.Position = part.InitialPosition;
 			DrawScene();
 		}
 		
 		private void Unfix_Click(object sender, EventArgs e)
 		{
-			if (HilightedCell == null)
+			if (HilightedCel == null)
 				return;
-			var part = HilightedCell.Part;
+			var part = HilightedCel.Part;
 			part.Fix = 0;
 		}
 
 		private void Refix_Click(object sender, EventArgs e)
 		{
-			if (HilightedCell == null)
+			if (HilightedCel == null)
 				return;
-			var part = HilightedCell.Part;
+			var part = HilightedCel.Part;
 			part.Fix = part.InitialFix;
 		}
 
@@ -540,19 +540,19 @@ namespace KiSSLab
 				return;
 
 			Scene.DrawToBitmap(bitmap);
-			if (Hilight && HilightedCell != null)
+			if (Hilight && HilightedCel != null)
 			{
 				using (var g = Graphics.FromImage(bitmap))
 				{
-					var cell = HilightedCell;
-					var part = cell.Part;
+					var cel = HilightedCel;
+					var part = cel.Part;
 					var color = Color.Lime;
 					if (part.Locked)
 						color = Color.Red;
 					else if (part.Fix > 0)
 						color = Color.Blue;
 					var dotted = new Pen(color, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dot };
-					g.DrawRectangle(dotted, new Rectangle(part.Position.X + cell.Offset.X, part.Position.Y + cell.Offset.Y, cell.Image.Width - 1, cell.Image.Height - 1));
+					g.DrawRectangle(dotted, new Rectangle(part.Position.X + cel.Offset.X, part.Position.Y + cel.Offset.Y, cel.Image.Width - 1, cel.Image.Height - 1));
 				}
 			}
 
@@ -605,7 +605,7 @@ namespace KiSSLab
 			editor.SetScene(Scene);
 			//if (this.WindowState == FormWindowState.Normal)
 			//	this.ClientSize = new Size((screen.Width / Zoom) + 16 + editor.Width, (screen.Height / Zoom) + 8 + menu.Height + tools.Height + status.Height);
-			//HilightedCell = scene.Cells[0];
+			//HilightedCel = scene.Cels[0];
 			Viewer_Resize(null, null);
 			this.Text = string.Format("{0} - {1}", Application.ProductName, configFile);
 
@@ -701,9 +701,9 @@ namespace KiSSLab
 			OpenDoll(lastOpened[0], lastOpened[1]);
 		}
 
-		private void CopyCell_Click(object sender, EventArgs e)
+		private void CopyCel_Click(object sender, EventArgs e)
 		{
-			Clipboard.SetImage(HilightedCell.Image);
+			Clipboard.SetImage(HilightedCel.Image);
 		}
 
 		private void About_Click(object sender, EventArgs e)

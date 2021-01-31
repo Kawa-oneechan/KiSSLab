@@ -29,16 +29,16 @@
 		private void InitializeComponent()
 		{
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-			this.cells = new DarkUI.Controls.DarkComboBox();
+			this.cels = new DarkUI.Controls.DarkComboBox();
 			this.darkLabel3 = new DarkUI.Controls.DarkLabel();
-			this.cellFilenameTextBox = new DarkUI.Controls.DarkTextBox();
+			this.celFilenameTextBox = new DarkUI.Controls.DarkTextBox();
 			this.darkLabel4 = new DarkUI.Controls.DarkLabel();
-			this.cellOffXTextBox = new DarkUI.Controls.DarkNumericUpDown();
-			this.cellOffYTextBox = new DarkUI.Controls.DarkNumericUpDown();
-			this.cellVisibleCheckBox = new DarkUI.Controls.DarkCheckBox();
-			this.cellGhostedCheckBox = new DarkUI.Controls.DarkCheckBox();
-			this.cellOpacityLabel = new DarkUI.Controls.DarkLabel();
-			this.cellOpacityTrackBar = new System.Windows.Forms.TrackBar();
+			this.celOffXTextBox = new DarkUI.Controls.DarkNumericUpDown();
+			this.celOffYTextBox = new DarkUI.Controls.DarkNumericUpDown();
+			this.celVisibleCheckBox = new DarkUI.Controls.DarkCheckBox();
+			this.celGhostedCheckBox = new DarkUI.Controls.DarkCheckBox();
+			this.celOpacityLabel = new DarkUI.Controls.DarkLabel();
+			this.celOpacityTrackBar = new System.Windows.Forms.TrackBar();
 			this.darkTitle2 = new DarkUI.Controls.DarkTitle();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.parts = new DarkUI.Controls.DarkComboBox();
@@ -50,30 +50,30 @@
 			this.darkLabel2 = new DarkUI.Controls.DarkLabel();
 			this.partFixTextBox = new DarkUI.Controls.DarkTextBox();
 			this.partSectionPanel = new DarkUI.Controls.DarkSectionPanel();
-			this.cellSectionPanel = new DarkUI.Controls.DarkSectionPanel();
+			this.celSectionPanel = new DarkUI.Controls.DarkSectionPanel();
 			this.flowLayoutPanel2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.cellOffXTextBox)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.cellOffYTextBox)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.cellOpacityTrackBar)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.celOffXTextBox)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.celOffYTextBox)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.celOpacityTrackBar)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.partPosXTextBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.partPosYTextBox)).BeginInit();
 			this.partSectionPanel.SuspendLayout();
-			this.cellSectionPanel.SuspendLayout();
+			this.celSectionPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// flowLayoutPanel2
 			// 
-			this.flowLayoutPanel2.Controls.Add(this.cells);
+			this.flowLayoutPanel2.Controls.Add(this.cels);
 			this.flowLayoutPanel2.Controls.Add(this.darkLabel3);
-			this.flowLayoutPanel2.Controls.Add(this.cellFilenameTextBox);
+			this.flowLayoutPanel2.Controls.Add(this.celFilenameTextBox);
 			this.flowLayoutPanel2.Controls.Add(this.darkLabel4);
-			this.flowLayoutPanel2.Controls.Add(this.cellOffXTextBox);
-			this.flowLayoutPanel2.Controls.Add(this.cellOffYTextBox);
-			this.flowLayoutPanel2.Controls.Add(this.cellVisibleCheckBox);
-			this.flowLayoutPanel2.Controls.Add(this.cellGhostedCheckBox);
-			this.flowLayoutPanel2.Controls.Add(this.cellOpacityLabel);
-			this.flowLayoutPanel2.Controls.Add(this.cellOpacityTrackBar);
+			this.flowLayoutPanel2.Controls.Add(this.celOffXTextBox);
+			this.flowLayoutPanel2.Controls.Add(this.celOffYTextBox);
+			this.flowLayoutPanel2.Controls.Add(this.celVisibleCheckBox);
+			this.flowLayoutPanel2.Controls.Add(this.celGhostedCheckBox);
+			this.flowLayoutPanel2.Controls.Add(this.celOpacityLabel);
+			this.flowLayoutPanel2.Controls.Add(this.celOpacityTrackBar);
 			this.flowLayoutPanel2.Controls.Add(this.darkTitle2);
 			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(1, 25);
@@ -82,14 +82,14 @@
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(318, 240);
 			this.flowLayoutPanel2.TabIndex = 2;
 			// 
-			// cells
+			// cels
 			// 
-			this.cells.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-			this.cells.Location = new System.Drawing.Point(7, 7);
-			this.cells.Name = "cells";
-			this.cells.Size = new System.Drawing.Size(303, 24);
-			this.cells.TabIndex = 0;
-			this.cells.SelectedIndexChanged += new System.EventHandler(this.cells_SelectedItemChanged);
+			this.cels.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+			this.cels.Location = new System.Drawing.Point(7, 7);
+			this.cels.Name = "cels";
+			this.cels.Size = new System.Drawing.Size(303, 24);
+			this.cels.TabIndex = 0;
+			this.cels.SelectedIndexChanged += new System.EventHandler(this.cels_SelectedItemChanged);
 			// 
 			// darkLabel3
 			// 
@@ -101,16 +101,16 @@
 			this.darkLabel3.Text = "Original filename";
 			this.darkLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// cellFilenameTextBox
+			// celFilenameTextBox
 			// 
-			this.cellFilenameTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-			this.cellFilenameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.cellFilenameTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.cellFilenameTextBox.Location = new System.Drawing.Point(140, 37);
-			this.cellFilenameTextBox.Name = "cellFilenameTextBox";
-			this.cellFilenameTextBox.ReadOnly = true;
-			this.cellFilenameTextBox.Size = new System.Drawing.Size(170, 23);
-			this.cellFilenameTextBox.TabIndex = 14;
+			this.celFilenameTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+			this.celFilenameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.celFilenameTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.celFilenameTextBox.Location = new System.Drawing.Point(140, 37);
+			this.celFilenameTextBox.Name = "celFilenameTextBox";
+			this.celFilenameTextBox.ReadOnly = true;
+			this.celFilenameTextBox.Size = new System.Drawing.Size(170, 23);
+			this.celFilenameTextBox.TabIndex = 14;
 			// 
 			// darkLabel4
 			// 
@@ -122,77 +122,77 @@
 			this.darkLabel4.Text = "Offset";
 			this.darkLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// cellOffXTextBox
+			// celOffXTextBox
 			// 
-			this.cellOffXTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-			this.cellOffXTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.cellOffXTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.cellOffXTextBox.Location = new System.Drawing.Point(140, 66);
-			this.cellOffXTextBox.Maximum = new decimal(new int[] {
+			this.celOffXTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+			this.celOffXTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.celOffXTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.celOffXTextBox.Location = new System.Drawing.Point(140, 66);
+			this.celOffXTextBox.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-			this.cellOffXTextBox.Name = "cellOffXTextBox";
-			this.cellOffXTextBox.Size = new System.Drawing.Size(82, 23);
-			this.cellOffXTextBox.TabIndex = 16;
-			this.cellOffXTextBox.ValueChanged += new System.EventHandler(this.cellOffTextBox_ValueChanged);
+			this.celOffXTextBox.Name = "celOffXTextBox";
+			this.celOffXTextBox.Size = new System.Drawing.Size(82, 23);
+			this.celOffXTextBox.TabIndex = 16;
+			this.celOffXTextBox.ValueChanged += new System.EventHandler(this.celOffTextBox_ValueChanged);
 			// 
-			// cellOffYTextBox
+			// celOffYTextBox
 			// 
-			this.cellOffYTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-			this.cellOffYTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.cellOffYTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.cellOffYTextBox.Location = new System.Drawing.Point(228, 66);
-			this.cellOffYTextBox.Maximum = new decimal(new int[] {
+			this.celOffYTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+			this.celOffYTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.celOffYTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.celOffYTextBox.Location = new System.Drawing.Point(228, 66);
+			this.celOffYTextBox.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-			this.cellOffYTextBox.Name = "cellOffYTextBox";
-			this.cellOffYTextBox.Size = new System.Drawing.Size(82, 23);
-			this.cellOffYTextBox.TabIndex = 17;
-			this.cellOffYTextBox.ValueChanged += new System.EventHandler(this.cellOffTextBox_ValueChanged);
+			this.celOffYTextBox.Name = "celOffYTextBox";
+			this.celOffYTextBox.Size = new System.Drawing.Size(82, 23);
+			this.celOffYTextBox.TabIndex = 17;
+			this.celOffYTextBox.ValueChanged += new System.EventHandler(this.celOffTextBox_ValueChanged);
 			// 
-			// cellVisibleCheckBox
+			// celVisibleCheckBox
 			// 
-			this.cellVisibleCheckBox.Location = new System.Drawing.Point(7, 95);
-			this.cellVisibleCheckBox.Name = "cellVisibleCheckBox";
-			this.cellVisibleCheckBox.Size = new System.Drawing.Size(127, 23);
-			this.cellVisibleCheckBox.TabIndex = 18;
-			this.cellVisibleCheckBox.Text = "Visible";
-			this.cellVisibleCheckBox.CheckedChanged += new System.EventHandler(this.cellVisibleCheckBox_CheckedChanged);
+			this.celVisibleCheckBox.Location = new System.Drawing.Point(7, 95);
+			this.celVisibleCheckBox.Name = "celVisibleCheckBox";
+			this.celVisibleCheckBox.Size = new System.Drawing.Size(127, 23);
+			this.celVisibleCheckBox.TabIndex = 18;
+			this.celVisibleCheckBox.Text = "Visible";
+			this.celVisibleCheckBox.CheckedChanged += new System.EventHandler(this.celVisibleCheckBox_CheckedChanged);
 			// 
-			// cellGhostedCheckBox
+			// celGhostedCheckBox
 			// 
-			this.flowLayoutPanel2.SetFlowBreak(this.cellGhostedCheckBox, true);
-			this.cellGhostedCheckBox.Location = new System.Drawing.Point(140, 95);
-			this.cellGhostedCheckBox.Name = "cellGhostedCheckBox";
-			this.cellGhostedCheckBox.Size = new System.Drawing.Size(127, 23);
-			this.cellGhostedCheckBox.TabIndex = 22;
-			this.cellGhostedCheckBox.Text = "Ghost";
-			this.cellGhostedCheckBox.CheckedChanged += new System.EventHandler(this.cellGhostedCheckBox_CheckedChanged);
+			this.flowLayoutPanel2.SetFlowBreak(this.celGhostedCheckBox, true);
+			this.celGhostedCheckBox.Location = new System.Drawing.Point(140, 95);
+			this.celGhostedCheckBox.Name = "celGhostedCheckBox";
+			this.celGhostedCheckBox.Size = new System.Drawing.Size(127, 23);
+			this.celGhostedCheckBox.TabIndex = 22;
+			this.celGhostedCheckBox.Text = "Ghost";
+			this.celGhostedCheckBox.CheckedChanged += new System.EventHandler(this.celGhostedCheckBox_CheckedChanged);
 			// 
-			// cellOpacityLabel
+			// celOpacityLabel
 			// 
-			this.cellOpacityLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.cellOpacityLabel.Location = new System.Drawing.Point(7, 121);
-			this.cellOpacityLabel.Name = "cellOpacityLabel";
-			this.cellOpacityLabel.Size = new System.Drawing.Size(127, 23);
-			this.cellOpacityLabel.TabIndex = 20;
-			this.cellOpacityLabel.Text = "Opacity";
-			this.cellOpacityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.celOpacityLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.celOpacityLabel.Location = new System.Drawing.Point(7, 121);
+			this.celOpacityLabel.Name = "celOpacityLabel";
+			this.celOpacityLabel.Size = new System.Drawing.Size(127, 23);
+			this.celOpacityLabel.TabIndex = 20;
+			this.celOpacityLabel.Text = "Opacity";
+			this.celOpacityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// cellOpacityTrackBar
+			// celOpacityTrackBar
 			// 
-			this.cellOpacityTrackBar.LargeChange = 16;
-			this.cellOpacityTrackBar.Location = new System.Drawing.Point(140, 124);
-			this.cellOpacityTrackBar.Maximum = 255;
-			this.cellOpacityTrackBar.Name = "cellOpacityTrackBar";
-			this.cellOpacityTrackBar.Size = new System.Drawing.Size(170, 45);
-			this.cellOpacityTrackBar.TabIndex = 21;
-			this.cellOpacityTrackBar.TickFrequency = 16;
-			this.cellOpacityTrackBar.ValueChanged += new System.EventHandler(this.cellOpacityTrackBar_ValueChanged);
+			this.celOpacityTrackBar.LargeChange = 16;
+			this.celOpacityTrackBar.Location = new System.Drawing.Point(140, 124);
+			this.celOpacityTrackBar.Maximum = 255;
+			this.celOpacityTrackBar.Name = "celOpacityTrackBar";
+			this.celOpacityTrackBar.Size = new System.Drawing.Size(170, 45);
+			this.celOpacityTrackBar.TabIndex = 21;
+			this.celOpacityTrackBar.TickFrequency = 16;
+			this.celOpacityTrackBar.ValueChanged += new System.EventHandler(this.celOpacityTrackBar_ValueChanged);
 			// 
 			// darkTitle2
 			// 
@@ -314,37 +314,37 @@
 			this.partSectionPanel.Size = new System.Drawing.Size(320, 156);
 			this.partSectionPanel.TabIndex = 1;
 			// 
-			// cellSectionPanel
+			// celSectionPanel
 			// 
-			this.cellSectionPanel.AlwaysBlue = true;
-			this.cellSectionPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.cellSectionPanel.Controls.Add(this.flowLayoutPanel2);
-			this.cellSectionPanel.Dock = System.Windows.Forms.DockStyle.Top;
-			this.cellSectionPanel.Location = new System.Drawing.Point(0, 156);
-			this.cellSectionPanel.Name = "cellSectionPanel";
-			this.cellSectionPanel.SectionHeader = "Cell properties";
-			this.cellSectionPanel.Size = new System.Drawing.Size(320, 266);
-			this.cellSectionPanel.TabIndex = 2;
+			this.celSectionPanel.AlwaysBlue = true;
+			this.celSectionPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.celSectionPanel.Controls.Add(this.flowLayoutPanel2);
+			this.celSectionPanel.Dock = System.Windows.Forms.DockStyle.Top;
+			this.celSectionPanel.Location = new System.Drawing.Point(0, 156);
+			this.celSectionPanel.Name = "celSectionPanel";
+			this.celSectionPanel.SectionHeader = "Cel properties";
+			this.celSectionPanel.Size = new System.Drawing.Size(320, 266);
+			this.celSectionPanel.TabIndex = 2;
 			// 
 			// Editor
 			// 
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-			this.Controls.Add(this.cellSectionPanel);
+			this.Controls.Add(this.celSectionPanel);
 			this.Controls.Add(this.partSectionPanel);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "Editor";
 			this.Size = new System.Drawing.Size(320, 553);
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.cellOffXTextBox)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.cellOffYTextBox)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.cellOpacityTrackBar)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.celOffXTextBox)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.celOffYTextBox)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.celOpacityTrackBar)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.partPosXTextBox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.partPosYTextBox)).EndInit();
 			this.partSectionPanel.ResumeLayout(false);
-			this.cellSectionPanel.ResumeLayout(false);
+			this.celSectionPanel.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -352,17 +352,17 @@
 		#endregion
 
 		private DarkUI.Controls.DarkComboBox parts;
-		private DarkUI.Controls.DarkComboBox cells;
+		private DarkUI.Controls.DarkComboBox cels;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private DarkUI.Controls.DarkLabel darkLabel3;
-		private DarkUI.Controls.DarkTextBox cellFilenameTextBox;
+		private DarkUI.Controls.DarkTextBox celFilenameTextBox;
 		private DarkUI.Controls.DarkLabel darkLabel4;
-		private DarkUI.Controls.DarkNumericUpDown cellOffXTextBox;
-		private DarkUI.Controls.DarkNumericUpDown cellOffYTextBox;
-		private DarkUI.Controls.DarkCheckBox cellVisibleCheckBox;
+		private DarkUI.Controls.DarkNumericUpDown celOffXTextBox;
+		private DarkUI.Controls.DarkNumericUpDown celOffYTextBox;
+		private DarkUI.Controls.DarkCheckBox celVisibleCheckBox;
 		private DarkUI.Controls.DarkTitle darkTitle2;
-		private DarkUI.Controls.DarkLabel cellOpacityLabel;
-		private System.Windows.Forms.TrackBar cellOpacityTrackBar;
+		private DarkUI.Controls.DarkLabel celOpacityLabel;
+		private System.Windows.Forms.TrackBar celOpacityTrackBar;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private DarkUI.Controls.DarkLabel darkTitle1;
 		private DarkUI.Controls.DarkTextBox partIDTextBox;
@@ -372,8 +372,8 @@
 		private DarkUI.Controls.DarkLabel darkLabel2;
 		private DarkUI.Controls.DarkTextBox partFixTextBox;
 		private DarkUI.Controls.DarkSectionPanel partSectionPanel;
-		private DarkUI.Controls.DarkSectionPanel cellSectionPanel;
-		private DarkUI.Controls.DarkCheckBox cellGhostedCheckBox;
+		private DarkUI.Controls.DarkSectionPanel celSectionPanel;
+		private DarkUI.Controls.DarkCheckBox celGhostedCheckBox;
 
 
 

@@ -31,7 +31,7 @@ namespace KiSSLab
 		}
 
 		public List<Part> Parts { get; set; }
-		public List<Cell> Cells { get; set; }
+		public List<Cel> Cels { get; set; }
 
 		public int ScreenWidth { get; private set; }
 		public int ScreenHeight { get; private set; }
@@ -59,7 +59,7 @@ namespace KiSSLab
 			Viewer = viewer;
 
 			Parts = new List<Part>();
-			Cells = new List<Cell>();
+			Cels = new List<Cel>();
 
 			Events = new Dictionary<string, List<object>>();
 			Timers = new Dictionary<int, Timer>();
@@ -152,8 +152,8 @@ namespace KiSSLab
 						}
 						
 					}
-					#region Cell parser
-					else if (form == "cells")
+					#region Cel parser
+					else if (form == "cels")
 					{
 						foreach (var celItem in rest.Cast<List<object>>())
 						{
@@ -255,7 +255,7 @@ namespace KiSSLab
 								part = new Part()
 								{
 									ID = partof,
-									Cells = new List<Cell>(),
+									Cels = new List<Cel>(),
 								};
 								Parts.Add(part);
 							}
@@ -300,7 +300,7 @@ namespace KiSSLab
 								part.Fix = part.InitialFix = fix;
 							}
 
-							var c = new Cell()
+							var c = new Cel()
 							{
 								Image = image,
 								ImageFilename = file + ".png",
@@ -316,10 +316,10 @@ namespace KiSSLab
 							}
 							c.Offset = new Point((int)offset[0], (int)offset[1]);
 							c.Part = part;
-							part.Cells.Add(c);
+							part.Cels.Add(c);
 							part.UpdateBounds();
 
-							Cells.Add(c);
+							Cels.Add(c);
 						}
 					}
 					#endregion
@@ -329,39 +329,39 @@ namespace KiSSLab
 			}
 
 			//Determine max set count
-			foreach (var cell in Cells)
+			foreach (var cel in Cels)
 			{
 				for (var i = 0; i < 10; i++)
 				{
-					if (cell.OnSets[i] && i > Sets)
+					if (cel.OnSets[i] && i > Sets)
 						Sets = i;
 				}
 			}
 			Sets++;
 		}
 
-		public Part GetPartFromPoint(Point point, out Cell backCel)
+		public Part GetPartFromPoint(Point point, out Cel backCel)
 		{
 			Part ret = null;
 			backCel = null;
-			for (var i = Cells.Count; i > 0; i--)
+			for (var i = Cels.Count; i > 0; i--)
 			{
-				var cell = Cells[i - 1];
-				var part = cell.Part;
+				var cel = Cels[i - 1];
+				var part = cel.Part;
 
-				if (cell.Ghost) continue;
-				if (!cell.OnSet) continue;
-				if (!cell.Visible) continue;
+				if (cel.Ghost) continue;
+				if (!cel.OnSet) continue;
+				if (!cel.Visible) continue;
 
-				var x = point.X - part.Position.X - cell.Offset.X;
-				var y = point.Y - part.Position.Y - cell.Offset.Y;
-				if (x <= 0 || y <= 0 || x >= cell.Image.Width || y >= cell.Image.Height)
+				var x = point.X - part.Position.X - cel.Offset.X;
+				var y = point.Y - part.Position.Y - cel.Offset.Y;
+				if (x <= 0 || y <= 0 || x >= cel.Image.Width || y >= cel.Image.Height)
 					continue;
-				var color = cell.Image.GetPixel(x, y);
+				var color = cel.Image.GetPixel(x, y);
 				if (color.A != 0)
 				{
 					ret = part;
-					backCel = cell;
+					backCel = cel;
 				}
 			}
 			return ret;
@@ -396,20 +396,20 @@ namespace KiSSLab
 			else
 				gfx.Clear(Color.CornflowerBlue);
 
-			foreach (var cell in Cells.Reverse<Cell>())
+			foreach (var cel in Cels.Reverse<Cel>())
 			{
-				var part = cell.Part;
-				if (!cell.OnSet) continue;
-				if (!cell.Visible) continue;
+				var part = cel.Part;
+				if (!cel.OnSet) continue;
+				if (!cel.Visible) continue;
 				
-				if (cell.Opacity == 0)
+				if (cel.Opacity == 0)
 					continue;
-				matrix[3][3] = cell.Opacity / 256.0f;
+				matrix[3][3] = cel.Opacity / 256.0f;
 				attrs.SetColorMatrix(new ColorMatrix(matrix));
 
 				try
 				{
-					gfx.DrawImage(cell.Image, new Rectangle(cell.Part.Position.X + cell.Offset.X, cell.Part.Position.Y + cell.Offset.Y, cell.Image.Width, cell.Image.Height), 0, 0, cell.Image.Width, cell.Image.Height, GraphicsUnit.Pixel, attrs);
+					gfx.DrawImage(cel.Image, new Rectangle(cel.Part.Position.X + cel.Offset.X, cel.Part.Position.Y + cel.Offset.Y, cel.Image.Width, cel.Image.Height), 0, 0, cel.Image.Width, cel.Image.Height, GraphicsUnit.Pixel, attrs);
 				}
 				catch (Exception)
 				{ }
@@ -417,7 +417,7 @@ namespace KiSSLab
 		}
 	}
 
-	public class Cell
+	public class Cel
 	{
 		public string ImageFilename { get; set; }
 		public string Filename { get { return ImageFilename; } }
@@ -431,7 +431,7 @@ namespace KiSSLab
 		public int Opacity { get; set; }
 		public bool Ghost { get; set; }
 
-		public Cell()
+		public Cel()
 		{
 			OnSets = new bool[10];
 			for (var i = 0; i < 10; i++)
@@ -446,7 +446,7 @@ namespace KiSSLab
 
 	public class Part
 	{
-		public List<Cell> Cells { get; set; }
+		public List<Cel> Cels { get; set; }
 		public Point[] Positions { get; set; }
 		public Point Position { get { return Positions[Viewer.Scene.Set]; } set { Positions[Viewer.Scene.Set] = value; } }
 		public Point[] InitialPositions { get; set; }
@@ -460,11 +460,11 @@ namespace KiSSLab
 		{
 			get
 			{
-				return Cells.Any(c => c.Visible);
+				return Cels.Any(c => c.Visible);
 			}
 			set
 			{
-				Cells.ForEach(c => c.Visible = value);
+				Cels.ForEach(c => c.Visible = value);
 			}
 		}
 
@@ -484,12 +484,12 @@ namespace KiSSLab
 		{
 			var w = 0;
 			var h = 0;
-			foreach (var cell in Cells)
+			foreach (var cel in Cels)
 			{
-				if (cell.Image.Width + cell.Offset.X > w)
-					w = cell.Image.Width + cell.Offset.X;
-				if (cell.Image.Height + cell.Offset.Y > h)
-					h = cell.Image.Height + cell.Offset.Y;
+				if (cel.Image.Width + cel.Offset.X > w)
+					w = cel.Image.Width + cel.Offset.X;
+				if (cel.Image.Height + cel.Offset.Y > h)
+					h = cel.Image.Height + cel.Offset.Y;
 			}
 			Bounds = new Size(w, h);
 		}

@@ -24,7 +24,7 @@
 
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 
-		private System.Windows.Forms.ToolStripMenuItem copyCellToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem copyCelToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem resetPositionToolStripMenuItem;
 
 		private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
@@ -54,7 +54,7 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.copyCellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.copyCelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.resetPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,8 +77,8 @@
 			this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.screenContainer = new System.Windows.Forms.Panel();
 			this.screen = new System.Windows.Forms.PictureBox();
-			this.cellContextMenu = new DarkUI.Controls.DarkContextMenu();
-			this.cellMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
+			this.celContextMenu = new DarkUI.Controls.DarkContextMenu();
+			this.celMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.unfixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.refixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.resetPositionToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,7 +89,7 @@
 			this.status.SuspendLayout();
 			this.screenContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.screen)).BeginInit();
-			this.cellContextMenu.SuspendLayout();
+			this.celContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menu
@@ -163,7 +163,7 @@
 			// 
 			this.editToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
 			this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyCellToolStripMenuItem,
+            this.copyCelToolStripMenuItem,
 			this.unfixToolStripMenuItem,
             this.refixToolStripMenuItem,
             this.resetPositionToolStripMenuItem});
@@ -171,16 +171,16 @@
 			this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
 			this.editToolStripMenuItem.Text = "&Edit";
 			// 
-			// copyCellToolStripMenuItem
+			// copyCelToolStripMenuItem
 			// 
-			this.copyCellToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.copyCellToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.copyCellToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Copy;
-			this.copyCellToolStripMenuItem.Name = "copyCellToolStripMenuItem";
-			this.copyCellToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.copyCellToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-			this.copyCellToolStripMenuItem.Text = "&Copy cell";
-			this.copyCellToolStripMenuItem.Click += new System.EventHandler(this.CopyCell_Click);
+			this.copyCelToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.copyCelToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.copyCelToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Copy;
+			this.copyCelToolStripMenuItem.Name = "copyCelToolStripMenuItem";
+			this.copyCelToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.copyCelToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
+			this.copyCelToolStripMenuItem.Text = "&Copy cel";
+			this.copyCelToolStripMenuItem.Click += new System.EventHandler(this.CopyCel_Click);
 			// 
 			// resetPositionToolStripMenuItem
 			// 
@@ -266,7 +266,7 @@
 			this.highlightToolStripButton.Image = global::KiSSLab.Properties.Resources.Highlight;
 			this.highlightToolStripButton.Name = "highlightToolStripButton";
 			this.highlightToolStripButton.Size = new System.Drawing.Size(23, 23);
-			this.highlightToolStripButton.Text = "Highlight current cell";
+			this.highlightToolStripButton.Text = "Highlight current cel";
 			this.highlightToolStripButton.Click += new System.EventHandler(this.Highlight_Click);
 			// 
 			// gridToolStripButton
@@ -419,25 +419,25 @@
 			this.screen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Screen_MouseMove);
 			this.screen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Screen_MouseUp);
 			// 
-			// cellContextMenu
+			// celContextMenu
 			// 
-			this.cellContextMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.cellContextMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.cellContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cellMenuHeader,
+			this.celContextMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.celContextMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.celContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.celMenuHeader,
             this.toolStripSeparator7});
-			this.cellContextMenu.Name = "cellContextMenu";
-			this.cellContextMenu.Size = new System.Drawing.Size(169, 99);
+			this.celContextMenu.Name = "celContextMenu";
+			this.celContextMenu.Size = new System.Drawing.Size(169, 99);
 			// 
-			// cellMenuHeader
+			// celMenuHeader
 			// 
-			this.cellMenuHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.cellMenuHeader.Enabled = false;
-			this.cellMenuHeader.Font = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Bold);
-			this.cellMenuHeader.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
-			this.cellMenuHeader.Name = "cellMenuHeader";
-			this.cellMenuHeader.Size = new System.Drawing.Size(168, 22);
-			this.cellMenuHeader.Text = "toolStripMenuItem1";
+			this.celMenuHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.celMenuHeader.Enabled = false;
+			this.celMenuHeader.Font = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Bold);
+			this.celMenuHeader.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+			this.celMenuHeader.Name = "celMenuHeader";
+			this.celMenuHeader.Size = new System.Drawing.Size(168, 22);
+			this.celMenuHeader.Text = "toolStripMenuItem1";
 			// 
 			// unfixToolStripMenuItem
 			// 
@@ -513,7 +513,7 @@
 			this.status.PerformLayout();
 			this.screenContainer.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.screen)).EndInit();
-			this.cellContextMenu.ResumeLayout(false);
+			this.celContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -539,11 +539,11 @@
 		private System.Windows.Forms.Panel screenContainer;
 		private System.Windows.Forms.PictureBox screen;
 		private System.Windows.Forms.ToolStripButton gridToolStripButton;
-		private DarkUI.Controls.DarkContextMenu cellContextMenu;
+		private DarkUI.Controls.DarkContextMenu celContextMenu;
 		private System.Windows.Forms.ToolStripMenuItem unfixToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem refixToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem resetPositionToolStripMenuItem1;
-		private System.Windows.Forms.ToolStripMenuItem cellMenuHeader;
+		private System.Windows.Forms.ToolStripMenuItem celMenuHeader;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
 	}
 }

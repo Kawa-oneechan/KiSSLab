@@ -12,31 +12,28 @@ namespace Kawa.Mix
 	{
 		private class MixFileEntry
 		{
-			public string MixFile, Filename;
+			public string Source, Filename;
 			public int Offset, Length;
 			public bool IsCompressed;
+			public bool IsInFolder;
 		}
 
-		private static string dataFolder;
-
 		private static Dictionary<string, MixFileEntry> fileList;
-
 		private static Dictionary<string, string> stringCache;
 
-		public static void Initialize(string mixfile)
+		public static void Reset()
 		{
 			fileList = new Dictionary<string, MixFileEntry>();
 			stringCache = new Dictionary<string, string>();
-			//var mixfiles = new List<string>() { mainFile + "." + ext };
-			//mixfiles.AddRange(Directory.GetFiles(".", "*." + ext).Select(x => x.Substring(2)).Where(x => !x.Equals(mainFile + "." + ext, StringComparison.OrdinalIgnoreCase)));
-			//foreach (var mixfile in mixfiles)
-						
-			if (File.Exists(mixfile))
-			{
-				//if (!File.Exists(mixfile))
-				//	continue;
+		}
 
-				using (var mStream = new BinaryReader(File.Open(mixfile, FileMode.Open)))
+		public static void Load(string source)
+		{
+			if (fileList == null)
+				Reset();
+			if (File.Exists(source))
+			{
+				using (var mStream = new BinaryReader(File.Open(source, FileMode.Open)))
 				{
 					//This is not the "proper" way to do it. Fuck that.
 					while (true)
@@ -46,7 +43,7 @@ namespace Kawa.Mix
 						{
 							if (header[2] == 1 && header[3] == 2) //reached the Central Directory
 								break;
-							throw new FileLoadException(string.Format("Zip file '{0}' has an incorrect header.", mixfile));
+							throw new FileLoadException(string.Format("Zip file '{0}' has an incorrect header.", source));
 						}
 						mStream.BaseStream.Seek(4, SeekOrigin.Current);
 						var method = mStream.ReadInt16();
@@ -69,34 +66,48 @@ namespace Kawa.Mix
 							Length = compressedSize,
 							IsCompressed = method == 8,
 							Filename = filename,
-							MixFile = mixfile,
+							Source = source,
+							IsInFolder = false,
 						};
 						fileList[filename] = entry;
 					}
 				}
 			}
-			else if (Directory.Exists(mixfile))
+			else if (Directory.Exists(source))
 			{
-				dataFolder = mixfile;
+				foreach (var filename in Directory.EnumerateFiles(source))
+				{
+					var fn = Path.GetFileName(filename);
+					var entry = new MixFileEntry()
+					{
+						Offset = 0,
+						Length = 0,
+						IsCompressed = false,
+						Filename = fn,
+						Source = source,
+						IsInFolder = true,
+					};
+					fileList[fn] = entry;
+				}
 			}
 		}
 
 		public static bool FileExists(string fileName)
 		{
-			if (dataFolder != null && File.Exists(Path.Combine(dataFolder, fileName)))
-				return true;
 			return (fileList.ContainsKey(fileName));
 		}
 
 		public static Stream GetStream(string fileName)
 		{
-			if (dataFolder != null && File.Exists(Path.Combine(dataFolder, fileName)))
-				return new MemoryStream(File.ReadAllBytes(Path.Combine(dataFolder, fileName)));
 			if (!fileList.ContainsKey(fileName))
-				throw new FileNotFoundException("File " + fileName + " was not found in the MIX files.");
-			MemoryStream ret;
+				throw new FileNotFoundException(string.Format("File {0} was not found.",  fileName));
 			var entry = fileList[fileName];
-			using (var mStream = new BinaryReader(File.Open(entry.MixFile, FileMode.Open)))
+			if (entry.IsInFolder)
+			{
+				return new MemoryStream(File.ReadAllBytes(Path.Combine(entry.Source, entry.Filename)));
+			}
+			MemoryStream ret;
+			using (var mStream = new BinaryReader(File.Open(entry.Source, FileMode.Open)))
 			{
 				mStream.BaseStream.Seek(entry.Offset, SeekOrigin.Begin);
 				ret = new MemoryStream(mStream.ReadBytes(entry.Length));
@@ -108,10 +119,8 @@ namespace Kawa.Mix
 		{
 			if (cache && stringCache.ContainsKey(fileName))
 				return stringCache[fileName];
-			if (dataFolder != null && File.Exists(Path.Combine(dataFolder, fileName)))
-				return File.ReadAllText(Path.Combine(dataFolder, fileName));
 			if (!fileList.ContainsKey(fileName))
-				throw new FileNotFoundException("File " + fileName + " was not found in the MIX files.");
+				throw new FileNotFoundException(string.Format("File {0} was not found.", fileName));
 			var bytes = GetBytes(fileName);
 			var ret = Encoding.UTF8.GetString(bytes);
 			if (cache)
@@ -122,8 +131,6 @@ namespace Kawa.Mix
 		//TODO: cache the returns.
 		public static Bitmap GetBitmap(string fileName)
 		{
-			if (dataFolder != null && File.Exists(Path.Combine(dataFolder, fileName)))
-				return new Bitmap(Path.Combine(dataFolder, fileName));
 			var raw = GetBytes(fileName);
 			using (var str = new MemoryStream(raw))
 			{
@@ -133,13 +140,15 @@ namespace Kawa.Mix
 
 		public static byte[] GetBytes(string fileName)
 		{
-			if (dataFolder != null && File.Exists(Path.Combine(dataFolder, fileName)))
-				return File.ReadAllBytes(Path.Combine(dataFolder, fileName));
 			if (!fileList.ContainsKey(fileName))
-				throw new FileNotFoundException("File " + fileName + " was not found in the MIX files.");
-			byte[] ret;
+				throw new FileNotFoundException(string.Format("File {0} was not found.", fileName));
 			var entry = fileList[fileName];
-			using (var mStream = new BinaryReader(File.Open(entry.MixFile, FileMode.Open)))
+			if (entry.IsInFolder)
+			{
+				return File.ReadAllBytes(Path.Combine(entry.Source, entry.Filename));
+			}
+			byte[] ret;
+			using (var mStream = new BinaryReader(File.Open(entry.Source, FileMode.Open)))
 			{
 				mStream.BaseStream.Seek(entry.Offset, SeekOrigin.Begin);
 				if (!entry.IsCompressed)
@@ -171,11 +180,6 @@ namespace Kawa.Mix
 			var ret = new List<string>();
 			foreach (var entry in fileList.Values.Where(x => x.Filename.StartsWith(path)))
 				ret.Add(entry.Filename);
-			if (Directory.Exists(Path.Combine(dataFolder, path)))
-			{
-				var getFiles = Directory.GetFiles(Path.Combine(dataFolder, path), "*", SearchOption.AllDirectories);
-				ret.AddRange(getFiles.Select(x => x.Substring((dataFolder + "\\").Length)).Where(x => !ret.Contains(x)));
-			}
 			return ret.ToArray();
 		}
 		
@@ -189,7 +193,7 @@ namespace Kawa.Mix
 			var entry = fileList[fileName];
 			offset = entry.Offset;
 			length = entry.Length;
-			mixFile = entry.MixFile;
+			mixFile = entry.Source;
 		}
 
 		public static string[] GetFilesWithPattern(string pattern)
@@ -198,16 +202,6 @@ namespace Kawa.Mix
 			var regex = new System.Text.RegularExpressions.Regex(pattern.Replace("*", "(.*)").Replace("\\", "\\\\"));
 			foreach (var entry in fileList.Values.Where(x => regex.IsMatch(x.Filename)))
 				ret.Add(entry.Filename);
-			if (dataFolder != null && Directory.Exists(dataFolder))
-			{
-				if (pattern.Contains('\\'))
-				{
-					if (!Directory.Exists(Path.Combine(dataFolder, Path.GetDirectoryName(pattern))))
-						return ret.ToArray();
-				}
-				var getFiles = Directory.GetFiles(dataFolder, pattern, SearchOption.AllDirectories);
-				ret.AddRange(getFiles.Select(f => f.Substring(dataFolder.Length + 1)).Where(f => !ret.Contains(f)));
-			}
 			return ret.ToArray();
 		}
 	}

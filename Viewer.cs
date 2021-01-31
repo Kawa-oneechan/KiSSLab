@@ -75,14 +75,14 @@ namespace KiSSLab
 
 			highlightToolStripButton.Checked = Hilight;
 
-			var after = tools.Items.IndexOf(nextSetToolStripButton);
+			var after = mainToolStrip.Items.IndexOf(nextSetToolStripButton);
 			for (var i = 0; i < 10; i++)
 			{
 				after++;
-				tools.Items.Insert(after, new ToolStripButton(
+				mainToolStrip.Items.Insert(after, new ToolStripButton(
 					i.ToString(), null, (s, e) =>
 					{
-						((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
+						((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
 						Scene.Set = int.Parse(((ToolStripButton)s).Text);
 						if (dropped != null) dropped.LastCollidedWith = null;
 						DrawScene();
@@ -95,14 +95,14 @@ namespace KiSSLab
 					Checked = (i == 0),
 				});
 			}
-			after = tools.Items.IndexOf(nextPalToolStripButton);
+			after = mainToolStrip.Items.IndexOf(nextPalToolStripButton);
 			for (var i = 0; i < 10; i++)
 			{
 				after++;
-				tools.Items.Insert(after, new ToolStripButton(
+				mainToolStrip.Items.Insert(after, new ToolStripButton(
 					i.ToString(), null, (s, e) =>
 					{
-						((ToolStripButton)tools.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
+						((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
 						Scene.Palette = int.Parse(((ToolStripButton)s).Text);
 						DrawScene();
 						((ToolStripButton)s).Checked = true;
@@ -118,12 +118,12 @@ namespace KiSSLab
 			for (var i = 1; i <= 3; i++)
 			{
 				after++;
-				tools.Items.Insert(after, new ToolStripButton(
+				mainToolStrip.Items.Insert(after, new ToolStripButton(
 					string.Format("×{0}", i), null, (s, e) =>
 					{
-						((ToolStripButton)tools.Items.Find("z" + Zoom.ToString(), false)[0]).Checked = false;
+						((ToolStripButton)mainToolStrip.Items.Find("z" + Zoom.ToString(), false)[0]).Checked = false;
 						Zoom = int.Parse(((ToolStripButton)s).Text.Substring(1));
-						screen.ClientSize = new Size(bitmap.Width * Zoom, bitmap.Height * Zoom);
+						screenPictureBox.ClientSize = new Size(bitmap.Width * Zoom, bitmap.Height * Zoom);
 						((ToolStripButton)s).Checked = true;
 						Config.ZoomLevel = Zoom;
 						Viewer_Resize(null, null);
@@ -136,7 +136,7 @@ namespace KiSSLab
 					Checked = (i == Zoom),
 				});
 			}
-			editorToolStripButton.Checked = Config.Editor == 1;
+			propertiesToolStripButton.Checked = Config.Editor == 1;
 
 			foreach (var e in editToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
 			{
@@ -160,6 +160,8 @@ namespace KiSSLab
 			}
 
 			editor.Visible = Config.Editor == 1;
+			if (!editor.Visible)
+				screenContainerPanel.Width += editor.Width;
 
 			Viewer_Resize(null, null);
 			UpdateColors();
@@ -171,7 +173,7 @@ namespace KiSSLab
 				BackColor = Color.Red,
 				Visible = false,
 			};
-			screen.Controls.Add(debug);
+			screenPictureBox.Controls.Add(debug);
 			Tools.PointDebug = debug;
 
 			bitmap = new Bitmap(480, 400);
@@ -196,14 +198,14 @@ namespace KiSSLab
 		{
 			if (e.Control && (e.KeyValue >= 48 && e.KeyValue <= 57))
 			{
-				((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
+				((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
 				if (e.KeyValue == 48)
 					Scene.Set = 0;
 				else
 					Scene.Set = e.KeyValue - 48;
 				if (Scene.Set >= Scene.Sets)
 					Scene.Set = Scene.Sets - 1;
-				((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
+				((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 				DrawScene();
 			}
 			else if (e.Control && e.KeyValue == 9)
@@ -217,15 +219,15 @@ namespace KiSSLab
 
 		void Viewer_Resize(object sender, EventArgs e)
 		{
-			Config.WindowState = (int)this.WindowState; 
-			if (screenContainer.ClientSize.Width > screen.Width)
-				screen.Left = (screenContainer.ClientSize.Width / 2) - (screen.Width / 2);
+			Config.WindowState = (int)this.WindowState;
+			if (screenContainerPanel.ClientSize.Width > screenPictureBox.Width)
+				screenPictureBox.Left = (screenContainerPanel.ClientSize.Width / 2) - (screenPictureBox.Width / 2);
 			else
-				screen.Left = 0;
-			if (screenContainer.ClientSize.Height > screen.Height)
-				screen.Top = (screenContainer.ClientSize.Height / 2) - (screen.Height / 2);
+				screenPictureBox.Left = 0;
+			if (screenContainerPanel.ClientSize.Height > screenPictureBox.Height)
+				screenPictureBox.Top = (screenContainerPanel.ClientSize.Height / 2) - (screenPictureBox.Height / 2);
 			else
-				screen.Top = 0;
+				screenPictureBox.Top = 0;
 		}
 
 		private void Screen_MouseDown(object sender, MouseEventArgs e)
@@ -321,15 +323,15 @@ namespace KiSSLab
 				statusPart = HilightedCel.Part;
 			if (statusPart != null && cel != null)
 			{
-				status.Items[0].Text = string.Format("{0} » {1}", statusPart.ID, cel.ID);
-				status.Items[1].Text = string.Format("{0} by {1}", statusPart.Position.X, statusPart.Position.Y);
-				status.Items[2].Image = (statusPart.Locked || statusPart.Fix > 0) ? global::KiSSLab.Properties.Resources.Lock : global::KiSSLab.Properties.Resources.Unlock;
-				status.Items[3].Text = statusPart.Fix.ToString();
+				mainStatusStrip.Items[0].Text = string.Format("{0} » {1}", statusPart.ID, cel.ID);
+				mainStatusStrip.Items[1].Text = string.Format("{0} by {1}", statusPart.Position.X, statusPart.Position.Y);
+				mainStatusStrip.Items[2].Image = (statusPart.Locked || statusPart.Fix > 0) ? global::KiSSLab.Properties.Resources.Lock : global::KiSSLab.Properties.Resources.Unlock;
+				mainStatusStrip.Items[3].Text = statusPart.Fix.ToString();
 			}
 			else
 			{
-				status.Items[0].Text = status.Items[1].Text = status.Items[3].Text = string.Empty;
-				status.Items[2].Image = null;
+				mainStatusStrip.Items[0].Text = mainStatusStrip.Items[1].Text = mainStatusStrip.Items[3].Text = string.Empty;
+				mainStatusStrip.Items[2].Image = null;
 			}
 
 			if (part == null)
@@ -390,7 +392,7 @@ namespace KiSSLab
 				if (part == null || cel == null)
 					return;
 
-				var screenLocation = screen.PointToScreen(new Point(e.X, e.Y));
+				var screenLocation = screenPictureBox.PointToScreen(new Point(e.X, e.Y));
 
 				celMenuHeader.Text = cel.ID;
 				celContextMenu.Show(screenLocation);
@@ -404,10 +406,10 @@ namespace KiSSLab
 
 			/*
 			var pen = new Pen(Color.FromArgb(64, 255, 255, 255), 1);
-			for (var x = 0; x < screen.Width; x += 8 * Zoom)
-				e.Graphics.DrawLine(pen, x, 0, x, screen.Height);
-			for (var y = 0; y < screen.Height; y += 8 * Zoom)
-				e.Graphics.DrawLine(pen, 0, y, screen.Width, y);
+			for (var x = 0; x < screenPictureBox.Width; x += 8 * Zoom)
+				e.Graphics.DrawLine(pen, x, 0, x, screenPictureBox.Height);
+			for (var y = 0; y < screenPictureBox.Height; y += 8 * Zoom)
+				e.Graphics.DrawLine(pen, 0, y, screenPictureBox.Width, y);
 			*/
 		}
 
@@ -418,6 +420,8 @@ namespace KiSSLab
 				cdlg.Filter = "Doll files|*.zip;*.lisp";
 				if (cdlg.ShowDialog() == DialogResult.Cancel)
 					return;
+				if (sender != openExpansionToolStripMenuItem)
+					Mix.Reset();
 				if (cdlg.FileName.EndsWith("lisp", StringComparison.CurrentCultureIgnoreCase))
 					OpenDoll(Path.GetDirectoryName(cdlg.FileName), Path.GetFileName(cdlg.FileName));
 				else
@@ -502,7 +506,7 @@ namespace KiSSLab
 				Colors.ActiveControl = Color.FromArgb(159, 178, 196);
 			}
 			editor.UpdateColors();
-			foreach (var dd in menu.Items.OfType<ToolStripMenuItem>())
+			foreach (var dd in mainMenuStrip.Items.OfType<ToolStripMenuItem>())
 			{
 				dd.BackColor = Colors.GreyBackground;
 				foreach (var di in dd.DropDownItems.OfType<ToolStripMenuItem>())
@@ -510,16 +514,16 @@ namespace KiSSLab
 					di.BackColor = Colors.GreyBackground;
 				}
 			}
-			foreach (var dd in tools.Items.OfType<ToolStripItem>())
+			foreach (var dd in mainToolStrip.Items.OfType<ToolStripItem>())
 			{
 				dd.ForeColor = Colors.LightText;
 			}
-			foreach (var dd in status.Items.OfType<ToolStripStatusLabel>())
+			foreach (var dd in mainStatusStrip.Items.OfType<ToolStripStatusLabel>())
 			{
 				dd.BackColor = Colors.GreyBackground;
 				dd.ForeColor = Colors.LightText;
 			}
-			screenContainer.BackColor = Colors.DarkBackground;
+			screenContainerPanel.BackColor = Colors.DarkBackground;
 		}
 
 		protected override void WndProc(ref Message m)
@@ -556,14 +560,14 @@ namespace KiSSLab
 				}
 			}
 
-			screen.Refresh();
+			screenPictureBox.Refresh();
 		}
 
 		public void OpenDoll(string source, string configFile)
 		{
 			Sound.StopEverything();
 
-			Mix.Initialize(source);
+			Mix.Load(source);
 			if (configFile == null)
 			{
 				var configFiles = Mix.GetFilesWithPattern("*.lisp");
@@ -588,23 +592,23 @@ namespace KiSSLab
 
 			for (var i = 0; i < 10; i++)
 			{
-				tools.Items.Find("s" + i.ToString(), false)[0].Visible = i < Scene.Sets;
-				tools.Items.Find("p" + i.ToString(), false)[0].Visible = i < Scene.Palettes;
-				((ToolStripButton)tools.Items.Find("s" + i.ToString(), false)[0]).Checked = i == 0;
-				((ToolStripButton)tools.Items.Find("p" + i.ToString(), false)[0]).Checked = i == 0;
+				mainToolStrip.Items.Find("s" + i.ToString(), false)[0].Visible = i < Scene.Sets;
+				mainToolStrip.Items.Find("p" + i.ToString(), false)[0].Visible = i < Scene.Palettes;
+				((ToolStripButton)mainToolStrip.Items.Find("s" + i.ToString(), false)[0]).Checked = i == 0;
+				((ToolStripButton)mainToolStrip.Items.Find("p" + i.ToString(), false)[0]).Checked = i == 0;
 			}
 			Scene.Palette = 0;
 			Scene.Set = 0;
 
 			bitmap = new Bitmap(Scene.ScreenWidth, Scene.ScreenHeight);
-			//screen.BackgroundImage = bitmap;
-			//screen.BackgroundImageLayout = ImageLayout.Stretch;
+			//screenPictureBox.BackgroundImage = bitmap;
+			//screenPictureBox.BackgroundImageLayout = ImageLayout.Stretch;
 			//Scene.DrawToBitmap(bitmap);
 			DrawScene();
-			screen.ClientSize = new Size(bitmap.Width * Zoom, bitmap.Height * Zoom);
+			screenPictureBox.ClientSize = new Size(bitmap.Width * Zoom, bitmap.Height * Zoom);
 			editor.SetScene(Scene);
 			//if (this.WindowState == FormWindowState.Normal)
-			//	this.ClientSize = new Size((screen.Width / Zoom) + 16 + editor.Width, (screen.Height / Zoom) + 8 + menu.Height + tools.Height + status.Height);
+			//	this.ClientSize = new Size((screenPictureBox.Width / Zoom) + 16 + editor.Width, (screenPictureBox.Height / Zoom) + 8 + mainMenuStrip.Height + mainToolStrip.Height + mainStatusStrip.Height);
 			//HilightedCel = scene.Cels[0];
 			Viewer_Resize(null, null);
 			this.Text = string.Format("{0} - {1}", Application.ProductName, configFile);
@@ -713,50 +717,61 @@ namespace KiSSLab
 
 		private void Highlight_Click(object sender, EventArgs e)
 		{
-			Hilight = ((ToolStripButton)sender).Checked;
+			if (sender == highlightToolStripButton)
+				showHighlightToolStripMenuItem.Checked = highlightToolStripButton.Checked;
+			else
+				highlightToolStripButton.Checked = showHighlightToolStripMenuItem.Checked;
+			Hilight = highlightToolStripButton.Checked;
 			DrawScene();
 		}
 
 		private void NextSet_Click(object sender, EventArgs e)
 		{
-			((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
+			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
 			if (Scene.Set < Scene.Sets - 1)
 				Scene.Set++;
 			else
 				Scene.Set = 0;
 			if (dropped != null) dropped.LastCollidedWith = null;
 			DrawScene();
-			((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
+			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 		}
 
 		private void PreviousSet_Click(object sender, EventArgs e)
 		{
-			((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
+			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
 			if (Scene.Set == 0)
 				Scene.Set = Scene.Sets - 1;
 			else
 				Scene.Set--;
 			if (dropped != null) dropped.LastCollidedWith = null;
 			DrawScene();
-			((ToolStripButton)tools.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
+			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 		}
 
 		private void NextPal_Click(object sender, EventArgs e)
 		{
-			((ToolStripButton)tools.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
+			((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
 			Scene.Palette++;
 			if (Scene.Palette == Scene.Palettes) Scene.Palette = 0;
 			DrawScene();
-			((ToolStripButton)tools.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
+			((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
 		}
 
 		private void ShowEditor_Click(object sender, EventArgs e)
 		{
-			var me = (ToolStripButton)sender;
-			me.Checked = !me.Checked;
-			editor.Visible = me.Checked;
+			if (sender == propertiesToolStripMenuItem)
+				propertiesToolStripButton.Checked = propertiesToolStripMenuItem.Checked;
+			else
+				propertiesToolStripMenuItem.Checked = propertiesToolStripButton.Checked;
+			editor.Visible = propertiesToolStripButton.Checked;
 			Viewer_Resize(null, null);
-			Config.Editor = me.Checked ? 1 : 0;
+			Config.Editor = propertiesToolStripButton.Checked ? 1 : 0;
+		}
+
+		private void gridToolStripButton_CheckedChanged(object sender, EventArgs e)
+		{
+			alignToGridToolStripMenuItem.Checked = gridToolStripButton.Checked;
 		}
 	}
 

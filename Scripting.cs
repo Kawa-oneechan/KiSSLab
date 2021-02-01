@@ -174,7 +174,7 @@ namespace KiSSLab
 			var ret = Evaluate(thing);
 			if (typeof(T).Name == "Boolean" && ret is int)
 			{
-				ret = (int)ret == 1;
+				ret = (int)ret >= 1;
 			}
 			if (typeof(T).Name == "List`1" && ret.GetType().Name == "List`1")
 			{
@@ -212,6 +212,7 @@ namespace KiSSLab
 			var maybe = string.Format("{0}|{1}", fix, cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
+				//TODO: also apply to parts
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
@@ -219,6 +220,7 @@ namespace KiSSLab
 			maybe = string.Format("release|{0}", cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
+				//TODO: also apply to parts
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
@@ -287,6 +289,7 @@ namespace KiSSLab
 			var maybe = string.Format("{0}|{1}", fix, cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
+				//TODO: also apply to parts
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
@@ -294,6 +297,7 @@ namespace KiSSLab
 			maybe = string.Format("press|{0}", cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
+				//TODO: also apply to parts
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 			}
@@ -301,6 +305,7 @@ namespace KiSSLab
 
 		public void Click(Cel cel)
 		{
+			//TODO: use this kind of logic in Release and Catch up there.
 			var maybe = string.Format("click|{0}", cel.ID);
 			if (Events.ContainsKey(maybe))
 				RunEvent(Events[maybe]);

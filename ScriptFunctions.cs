@@ -321,7 +321,7 @@ namespace KiSSLab
 			if (mapThis == null)
 				return null;
 			if (mapThis is Part)
-				mapThis = ((Part)mapThis).Cels;
+				mapThis = ((Part)mapThis).Cels.Cast<object>().ToList();
 			foreach (var cel in (List<object>)mapThis)
 				((Cel)cel).Visible = true;
 			return mapThis;
@@ -334,7 +334,7 @@ namespace KiSSLab
 			if (mapThis == null)
 				return null;
 			if (mapThis is Part)
-				mapThis = ((Part)mapThis).Cels;
+				mapThis = ((Part)mapThis).Cels.Cast<object>().ToList();
 			foreach (var cel in (List<object>)mapThis)
 				((Cel)cel).Visible = false;
 			return mapThis;
@@ -347,7 +347,7 @@ namespace KiSSLab
 			if (mapThis == null)
 				return null;
 			if (mapThis is Part)
-				mapThis = ((Part)mapThis).Cels;
+				mapThis = ((Part)mapThis).Cels.Cast<object>().ToList();
 			foreach (var cel in (List<object>)mapThis)
 				((Cel)cel).Visible = !((Cel)cel).Visible;
 			return mapThis;

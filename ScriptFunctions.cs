@@ -242,12 +242,12 @@ namespace KiSSLab
 		{
 			object mapThis = CelsOrPart(args[0]);
 			if (mapThis == null)
-				return null;
+				return 0;
 			if (mapThis is Cel)
 				return ((Cel)mapThis).Visible ? 1 : 0;
 			else if (mapThis is Part)
 				return ((Part)mapThis).Cels.Count(c => c.Visible);
-			return false;
+			return 0;
 		}
 
 		[ScriptFunction]

@@ -151,25 +151,25 @@ Scripting is inspired by the [FKiSS standard](http://tigger.orpheusweb.co.uk/KIS
 
 Triggered when the specified timer runs out. 
 
-#### `(catch cel)`
+#### `(catch <cel or part>)`
 
-Triggered when the user presses on a cel ~~or part~~, and the part is unfixed.
+Triggered when the user presses on a cel or part, and the part is unfixed.
 
 #### `(collide <part> <part>)`
 
 Triggered when the user releases a part such that it touches another, pixel-wise. The variables `#A` and `#B` are set for your convenience.
 
-#### `(drop <cel>)`
+#### `(drop <cel or part>)`
 
-Triggered when the user releases a cel ~~or part~~, and the part is unfixed.
+Triggered when the user releases a cel or part, and the part is unfixed.
 
-#### `(fixcatch cel)`
+#### `(fixcatch <cel or part>)`
 
-Triggered when the user presses on a cel ~~or part~~, and the part unfixed.
+Triggered when the user presses on a cel or part, and the part unfixed.
 
-#### `(fixdrop <cel>)`
+#### `(fixdrop <cel or part>)`
 
-Triggered when the user releases a cel ~~or part~~, and the part is fixed.
+Triggered when the user releases a cel or part, and the part is fixed.
 
 #### `(initialize)`
 
@@ -179,13 +179,13 @@ Triggered right after loading the doll.
 
 In all respects the same as `collide`, but rectangular instead of pixel-wise.
 
-#### `(press cel)`
+#### `(press <cel or part>)`
 
-Triggered when the user presses on a cel ~~or part~~, regardless of its fix value, if no `catch` or `fixcatch` happened first.
+Triggered when the user presses on a cel or part, regardless of its fix value, if no `catch` or `fixcatch` happened first.
 
-#### `(release <cel>)`
+#### `(release <cel or part>)`
 
-Triggered when the user releases a cel ~~or part~~, regardless of its fix value, if no `drop` or `fixdrop` happened first.
+Triggered when the user releases a cel or part, regardless of its fix value, if no `drop` or `fixdrop` happened first.
 
 ### Functions
 

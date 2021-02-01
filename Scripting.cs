@@ -212,18 +212,36 @@ namespace KiSSLab
 			var maybe = string.Format("{0}|{1}", fix, cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
-				//TODO: also apply to parts
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
 			}
+			else
+			{
+				maybe = string.Format("{0}|{1}", fix, held.ID);
+				if (Events.ContainsKey(maybe))
+				{
+					RunEvent(Events[maybe]);
+					Viewer.DrawScene();
+					return;
+				}
+			}
 			maybe = string.Format("release|{0}", cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
-				//TODO: also apply to parts
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
+			}
+			else
+			{
+				maybe = string.Format("release|{0}", held.ID);
+				if (Events.ContainsKey(maybe))
+				{
+					RunEvent(Events[maybe]);
+					Viewer.DrawScene();
+					return;
+				}
 			}
 
 			foreach (var other in Parts)
@@ -289,31 +307,35 @@ namespace KiSSLab
 			var maybe = string.Format("{0}|{1}", fix, cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
-				//TODO: also apply to parts
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
 			}
+			else
+			{
+				maybe = string.Format("{0}|{1}", fix, held.ID);
+				if (Events.ContainsKey(maybe))
+				{
+					RunEvent(Events[maybe]);
+					Viewer.DrawScene();
+					return;
+				}
+			}
 			maybe = string.Format("press|{0}", cel.ID);
 			if (Events.ContainsKey(maybe))
 			{
-				//TODO: also apply to parts
 				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 			}
-		}
-
-		public void Click(Cel cel)
-		{
-			//TODO: use this kind of logic in Release and Catch up there.
-			var maybe = string.Format("click|{0}", cel.ID);
-			if (Events.ContainsKey(maybe))
-				RunEvent(Events[maybe]);
 			else
 			{
-				maybe = string.Format("click|{0}", cel.Part.ID);
+				maybe = string.Format("press|{0}", held.ID);
 				if (Events.ContainsKey(maybe))
+				{
 					RunEvent(Events[maybe]);
+					Viewer.DrawScene();
+					return;
+				}
 			}
 		}
 

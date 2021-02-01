@@ -305,8 +305,7 @@ namespace KiSSLab
 		{
 			if (args[0] is int)
 				args = new[] { (Symbol)"#a", args[0], args[1] };
-			var str = Evaluate(args[0]).ToString();
-			var moveWhat = Parts.FirstOrDefault(o => o.ID == str);
+			var moveWhat = (Part)FindPart(args[0]);
 			var moveToX = Evaluate<int>(args[1]);
 			var moveToY = Evaluate<int>(args[2]);
 			if (moveWhat != null)

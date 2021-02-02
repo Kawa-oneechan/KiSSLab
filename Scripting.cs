@@ -100,6 +100,7 @@ namespace KiSSLab
 
 		private object Send(object obj, List<object> cmd)
 		{
+			object ret = null;
 			var properties = obj.GetType().GetProperties();
 			for (var i = 1; i < cmd.Count; i++)
 			{
@@ -119,17 +120,17 @@ namespace KiSSLab
 						i++;
 						var valueToSet = Evaluate(cmd[i]);
 						property.SetValue(obj, valueToSet, null);
-						return valueToSet;
+						ret = valueToSet;
 					}
 					else
 					{
 						//This is a value to *get*.
 						var valueGotten = property.GetValue(obj, null);
-						return valueGotten;
+						ret = valueGotten;
 					}
 				}
 			}
-			return null;
+			return ret;
 		}
 
 		public object Evaluate(object thing)

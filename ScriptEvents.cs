@@ -59,6 +59,15 @@ namespace KiSSLab
 		}
 
 		/// <summary>
+		/// The user changes the palette to that specified.
+		/// </summary>
+		[ScriptEvent("col")]
+		public string ChangedCol(params object[] ev)
+		{
+			return string.Format("col|{0}", ev[1]);
+		}
+
+		/// <summary>
 		/// The two cels or objects touch, taking transparent pixels into account.
 		/// Triggers only if the cels did not overlap before one of them was moved by the user.
 		/// </summary>

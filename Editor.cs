@@ -123,9 +123,13 @@ namespace KiSSLab
 
 		private void partFixTextBox_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (locked) return;
 			if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
 				e.Handled = true;
+		}
+
+		private void partFixTextBox_Change(object sender, EventArgs e)
+		{
+			if (locked) return;
 			var part = (Part)this.parts.SelectedItem;
 			var f = string.IsNullOrWhiteSpace(partFixTextBox.Text) ? "0" : partFixTextBox.Text;
 			part.Fix = int.Parse(f);

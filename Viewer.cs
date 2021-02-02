@@ -82,11 +82,13 @@ namespace KiSSLab
 				mainToolStrip.Items.Insert(after, new ToolStripButton(
 					i.ToString(), null, (s, e) =>
 					{
-						((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
 						Scene.Set = int.Parse(((ToolStripButton)s).Text);
 						if (dropped != null) dropped.LastCollidedWith = null;
+						var maybe = string.Format("set|{0}", Scene.Set);
+						if (Scene.Events.ContainsKey(maybe))
+							Scene.RunEvent(Scene.Events[maybe]);
+						UpdatePalAndSetButtons();
 						DrawScene();
-						((ToolStripButton)s).Checked = true;
 					}, "s" + i.ToString()
 				)
 				{
@@ -102,10 +104,12 @@ namespace KiSSLab
 				mainToolStrip.Items.Insert(after, new ToolStripButton(
 					i.ToString(), null, (s, e) =>
 					{
-						((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
 						Scene.Palette = int.Parse(((ToolStripButton)s).Text);
+						var maybe = string.Format("col|{0}", Scene.Palette);
+						if (Scene.Events.ContainsKey(maybe))
+							Scene.RunEvent(Scene.Events[maybe]);
+						UpdatePalAndSetButtons();
 						DrawScene();
-						((ToolStripButton)s).Checked = true;
 					}, "p" + i.ToString()
 				)
 				{
@@ -266,7 +270,22 @@ namespace KiSSLab
 				{
 					held = part;
 					heldOffset = new Point(eX - part.Position.X, eY - part.Position.Y);
-					if (held.Fix > 0) held.Fix--;
+					if (held.Fix > 0)
+					{
+						held.Fix--;
+						if (held.Fix == 0)
+						{
+							var maybe = string.Format("unfix|{0}", cel);
+							if (Scene.Events.ContainsKey(maybe))
+								Scene.RunEvent(Scene.Events[maybe]);
+							else
+							{
+								maybe = string.Format("unfix|{0}", held);
+								if (Scene.Events.ContainsKey(maybe))
+									Scene.RunEvent(Scene.Events[maybe]);
+							}
+						}
+					}
 					fix = new Point(part.Position.X, part.Position.Y);
 				}
 			}
@@ -444,6 +463,15 @@ namespace KiSSLab
 				return;
 			var part = HilightedCel.Part;
 			part.Fix = 0;
+			var maybe = string.Format("unfix|{0}", HilightedCel);
+			if (Scene.Events.ContainsKey(maybe))
+				Scene.RunEvent(Scene.Events[maybe]);
+			else
+			{
+				maybe = string.Format("unfix|{0}", part);
+				if (Scene.Events.ContainsKey(maybe))
+					Scene.RunEvent(Scene.Events[maybe]);
+			}
 		}
 
 		private void Refix_Click(object sender, EventArgs e)
@@ -601,25 +629,18 @@ namespace KiSSLab
 			Scene.Set = 0;
 
 			bitmap = new Bitmap(Scene.ScreenWidth, Scene.ScreenHeight);
-			//screenPictureBox.BackgroundImage = bitmap;
-			//screenPictureBox.BackgroundImageLayout = ImageLayout.Stretch;
-			//Scene.DrawToBitmap(bitmap);
-			DrawScene();
 			screenPictureBox.ClientSize = new Size(bitmap.Width * Zoom, bitmap.Height * Zoom);
 			editor.SetScene(Scene);
-			//if (this.WindowState == FormWindowState.Normal)
-			//	this.ClientSize = new Size((screenPictureBox.Width / Zoom) + 16 + editor.Width, (screenPictureBox.Height / Zoom) + 8 + mainMenuStrip.Height + mainToolStrip.Height + mainStatusStrip.Height);
-			//HilightedCel = scene.Cels[0];
 			Viewer_Resize(null, null);
 			this.Text = string.Format("{0} - {1}", Application.ProductName, configFile);
 
 			if (Scene.Events.ContainsKey("initialize"))
-			{
 				Scene.RunEvent(Scene.Events["initialize"]);
-				DrawScene();
-			}
+			if (Scene.Events.ContainsKey("begin"))
+				Scene.RunEvent(Scene.Events["begin"]);
 
-			//AlarmTimer.Elapsed += new EventHandler(AlarmTimer_Tick);
+			DrawScene();
+
 			AlarmTimer.Start();
 
 			lastOpened = new[] { source, configFile };
@@ -727,26 +748,30 @@ namespace KiSSLab
 
 		private void NextSet_Click(object sender, EventArgs e)
 		{
-			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
 			if (Scene.Set < Scene.Sets - 1)
 				Scene.Set++;
 			else
 				Scene.Set = 0;
 			if (dropped != null) dropped.LastCollidedWith = null;
+			var maybe = string.Format("set|{0}", Scene.Set);
+			if (Scene.Events.ContainsKey(maybe))
+				Scene.RunEvent(Scene.Events[maybe]);
+			UpdatePalAndSetButtons();
 			DrawScene();
-			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 		}
 
 		private void PreviousSet_Click(object sender, EventArgs e)
 		{
-			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
 			if (Scene.Set == 0)
 				Scene.Set = Scene.Sets - 1;
 			else
 				Scene.Set--;
 			if (dropped != null) dropped.LastCollidedWith = null;
+			var maybe = string.Format("set|{0}", Scene.Set);
+			if (Scene.Events.ContainsKey(maybe))
+				Scene.RunEvent(Scene.Events[maybe]);
+			UpdatePalAndSetButtons();
 			DrawScene();
-			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 		}
 
 		private void NextPal_Click(object sender, EventArgs e)
@@ -754,6 +779,9 @@ namespace KiSSLab
 			((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = false;
 			Scene.Palette++;
 			if (Scene.Palette == Scene.Palettes) Scene.Palette = 0;
+			var maybe = string.Format("col|{0}", Scene.Palette);
+			if (Scene.Events.ContainsKey(maybe))
+				Scene.RunEvent(Scene.Events[maybe]);
 			DrawScene();
 			((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
 		}
@@ -773,6 +801,18 @@ namespace KiSSLab
 		{
 			alignToGridToolStripMenuItem.Checked = gridToolStripButton.Checked;
 		}
+
+		public void UpdatePalAndSetButtons()
+		{
+			for (var i = 0; i < 10; i++)
+			{
+				((ToolStripButton)mainToolStrip.Items.Find("s" + i, false)[0]).Checked = false;
+				((ToolStripButton)mainToolStrip.Items.Find("p" + i, false)[0]).Checked = false;
+			}
+			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
+			((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
+		}
+
 	}
 
 	public class MyConfig : RegistryConfig

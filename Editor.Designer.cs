@@ -300,6 +300,7 @@
 			this.partFixTextBox.Name = "partFixTextBox";
 			this.partFixTextBox.Size = new System.Drawing.Size(82, 23);
 			this.partFixTextBox.TabIndex = 9;
+			this.partFixTextBox.TextChanged += new System.EventHandler(this.partFixTextBox_Change);
 			this.partFixTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.partFixTextBox_KeyPress);
 			// 
 			// partSectionPanel

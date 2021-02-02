@@ -441,8 +441,10 @@ namespace KiSSLab
 		[ScriptFunction]
 		public object Notify(params object[] args)
 		{
-			//Concat up all what?
-			DarkUI.Forms.DarkMessageBox.ShowInformation(Evaluate(args[0]).ToString(), Application.ProductName);
+			var sb = new StringBuilder();
+			foreach (var arg in args)
+				sb.Append(Evaluate(arg).ToString());
+			DarkUI.Forms.DarkMessageBox.ShowInformation(sb.ToString(), Application.ProductName);
 			return null;
 		}
 	}

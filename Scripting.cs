@@ -107,8 +107,12 @@ namespace KiSSLab
 				if (cmd[i] is Symbol && cmd[i].ToString().EndsWith(":"))
 				{
 					var propName = cmd[i].ToString();
-					propName = propName.Remove(propName.Length - 1);
+					propName = propName.Remove(propName.Length - 1).ToLowerInvariant();
 					var property = properties.FirstOrDefault(p => p.Name.Equals(propName, StringComparison.InvariantCultureIgnoreCase));
+					var safe = property.GetCustomAttributes(true).OfType<ScriptPropertyAttribute>().Count() == 1;
+					//Allow getting the count of a list even without the attribute.
+					if (obj.GetType().Name == "List`1" && propName == "count")
+						safe = true;
 
 					//is there more?
 					if (i + 1 < cmd.Count)
@@ -119,14 +123,16 @@ namespace KiSSLab
 						//this must be a value to set.
 						i++;
 						var valueToSet = Evaluate(cmd[i]);
-						property.SetValue(obj, valueToSet, null);
+						if (safe)
+							property.SetValue(obj, valueToSet, null);
+						else
+							ret = null;
 						ret = valueToSet;
 					}
 					else
 					{
 						//This is a value to *get*.
-						var valueGotten = property.GetValue(obj, null);
-						ret = valueGotten;
+						ret = safe ? property.GetValue(obj, null) : null;
 					}
 				}
 			}
@@ -339,29 +345,33 @@ namespace KiSSLab
 				}
 			}
 		}
+	}
 
-		public class ScriptFunctionAttribute : Attribute
+	public class ScriptFunctionAttribute : Attribute
+	{
+		public string As { get; private set; }
+		public ScriptFunctionAttribute()
 		{
-			public string As { get; private set; }
-			public ScriptFunctionAttribute()
-			{
-			}
-			public ScriptFunctionAttribute(string name)
-			{
-				As = name;
-			}
 		}
+		public ScriptFunctionAttribute(string name)
+		{
+			As = name;
+		}
+	}
 
-		public class ScriptEventAttribute : Attribute
+	public class ScriptEventAttribute : Attribute
+	{
+		public string As { get; private set; }
+		public ScriptEventAttribute()
 		{
-			public string As { get; private set; }
-			public ScriptEventAttribute()
-			{
-			}
-			public ScriptEventAttribute(string name)
-			{
-				As = name;
-			}
 		}
+		public ScriptEventAttribute(string name)
+		{
+			As = name;
+		}
+	}
+
+	public class ScriptPropertyAttribute : Attribute
+	{
 	}
 }

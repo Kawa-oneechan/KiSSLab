@@ -420,15 +420,19 @@ namespace KiSSLab
 	public class Cel
 	{
 		public string ImageFilename { get; set; }
-		public string Filename { get { return ImageFilename; } }
 		public Bitmap Image { get; set; }
 		public Point Offset { get; set; }
+		[ScriptProperty]
 		public bool Visible { get; set; }
 		public bool[] OnSets { get; set; }
 		public bool OnSet { get { return OnSets[Viewer.Scene.Set]; } set { OnSets[Viewer.Scene.Set] = value; } }
+		[ScriptProperty]
 		public Part Part { get; set; }
+		[ScriptProperty]
 		public string ID { get; set; }
+		[ScriptProperty]
 		public int Opacity { get; set; }
+		[ScriptProperty]
 		public bool Ghost { get; set; }
 
 		public Cel()
@@ -446,16 +450,22 @@ namespace KiSSLab
 
 	public class Part
 	{
+		[ScriptProperty]
 		public List<Cel> Cels { get; set; }
 		public Point[] Positions { get; set; }
 		public Point Position { get { return Positions[Viewer.Scene.Set]; } set { Positions[Viewer.Scene.Set] = value; } }
 		public Point[] InitialPositions { get; set; }
 		public Point InitialPosition { get { return InitialPositions[Viewer.Scene.Set]; } set { InitialPositions[Viewer.Scene.Set] = value; } }
+		[ScriptProperty]
 		public int Fix { get; set; }
+		[ScriptProperty]
 		public int InitialFix { get; set; }
+		[ScriptProperty]
 		public bool Locked { get { return Fix >= 999; } set { Fix = value ? 999 : 0; } }
+		[ScriptProperty]
 		public string ID { get; set; }
 		public Part LastCollidedWith { get; set; }
+		[ScriptProperty]
 		public bool Visible
 		{
 			get

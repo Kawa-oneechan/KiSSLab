@@ -163,7 +163,7 @@ namespace KiSSLab
 			return args[0] is Part;
 		}
 
-		[ScriptFunction("if")]
+		[ScriptFunction]
 		public object If(params object[] args)
 		{
 			var expression = Evaluate<bool>(args[0]);
@@ -203,6 +203,32 @@ namespace KiSSLab
 				SetVar(iterator, item);
 				foreach (var command in block)
 					ret = Evaluate(command);
+			}
+			return ret;
+		}
+
+		[ScriptFunction]
+		public object For(params object[] args)
+		{
+			var what = args[0] as List<object>;
+			var iterator = what[0] as Symbol;
+			var from = Evaluate<int>(what[1]);
+			var to = Evaluate<int>(what[2]);
+			var step = (what.Count > 3) ? Evaluate<int>(what[3]) : (from < to ? 1 : -1);
+			if (step == 0) step = 1;
+			var val = from;
+			var block = args.Skip(1).ToList();
+			object ret = null;
+			while (true)
+			{
+				SetVar(iterator, val);
+				foreach (var command in block)
+					ret = Evaluate(command);
+				val += step;
+				if (step > 0 && val > to)
+					break;
+				if (step < 0 && val < to)
+					break;
 			}
 			return ret;
 		}

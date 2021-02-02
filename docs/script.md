@@ -21,15 +21,15 @@ Scripting is based on the [FKiSS standard](http://tigger.orpheusweb.co.uk/KISS/f
 
 In the function list, the following types are used:
 
-| Name          | Example          | Description                                                  |
-| ------------- | ---------------- | ------------------------------------------------------------ |
-| `bool` | `true` | The symbol `true` or `false`, or a number, where 0 is `false` and 1 or higher is `true`. |
-| `cel or part` |                  | The ID of a cel or part, or an object reference to a cel, part, or list of either. |
-| `cel`         | `"bangs1"`       | The ID of a cel, or an object reference to a cel or list of cels. |
-| `list` |                  | An object reference to a list. |
+| Name          | Example     | Description                                                  |
+| ------------- | ----------- | ------------------------------------------------------------ |
+| `bool`        | `true`      | The symbol `true` or `false`, or a number, where 0 is `false` and 1 or higher is `true`. |
+| `cel or part` |             | The ID of a cel or part, or an object reference to a cel, part, or list of either. |
+| `cel`         | `"bangs1"`  | The ID of a cel, or an object reference to a cel or list of cels. |
+| `list`        |             | An object reference to a list.                               |
 | `number`      | `47` `aVar` | Any expression that evaluates into a numerical value. This can be be an actual number, a variable with a number value, or a function call that returns a number. |
-| `object` |                  | An object reference. |
-| `variable`    | `aVar`           | A symbol whose name is not that of a function.               |
+| `object`      |             | An object reference.                                         |
+| `variable`    | `aVar`      | A symbol whose name is not that of a function.               |
 
 ### Object references
 
@@ -63,6 +63,16 @@ Returns `true` if the argument is a cel object reference, `false` otherwise.
 
 Since string IDs can refer to both cels and parts, and one ID can refer to either at once, the `cels` command can be used to *explicitly* return a cel object reference for the cel with that name. It may also return a list object reference if that ID refers to multiple cels, which is also a thing that can happen.
 
+`(for (<var> <from> <to> <optional step>) ...)`
+
+Iterates from one value to the next, sets the specified variable to each number in turn and executes the statements within. If the step value is left out, 1 or -1 is implied depending on whether the "from" value is lower or higher than the "to".
+
+```clojure
+(for (i 1 10 2)
+	(notify i) ; Counts 1, 3, 5, 7, 9.
+)
+```
+
 `(foreach (<list> <var>) ...)`
 
 Given a list object reference, sets the specified variable to each list item in turn and executes the statements inside.
@@ -87,9 +97,9 @@ Given an expression that evaluates to a number, executes the statements inside i
 ```clojure
 (if (mapped? "thing")
 	(notify "The thing is mapped.")
-    ; Could do more things if we wanted.
+	; Could do more things if we wanted.
 else
-    (notify "The thing is NOT mapped.")
+	(notify "The thing is NOT mapped.")
 )
 ```
 
@@ -162,7 +172,7 @@ Sets a timer to go off after `delay`. If the second parameter is a number, strin
 (timer
 	(
 		(moverel "one" "other" 2 0)
-        ; Could do more things here if we wanted.
+		; Could do more things here if we wanted.
 	)
 	25 repeat
 )

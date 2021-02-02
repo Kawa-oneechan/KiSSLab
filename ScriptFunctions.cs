@@ -304,6 +304,11 @@ namespace KiSSLab
 		[ScriptFunction]
 		public object Music(params object[] args)
 		{
+			if (args.Length == 0)
+			{
+				Viewer.Sound.StopMusic();
+				return 0;
+			}
 			var file = Evaluate<string>(args[0]);
 			Viewer.Sound.PlayMusic(file);
 			return 0;

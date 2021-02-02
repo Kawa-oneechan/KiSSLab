@@ -91,10 +91,7 @@ namespace KiSSLab
 
 			if (Mix.FileExists(name))
 			{
-				if (musicChannel != null)
-					musicChannel.Stop();
-				if (music != null)
-					music.Release();
+				StopMusic();
 				var data = Mix.GetBytes(name);
 				var fCSex = new FMOD.CreateSoundExInfo()
 				{
@@ -135,6 +132,17 @@ namespace KiSSLab
 			if (!Enabled)
 				return;
 			system.Update();
+		}
+
+		public void StopMusic()
+		{
+			if (!Enabled)
+				return;
+
+			if (musicChannel != null)
+				musicChannel.Stop();
+			if (music != null)
+				music.Release();
 		}
 
 		public void StopEverything()

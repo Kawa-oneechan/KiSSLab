@@ -122,6 +122,47 @@ namespace KiSSLab
 		
 		//or
 
+		/// <summary>
+		/// Returns true if the argument is null, or an empty list.
+		/// </summary>
+		[ScriptFunction("nul?")]
+		public object IsNull(params object[] args)
+		{
+			if (args[0] == null)
+				return true;
+			args[0] = Evaluate(args[0]);
+			if (args[0] is List<object> && ((List<object>)args[0]).Count == 0)
+				return true;
+			return false;
+		}
+
+		/// <summary>
+		/// Returns true if the argument is a list
+		/// </summary>
+		[ScriptFunction("list?")]
+		public object IsList(params object[] args)
+		{
+			return args[0] is List<object>;
+		}
+
+		/// <summary>
+		/// Returns true if the argument is a cel
+		/// </summary>
+		[ScriptFunction("cel?")]
+		public object IsCel(params object[] args)
+		{
+			return args[0] is Cel;
+		}
+
+		/// <summary>
+		/// Returns true if the argument is null
+		/// </summary>
+		[ScriptFunction("part?")]
+		public object IsPart(params object[] args)
+		{
+			return args[0] is Part;
+		}
+
 		[ScriptFunction("if")]
 		public object If(params object[] args)
 		{

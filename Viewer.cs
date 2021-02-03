@@ -441,6 +441,12 @@ namespace KiSSLab
 					return;
 				if (sender != openExpansionToolStripMenuItem)
 					Mix.Reset();
+				if (sender == openInNewToolStripMenuItem)
+				{
+					var newViewer = new Viewer(new[] { cdlg.FileName });
+					newViewer.Show();
+					return;
+				}
 				if (cdlg.FileName.EndsWith("lisp", StringComparison.CurrentCultureIgnoreCase))
 					OpenDoll(Path.GetDirectoryName(cdlg.FileName), Path.GetFileName(cdlg.FileName));
 				else

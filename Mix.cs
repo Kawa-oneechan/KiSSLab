@@ -19,12 +19,10 @@ namespace Kawa.Mix
 		}
 
 		private static Dictionary<string, MixFileEntry> fileList;
-		private static Dictionary<string, string> stringCache;
 
 		public static void Reset()
 		{
 			fileList = new Dictionary<string, MixFileEntry>();
-			stringCache = new Dictionary<string, string>();
 		}
 
 		public static void Load(string source)
@@ -115,20 +113,13 @@ namespace Kawa.Mix
 			return ret;
 		}
 
-		public static string GetString(string fileName, bool cache = true)
+		public static string GetString(string fileName)
 		{
-			if (cache && stringCache.ContainsKey(fileName))
-				return stringCache[fileName];
 			if (!fileList.ContainsKey(fileName))
 				throw new FileNotFoundException(string.Format("File {0} was not found.", fileName));
-			var bytes = GetBytes(fileName);
-			var ret = Encoding.UTF8.GetString(bytes);
-			if (cache)
-				stringCache[fileName] = ret;
-			return ret;
+			return Encoding.UTF8.GetString(GetBytes(fileName));
 		}
 
-		//TODO: cache the returns.
 		public static Bitmap GetBitmap(string fileName)
 		{
 			var raw = GetBytes(fileName);

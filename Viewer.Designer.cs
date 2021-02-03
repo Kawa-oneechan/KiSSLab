@@ -35,6 +35,7 @@
 			this.reopenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openInNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.copyCelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.unfixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,6 +99,7 @@
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
             this.openExpansionToolStripMenuItem,
+            this.openInNewToolStripMenuItem,
             this.reopenToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
@@ -153,6 +155,15 @@
 			this.exitToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
 			this.exitToolStripMenuItem.Text = "E&xit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.Exit_Click);
+			// 
+			// openInNewToolStripMenuItem
+			// 
+			this.openInNewToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.openInNewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.openInNewToolStripMenuItem.Name = "openInNewToolStripMenuItem";
+			this.openInNewToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.openInNewToolStripMenuItem.Text = "Open in &New…";
+			this.openInNewToolStripMenuItem.Click += new System.EventHandler(this.Open_Click);
 			// 
 			// editToolStripMenuItem
 			// 
@@ -549,6 +560,7 @@
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem openExpansionToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem openInNewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem reopenToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;

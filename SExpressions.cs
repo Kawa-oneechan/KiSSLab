@@ -72,7 +72,7 @@ namespace Kawa.SExpressions
 			}
 			return thing.ToString();
 		}
-		private enum States { TokenStart, ReadQuotedString, ReadStringOrNumber, Comment }
+		private enum States { TokenStart, ReadQuotedString, ReadStringOrNumber, Comment, ReadQSEscape }
 		private int lastInt;
 		private object Parse(string str)
 		{
@@ -117,10 +117,38 @@ namespace Kawa.SExpressions
 							tokens.Add(word.ToString());
 							state = States.TokenStart;
 						}
+						else if (ch == '\\')
+						{
+							state = States.ReadQSEscape;
+						}
 						else
 						{
 							word.Append(ch);
 						}
+						break;
+					case States.ReadQSEscape:
+						if (ch == '\\')
+						{
+							word.Append('\\');
+						}
+						else if (ch == '\"')
+						{
+							word.Append('\"');
+						}
+						else if (ch == '\'')
+						{
+							word.Append('\'');
+						}
+						else if (ch == 'n')
+						{
+							word.Append('\n');
+						}
+						else
+						{
+							word.Append('\\');
+							word.Append(ch);
+						}
+						state = States.ReadQuotedString;
 						break;
 					case States.ReadStringOrNumber:
 						if (char.IsWhiteSpace(ch))

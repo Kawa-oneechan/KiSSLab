@@ -73,6 +73,7 @@ namespace KiSSLab
 
 			ScreenWidth = 480;
 			ScreenHeight = 400;
+			MaxFix = 100;
 			backgrounds = new object[10];
 
 			matrix = new[] {

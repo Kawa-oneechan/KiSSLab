@@ -41,6 +41,7 @@ namespace KiSSLab
 			get { return backgrounds[set]; }
 			set { backgrounds[set] = value; }
 		}
+		public int MaxFix { get; private set; }
 
 		public int Palette { get; set; }
 		public int Palettes { get; private set; }
@@ -50,6 +51,7 @@ namespace KiSSLab
 		private Bitmap palette;
 		private float[][] matrix;
 		private object[] backgrounds;
+		private string defaultOn = "0123456789";
 
 		private ImageAttributes attrs;
 		private Graphics gfx;
@@ -96,8 +98,6 @@ namespace KiSSLab
 			var sex = new SExpression(Mix.GetString(configFile));
 			var data = ((List<object>)sex.Data)[0] as List<object>;
 
-			var defaultOn = "0123456789";
-
 			foreach (var item in data)
 			{
 				if (item is List<object> && ((List<object>)item)[0] is Symbol)
@@ -112,6 +112,10 @@ namespace KiSSLab
 					else if (form == "default-on" && rest.Count == 1 && rest[0] is string)
 					{
 						defaultOn = rest[0].ToString();
+					}
+					else if (form == "max-fix" && rest.Count == 1 && rest[0] is int)
+					{
+						MaxFix = (int)rest[0];
 					}
 					else if (form == "background")
 					{
@@ -157,169 +161,15 @@ namespace KiSSLab
 					{
 						foreach (var celItem in rest.Cast<List<object>>())
 						{
-							Bitmap image = null;
-							var file = "";
-							var id = "";
-							var partof = "";
-							var alpha = 255;
-							var positions = new List<object>() { 0, 0 };
-							var offset = new List<object>() { 0, 0 };
-							var on = defaultOn; //"0123456789";
-							var fix = 0;
-							var newPos = false;
-							var newFix = false;
-							var mapped = true;
-							var ghosted = false;
-
-							for (var i = 0; i < celItem.Count; i++)
+							form = celItem[0] as Symbol;
+							if (form == "group")
 							{
-								form = celItem[i] as Symbol;
-								if (form == null)
-									break;
-								if (form == "file")
-								{
-									i++;
-									file = celItem[i] as string;
-									if (id == "") id = file;
-									if (partof == "") partof = id;
-								}
-								else if (form == "id")
-								{
-									i++;
-									if (partof == id) partof = "";
-									id = celItem[i] as string;
-									if (partof == "") partof = id;
-								}
-								else if (form == "partof")
-								{
-									i++;
-									partof = celItem[i] as string;
-								}
-								else if (form == "alpha")
-								{
-									i++;
-									alpha = (int)celItem[i];
-								}
-								else if (form == "pos")
-								{
-									i++;
-									positions = celItem[i] as List<object>;
-									newPos = true;
-								}
-								else if (form == "offset")
-								{
-									i++;
-									offset = celItem[i] as List<object>;
-								}
-								else if (form == "fix")
-								{
-									i++;
-									fix = (int)celItem[i];
-									newFix = true;
-								}
-								else if (form == "locked")
-								{
-									fix = 9999;
-									newFix = true;
-								}
-								else if (form == "on")
-								{
-									i++;
-									on = celItem[i] as string;
-								}
-								else if (form == "unmapped")
-								{
-									mapped = false;
-								}
-								else if (form == "ghost")
-								{
-									ghosted = true;
-								}
+								//handle groups
 							}
-
-							//try to preload the image
-							try
+							else
 							{
-								image = Tools.GrabClonedBitmap(file + ".png"); //Mix.GetBitmap(file + ".png").ReleaseClone();
+								ParseCelForm(celItem);
 							}
-							catch (System.IO.FileNotFoundException ex)
-							{
-								DarkUI.Forms.DarkMessageBox.ShowWarning(ex.Message, Application.ProductName);
-								continue;
-							}
-
-							//find the partof object
-							var part = Parts.FirstOrDefault(o => o.ID == partof);
-							if (part == null)
-							{
-								part = new Part()
-								{
-									ID = partof,
-									Cels = new List<Cel>(),
-								};
-								Parts.Add(part);
-							}
-
-							if (newPos)
-							{
-								if (positions[0] is int)
-								{
-									//pos (12 34) --> pos ((12 34))
-									positions = new List<object>() { positions };
-								}
-
-								while (positions.Count < 10)
-									positions.Add(positions[0]);
-
-								for (var i = 0; i < 10; i++)
-								{
-									if (positions[i] is Symbol && positions[i].ToString() == "*")
-									{
-										if (i == 0)
-											positions[i] = new List<object>() { 0, 0 };
-										else
-											positions[i] = positions[0];
-									}
-									var pos = positions[i] as List<object>;
-									part.Positions[i] = new Point((int)pos[0], (int)pos[1]);
-									if (pos.Count > 2 && pos[2].ToString() == ">")
-									{
-										pos.RemoveAt(2);
-										for (var j = i + 1; j < 10; j++)
-											positions[j] = positions[i];
-									}
-								}
-
-								for (var i = 0; i < 10; i++)
-								{
-									part.InitialPositions[i] = part.Positions[i];
-								}
-							}
-							if (newFix)
-							{
-								part.Fix = part.InitialFix = fix;
-							}
-
-							var c = new Cel()
-							{
-								Image = image,
-								ImageFilename = file + ".png",
-								Visible = mapped,
-								ID = id,
-								Opacity = alpha,
-								Ghost = ghosted,
-							};
-							foreach (var s in on)
-							{
-								var i = (int)(s - '0');
-								c.OnSets[i] = true;
-							}
-							c.Offset = new Point((int)offset[0], (int)offset[1]);
-							c.Part = part;
-							part.Cels.Add(c);
-							part.UpdateBounds();
-
-							Cels.Add(c);
 						}
 					}
 					#endregion
@@ -338,6 +188,190 @@ namespace KiSSLab
 				}
 			}
 			Sets++;
+		}
+
+		public Cel ParseCelForm(List<object> celItem)
+		{
+			Bitmap image = null;
+			var file = "";
+			var id = "";
+			var partof = "";
+			var alpha = 255;
+			var positions = new List<object>() { 0, 0 };
+			var offset = new List<object>() { 0, 0 };
+			var on = defaultOn; //"0123456789";
+			var fix = 0;
+			var newPos = false;
+			var newFix = false;
+			var mapped = true;
+			var ghosted = false;
+
+			for (var i = 0; i < celItem.Count; i++)
+			{
+				var form = celItem[i] as Symbol;
+				switch (form)
+				{
+					case null:
+						break;
+					case "file":
+						{
+							i++;
+							file = celItem[i] as string;
+							if (id == "") id = file;
+							if (partof == "") partof = id;
+						}
+						break;
+					case "id":
+						{
+							i++;
+							if (partof == id) partof = "";
+							id = celItem[i] as string;
+							if (partof == "") partof = id;
+						}
+						break;
+					case "partof":
+						{
+							i++;
+							partof = celItem[i] as string;
+						}
+						break;
+					case "alpha":
+						{
+							i++;
+							alpha = (int)celItem[i];
+						}
+						break;
+					case "pos":
+						{
+							i++;
+							positions = celItem[i] as List<object>;
+							newPos = true;
+						}
+						break;
+					case "offset":
+						{
+							i++;
+							offset = celItem[i] as List<object>;
+						}
+						break;
+					case "fix":
+						{
+							i++;
+							fix = (int)celItem[i];
+							newFix = true;
+						}
+						break;
+					case "locked":
+						{
+							fix = MaxFix;
+							newFix = true;
+						}
+						break;
+					case "on":
+						{
+							i++;
+							on = celItem[i] as string;
+						}
+						break;
+					case "unmapped":
+						{
+							mapped = false;
+						}
+						break;
+					case "ghost":
+						{
+							ghosted = true;
+						}
+						break;
+					case "group":
+						break;
+				}
+			}
+
+			//try to preload the image
+			try
+			{
+				image = Tools.GrabClonedBitmap(file + ".png"); //Mix.GetBitmap(file + ".png").ReleaseClone();
+			}
+			catch (System.IO.FileNotFoundException ex)
+			{
+				DarkUI.Forms.DarkMessageBox.ShowWarning(ex.Message, Application.ProductName);
+				return null;
+			}
+
+			//find the partof object
+			var part = Parts.FirstOrDefault(o => o.ID == partof);
+			if (part == null)
+			{
+				part = new Part()
+				{
+					ID = partof,
+					Cels = new List<Cel>(),
+				};
+				Parts.Add(part);
+			}
+
+			if (newPos)
+			{
+				if (positions[0] is int)
+				{
+					//pos (12 34) --> pos ((12 34))
+					positions = new List<object>() { positions };
+				}
+
+				while (positions.Count < 10)
+					positions.Add(positions[0]);
+
+				for (var i = 0; i < 10; i++)
+				{
+					if (positions[i] is Symbol && positions[i].ToString() == "*")
+					{
+						if (i == 0)
+							positions[i] = new List<object>() { 0, 0 };
+						else
+							positions[i] = positions[0];
+					}
+					var pos = positions[i] as List<object>;
+					part.Positions[i] = new Point((int)pos[0], (int)pos[1]);
+					if (pos.Count > 2 && pos[2].ToString() == ">")
+					{
+						pos.RemoveAt(2);
+						for (var j = i + 1; j < 10; j++)
+							positions[j] = positions[i];
+					}
+				}
+
+				for (var i = 0; i < 10; i++)
+				{
+					part.InitialPositions[i] = part.Positions[i];
+				}
+			}
+			if (newFix)
+			{
+				part.Fix = part.InitialFix = fix;
+			}
+
+			var c = new Cel()
+			{
+				Image = image,
+				ImageFilename = file + ".png",
+				Visible = mapped,
+				ID = id,
+				Opacity = alpha,
+				Ghost = ghosted,
+			};
+			foreach (var s in on)
+			{
+				var i = (int)(s - '0');
+				c.OnSets[i] = true;
+			}
+			c.Offset = new Point((int)offset[0], (int)offset[1]);
+			c.Part = part;
+			part.Cels.Add(c);
+			part.UpdateBounds();
+
+			Cels.Add(c);
+			return c;
 		}
 
 		public Part GetPartFromPoint(Point point, out Cel backCel)
@@ -461,7 +495,7 @@ namespace KiSSLab
 		[ScriptProperty]
 		public int InitialFix { get; set; }
 		[ScriptProperty]
-		public bool Locked { get { return Fix >= 999; } set { Fix = value ? 999 : 0; } }
+		public bool Locked { get { return Fix >= Viewer.Scene.MaxFix; } set { Fix = value ? Viewer.Scene.MaxFix : 0; } }
 		[ScriptProperty]
 		public string ID { get; set; }
 		public Part LastCollidedWith { get; set; }

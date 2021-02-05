@@ -9,8 +9,6 @@ namespace KiSSLab
 {
 	public static class Tools
 	{
-		public static System.Windows.Forms.Control PointDebug { get; set; }
-
 		public static int Distance(Point a, Point b)
 		{
 			var x = (b.X - a.X);
@@ -79,14 +77,12 @@ namespace KiSSLab
 
 							if (color1.A != 0 && color2.A != 0)
 							{
-								if (PointDebug != null) PointDebug.Location = new Point((x * Viewer.Zoom) - 1, (y * Viewer.Zoom) - 1);
 								return true;
 							}
 						}
 					}
 				}
 			}
-			if (PointDebug != null) PointDebug.Location = new Point(-4, -4);
 			return false;
 		}
 

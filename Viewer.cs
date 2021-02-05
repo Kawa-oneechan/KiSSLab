@@ -21,10 +21,9 @@ namespace KiSSLab
 		private Point lastClick;
 		private Panel debug;
 
-		public static Scene Scene;
-		public static int Zoom = 1;
+		public Scene Scene;
 
-		public static bool Hilight;
+		public bool Hilight;
 		public Cel HilightedCel;
 
 		private System.Windows.Forms.Timer AlarmTimer;
@@ -65,7 +64,6 @@ namespace KiSSLab
 			this.WindowState = (FormWindowState)windowState;
 			if (Config.ZoomLevel < 1 || Config.ZoomLevel > 3)
 				Config.ZoomLevel = 1;
-			Zoom = Config.ZoomLevel;
 			if (!string.IsNullOrWhiteSpace(Config.AutoLoad) && args.Length == 0)
 				args = new string[] { Config.AutoLoad };
 
@@ -125,11 +123,11 @@ namespace KiSSLab
 				mainToolStrip.Items.Insert(after, new ToolStripButton(
 					string.Format("×{0}", i), null, (s, e) =>
 					{
-						((ToolStripButton)mainToolStrip.Items.Find("z" + Zoom.ToString(), false)[0]).Checked = false;
-						Zoom = int.Parse(((ToolStripButton)s).Text.Substring(1));
-						screenPictureBox.ClientSize = new Size(bitmap.Width * Zoom, bitmap.Height * Zoom);
+						((ToolStripButton)mainToolStrip.Items.Find("z" + Config.ZoomLevel.ToString(), false)[0]).Checked = false;
+						Config.ZoomLevel = int.Parse(((ToolStripButton)s).Text.Substring(1));
+						screenPictureBox.ClientSize = new Size(bitmap.Width * Config.ZoomLevel, bitmap.Height * Config.ZoomLevel);
 						((ToolStripButton)s).Checked = true;
-						Config.ZoomLevel = Zoom;
+						if (Scene != null) Scene.Zoom = Config.ZoomLevel;
 						Viewer_Resize(null, null);
 						DrawScene();
 					}, "z" + i.ToString()
@@ -137,7 +135,7 @@ namespace KiSSLab
 				{
 					ToolTipText = string.Format("Set zoom level to {0}", i),
 					DisplayStyle = ToolStripItemDisplayStyle.Text,
-					Checked = (i == Zoom),
+					Checked = (i == Config.ZoomLevel),
 				});
 			}
 			propertiesToolStripButton.Checked = Config.Editor == 1;
@@ -169,16 +167,6 @@ namespace KiSSLab
 
 			Viewer_Resize(null, null);
 			UpdateColors();
-
-			debug = new Panel()
-			{
-				Size = new Size(3, 3),
-				Location = new Point(-8, -8),
-				BackColor = Color.Red,
-				Visible = false,
-			};
-			screenPictureBox.Controls.Add(debug);
-			Tools.PointDebug = debug;
 
 			bitmap = new Bitmap(480, 400);
 			Sound = new SoundSystem();
@@ -239,8 +227,8 @@ namespace KiSSLab
 			if (Scene == null)
 				return;
 
-			var eX = e.X / Zoom;
-			var eY = e.Y / Zoom;
+			var eX = e.X / Scene.Zoom;
+			var eY = e.Y / Scene.Zoom;
 			var realLocation = new Point(eX, eY);
 			if (gridToolStripButton.Checked)
 			{
@@ -300,8 +288,8 @@ namespace KiSSLab
 			if (Scene == null)
 				return;
 
-			var eX = e.X / Zoom;
-			var eY = e.Y / Zoom;
+			var eX = e.X / Scene.Zoom;
+			var eY = e.Y / Scene.Zoom;
 			var realLocation = new Point(eX, eY);
 			if (gridToolStripButton.Checked)
 			{
@@ -368,8 +356,8 @@ namespace KiSSLab
 			//if (drawing)
 			//	return;
 
-			var eX = e.X / Zoom;
-			var eY = e.Y / Zoom;
+			var eX = e.X / Scene.Zoom;
+			var eY = e.Y / Scene.Zoom;
 			var eLocation = new Point(eX, eY);
 			if (eLocation.Equals(lastClick) && HilightedCel != null)
 			{
@@ -402,8 +390,8 @@ namespace KiSSLab
 		{
 			if (e.Button == MouseButtons.Right)
 			{
-				var eX = e.X / Zoom;
-				var eY = e.Y / Zoom;
+				var eX = e.X / Scene.Zoom;
+				var eY = e.Y / Scene.Zoom;
 				var realLocation = new Point(eX, eY);
 
 				var cel = default(Cel);
@@ -421,7 +409,7 @@ namespace KiSSLab
 		private void Screen_Paint(object sender, PaintEventArgs e)
 		{
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-			e.Graphics.DrawImage(bitmap, 0, 0, bitmap.Width * Zoom, bitmap.Height * Zoom);
+			e.Graphics.DrawImage(bitmap, 0, 0, bitmap.Width * Scene.Zoom, bitmap.Height * Scene.Zoom);
 
 			/*
 			var pen = new Pen(Color.FromArgb(64, 255, 255, 255), 1);
@@ -633,9 +621,10 @@ namespace KiSSLab
 			}
 			Scene.Palette = 0;
 			Scene.Set = 0;
+			Scene.Zoom = Config.ZoomLevel;
 
 			bitmap = new Bitmap(Scene.ScreenWidth, Scene.ScreenHeight);
-			screenPictureBox.ClientSize = new Size(bitmap.Width * Zoom, bitmap.Height * Zoom);
+			screenPictureBox.ClientSize = new Size(bitmap.Width * Scene.Zoom, bitmap.Height * Scene.Zoom);
 			editor.SetScene(Scene);
 			Viewer_Resize(null, null);
 			this.Text = string.Format("{0} - {1}", Application.ProductName, configFile);

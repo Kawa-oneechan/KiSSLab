@@ -47,6 +47,8 @@ namespace KiSSLab
 		public int Palettes { get; private set; }
 		public int Sets { get; private set; }
 
+		public int Zoom { get; set; }
+
 		private int set;
 		private Bitmap palette;
 		private float[][] matrix;
@@ -304,7 +306,7 @@ namespace KiSSLab
 			var part = Parts.FirstOrDefault(o => o.ID == partof);
 			if (part == null)
 			{
-				part = new Part()
+				part = new Part(this)
 				{
 					ID = partof,
 					Cels = new List<Cel>(),
@@ -352,7 +354,7 @@ namespace KiSSLab
 				part.Fix = part.InitialFix = fix;
 			}
 
-			var c = new Cel()
+			var c = new Cel(this)
 			{
 				Image = image,
 				ImageFilename = file + ".png",
@@ -454,13 +456,14 @@ namespace KiSSLab
 
 	public class Cel
 	{
+		private Scene scene;
 		public string ImageFilename { get; set; }
 		public Bitmap Image { get; set; }
 		public Point Offset { get; set; }
 		[ScriptProperty]
 		public bool Visible { get; set; }
 		public bool[] OnSets { get; set; }
-		public bool OnSet { get { return OnSets[Viewer.Scene.Set]; } set { OnSets[Viewer.Scene.Set] = value; } }
+		public bool OnSet { get { return OnSets[scene.Set]; } set { OnSets[scene.Set] = value; } }
 		[ScriptProperty]
 		public Part Part { get; set; }
 		[ScriptProperty]
@@ -470,8 +473,9 @@ namespace KiSSLab
 		[ScriptProperty]
 		public bool Ghost { get; set; }
 
-		public Cel()
+		public Cel(Scene scene)
 		{
+			this.scene = scene;
 			OnSets = new bool[10];
 			for (var i = 0; i < 10; i++)
 				OnSets[i] = false;
@@ -485,18 +489,19 @@ namespace KiSSLab
 
 	public class Part
 	{
+		private Scene scene;
 		[ScriptProperty]
 		public List<Cel> Cels { get; set; }
 		public Point[] Positions { get; set; }
-		public Point Position { get { return Positions[Viewer.Scene.Set]; } set { Positions[Viewer.Scene.Set] = value; } }
+		public Point Position { get { return Positions[scene.Set]; } set { Positions[scene.Set] = value; } }
 		public Point[] InitialPositions { get; set; }
-		public Point InitialPosition { get { return InitialPositions[Viewer.Scene.Set]; } set { InitialPositions[Viewer.Scene.Set] = value; } }
+		public Point InitialPosition { get { return InitialPositions[scene.Set]; } set { InitialPositions[scene.Set] = value; } }
 		[ScriptProperty]
 		public int Fix { get; set; }
 		[ScriptProperty]
 		public int InitialFix { get; set; }
 		[ScriptProperty]
-		public bool Locked { get { return Fix >= Viewer.Scene.MaxFix; } set { Fix = value ? Viewer.Scene.MaxFix : 0; } }
+		public bool Locked { get { return Fix >= scene.MaxFix; } set { Fix = value ? scene.MaxFix : 0; } }
 		[ScriptProperty]
 		public string ID { get; set; }
 		public Part LastCollidedWith { get; set; }
@@ -513,8 +518,9 @@ namespace KiSSLab
 			}
 		}
 
-		public Part()
+		public Part(Scene scene)
 		{
+			this.scene = scene;
 			InitialPositions = new Point[10];
 			Positions = new Point[10];
 		}

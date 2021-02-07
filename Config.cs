@@ -27,6 +27,8 @@ namespace Kawa.Configuration
 					continue;
 				var defaultVal = ((SettingAttribute)attribs[0]).Default;
 				var val = GetValue(setting.Name, defaultVal);
+				if (val == null)
+					val = defaultVal;
 				setting.SetValue(this, val, null);
 			}
 		}

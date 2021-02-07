@@ -408,6 +408,8 @@ namespace KiSSLab
 
 		private void Screen_Paint(object sender, PaintEventArgs e)
 		{
+			if (Scene == null)
+				return;
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 			e.Graphics.DrawImage(bitmap, 0, 0, bitmap.Width * Scene.Zoom, bitmap.Height * Scene.Zoom);
 

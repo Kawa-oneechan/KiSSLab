@@ -365,6 +365,8 @@ namespace KiSSLab
 			};
 			foreach (var s in on)
 			{
+				if (!char.IsDigit(s))
+					continue;
 				var i = (int)(s - '0');
 				c.OnSets[i] = true;
 			}

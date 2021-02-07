@@ -828,6 +828,8 @@ namespace KiSSLab
 		public string AutoLoad { get; set; }
 		[Setting(0)]
 		public int Editor { get; set; }
+		[Setting("")]
+		public string AutoCollide { get; set; }
 
 		public MyConfig(string path) : base(path) { }
 	}

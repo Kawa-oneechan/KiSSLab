@@ -29,8 +29,8 @@
 		private void InitializeComponent()
 		{
 			this.panel = new System.Windows.Forms.Panel();
-			this.header = new DarkUI.Controls.DarkLabel();
 			this.rest = new DarkUI.Controls.DarkLabel();
+			this.header = new DarkUI.Controls.DarkLabel();
 			this.panel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -45,6 +45,17 @@
 			this.panel.Size = new System.Drawing.Size(343, 229);
 			this.panel.TabIndex = 2;
 			// 
+			// rest
+			// 
+			this.rest.Dock = System.Windows.Forms.DockStyle.Top;
+			this.rest.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.rest.Location = new System.Drawing.Point(15, 115);
+			this.rest.Name = "rest";
+			this.rest.Size = new System.Drawing.Size(313, 111);
+			this.rest.TabIndex = 1;
+			this.rest.Text = "...";
+			this.rest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
 			// header
 			// 
 			this.header.Dock = System.Windows.Forms.DockStyle.Top;
@@ -57,17 +68,6 @@
 			this.header.TabIndex = 0;
 			this.header.Text = "...";
 			this.header.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			// 
-			// rest
-			// 
-			this.rest.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.rest.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.rest.Location = new System.Drawing.Point(15, 115);
-			this.rest.Name = "rest";
-			this.rest.Size = new System.Drawing.Size(313, 58);
-			this.rest.TabIndex = 1;
-			this.rest.Text = "...";
-			this.rest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// About
 			// 

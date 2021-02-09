@@ -41,9 +41,6 @@
     <Win32Resource>KiSSLab.res</Win32Resource>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DarkUI">
-      <HintPath>.\DarkUI.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -69,6 +66,127 @@
     <Compile Include="ConfigPicker.Designer.cs">
       <DependentUpon>ConfigPicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="DarkUI\Collections\ObservableList.cs" />
+    <Compile Include="DarkUI\Collections\ObservableListModified.cs" />
+    <Compile Include="DarkUI\Config\Colors.cs" />
+    <Compile Include="DarkUI\Config\Consts.cs" />
+    <Compile Include="DarkUI\Controls\DarkButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkButtonStyle.cs" />
+    <Compile Include="DarkUI\Controls\DarkCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkCheckedListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkContentAlignment.cs" />
+    <Compile Include="DarkUI\Controls\DarkContextMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkControlState.cs" />
+    <Compile Include="DarkUI\Controls\DarkDropdownItem.cs" />
+    <Compile Include="DarkUI\Controls\DarkDropdownList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkListItem.cs" />
+    <Compile Include="DarkUI\Controls\DarkListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkNumericUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkScrollBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkScrollBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkScrollOrientation.cs" />
+    <Compile Include="DarkUI\Controls\DarkScrollView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkSectionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkSeparator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkStatusStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkTitle.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\DarkToolStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Controls\ScrollValueEventArgs.cs" />
+    <Compile Include="DarkUI\Extensions\BitmapExtensions.cs" />
+    <Compile Include="DarkUI\Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="DarkUI\Forms\DarkDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Forms\DarkDialog.Designer.cs">
+      <DependentUpon>DarkDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DarkUI\Forms\DarkDialogButton.cs" />
+    <Compile Include="DarkUI\Forms\DarkForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Forms\DarkMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DarkUI\Forms\DarkMessageBox.Designer.cs">
+      <DependentUpon>DarkMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DarkUI\Forms\DarkMessageBoxIcon.cs" />
+    <Compile Include="DarkUI\Icons\DropdownIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DropdownIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DarkUI\Icons\MenuIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MenuIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DarkUI\Icons\MessageBoxIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MessageBoxIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DarkUI\Icons\ScrollIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScrollIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DarkUI\Renderers\DarkMenuRenderer.cs" />
+    <Compile Include="DarkUI\Renderers\DarkToolStripRenderer.cs" />
+    <Compile Include="DarkUI\Win32\ControlScrollFilter.cs" />
+    <Compile Include="DarkUI\Win32\Native.cs" />
+    <Compile Include="DarkUI\Win32\WindowsMessages.cs" />
     <Compile Include="Doll.cs" />
     <Compile Include="Editor.cs">
       <SubType>UserControl</SubType>
@@ -92,6 +210,10 @@
     </Compile>
     <Compile Include="Mix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DarkUI\Icons\DropdownIcons.resx" />
+    <EmbeddedResource Include="DarkUI\Icons\MenuIcons.resx" />
+    <EmbeddedResource Include="DarkUI\Icons\MessageBoxIcons.resx" />
+    <EmbeddedResource Include="DarkUI\Icons\ScrollIcons.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

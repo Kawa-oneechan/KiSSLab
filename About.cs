@@ -24,7 +24,7 @@ namespace KiSSLab
 
 			header.Image = (new Icon(global::KiSSLab.Properties.Resources.app, new Size(64, 64))).ToBitmap();
 			header.Text = Application.ProductName;
-			rest.Text = string.Format("Because KiSS/GS is old and busted, I guess.\r\n\r\nVersion {0}\r\n\r\n© 2021 Firrhna Productions", Application.ProductVersion);
+			rest.Text = string.Format("Because KiSS/GS is old and busted, I guess.\r\n\r\nVersion {0}\r\n\r\n© 2021 Firrhna Productions.\r\nDarkUI by Robin Perris, seasoned to taste.", Application.ProductVersion);
 		}
 	}
 }

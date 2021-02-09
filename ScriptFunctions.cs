@@ -52,6 +52,14 @@ namespace KiSSLab
 			return ret;
 		}
 
+		[ScriptFunction("%")]
+		public object Modulo(params object[] args)
+		{
+			var val = Evaluate<int>(args[0]);
+			var mod = Evaluate<int>(args[1]);
+			return val % mod;
+		}
+
 		[ScriptFunction("=")]
 		public object SetVar(params object[] args)
 		{
@@ -61,6 +69,16 @@ namespace KiSSLab
 				return key;
 			scriptVariables[key] = val;
 			return key;
+		}
+
+		[ScriptFunction("++")]
+		public object Increment(params object[] args)
+		{
+			var key = args[0] as Symbol;
+			var val = (int)scriptVariables[key];
+			val++;
+			scriptVariables[key] = val;
+			return val;
 		}
 
 		[ScriptFunction("==")]
@@ -164,6 +182,15 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
+		public object Cat(params object[] args)
+		{
+			var sb = new StringBuilder();
+			foreach (var arg in args)
+				sb.Append(Evaluate(arg));
+			return sb.ToString();
+		}
+
+		[ScriptFunction]
 		public object If(params object[] args)
 		{
 			var expression = Evaluate<bool>(args[0]);
@@ -250,7 +277,13 @@ namespace KiSSLab
 				var obj = Parts.FirstOrDefault(o => o.ID == objID);
 				if (obj == null)
 					return null;
+				if (celID.Contains('?') || celID.Contains('*'))
+					return obj.Cels.Where(o => o.ID.SplatMatch(celID)).Cast<object>().ToList();
 				return obj.Cels.Where(o => o.ID == celID).Cast<object>().ToList();
+			}
+			else if (id.Contains('?') || id.Contains('*'))
+			{
+				return Cels.Where(o => o.ID.SplatMatch(id)).Cast<object>().ToList();
 			}
 			var cels = Cels.Where(o => o.ID == id).Cast<object>().ToList();
 			if (cels.Count == 0)

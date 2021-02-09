@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -101,6 +102,12 @@ namespace KiSSLab
 				gfx.DrawImage(jango, full, full, GraphicsUnit.Pixel);
 				return boba;
 			}
+		}
+
+		public static bool SplatMatch(this string input, string pattern)
+		{
+			pattern = "^" + Regex.Escape(pattern).Replace("\\?", ".").Replace("\\*", ".*") + "$";
+			return Regex.IsMatch(input, pattern);
 		}
 	}
 }

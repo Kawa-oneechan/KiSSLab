@@ -95,6 +95,66 @@ namespace KiSSLab
 			return key;
 		}
 
+		[ScriptFunction("+=")]
+		public object AddAssign(params object[] args)
+		{
+			var key = Evaluate<Symbol>(args[0]);
+			if (key == "true" || key == "false")
+				return key;
+			var val = (int)scriptVariables[key];
+			foreach (var arg in args.Skip(1))
+				val += Evaluate<int>(arg);
+			scriptVariables[key] = val;
+			return key;
+		}
+
+		[ScriptFunction("-=")]
+		public object SubAssign(params object[] args)
+		{
+			var key = Evaluate<Symbol>(args[0]);
+			if (key == "true" || key == "false")
+				return key;
+			var val = (int)scriptVariables[key];
+			foreach (var arg in args.Skip(1))
+				val -= Evaluate<int>(arg);
+			scriptVariables[key] = val;
+			return key;
+		}
+
+		[ScriptFunction("*=")]
+		public object MulAssign(params object[] args)
+		{
+			var key = Evaluate<Symbol>(args[0]);
+			if (key == "true" || key == "false")
+				return key;
+			var val = (int)scriptVariables[key];
+			foreach (var arg in args.Skip(1))
+				val *= Evaluate<int>(arg);
+			scriptVariables[key] = val;
+			return key;
+		}
+
+		[ScriptFunction("/=")]
+		public object DivAssign(params object[] args)
+		{
+			var key = Evaluate<Symbol>(args[0]);
+			if (key == "true" || key == "false")
+				return key;
+			var val = (int)scriptVariables[key];
+			foreach (var arg in args.Skip(1))
+			{
+				var div = Evaluate<int>(arg);
+				if (div == 0)
+				{
+					val = 0;
+					break;
+				}
+				val /= div;
+			}
+			scriptVariables[key] = val;
+			return key;
+		}
+
 		[ScriptFunction("%=")]
 		public object ModAssign(params object[] args)
 		{
@@ -156,16 +216,24 @@ namespace KiSSLab
 			return a >= b;
 		}
 
-		[ScriptFunction("not")]
+		[ScriptFunction]
 		public object Not(params object[] args)
 		{
 			var a = Evaluate<bool>(args[0]);
 			return !a;
 		}
 
-		//and
-		
-		//or
+		[ScriptFunction]
+		public object And(params object[] args)
+		{
+			return args.All(a => Evaluate<bool>(a));
+		}
+
+		[ScriptFunction]
+		public object Or(params object[] args)
+		{
+			return args.Any(a => Evaluate<bool>(a));
+		}
 
 		/// <summary>
 		/// Returns true if the argument is null, or an empty list.

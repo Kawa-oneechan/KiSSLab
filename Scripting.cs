@@ -179,15 +179,18 @@ namespace KiSSLab
 		public T Evaluate<T>(object thing)
 		{
 			var ret = Evaluate(thing);
-			if (typeof(T).Name == "Boolean" && ret is int)
+			if (typeof(T).Name == "Boolean")
 			{
-				ret = (int)ret >= 1;
+				if (ret is int)
+					ret = (int)ret >= 1;
+				else if (ret is List<object>)
+					ret = ((List<object>)ret).Count > 0;
 			}
-			if (typeof(T).Name == "List`1" && ret.GetType().Name == "List`1")
+			else if (typeof(T).Name == "List`1" && ret.GetType().Name == "List`1")
 			{
 				ret = ConvertSafeListToObj(ret);
 			}
-			if (!(ret is T))
+			else if (!(ret is T))
 			{
 				throw new InvalidCastException(string.Format("Evaluate<{0}> got a {1} instead.", typeof(T).Name, ret.GetType().Name));
 			}

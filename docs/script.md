@@ -23,7 +23,7 @@ In the function list, the following types are used:
 
 | Name          | Example     | Description                                                  |
 | ------------- | ----------- | ------------------------------------------------------------ |
-| `bool`        | `true`      | The symbol `true` or `false`, or a number, where 0 is `false` and 1 or higher is `true`. |
+| `bool`        | `true`      | The symbol `true` or `false`, or a number, where 0 is `false` and 1 or higher is `true`, or a list, where the empty list is `false`. |
 | `cel or part` |             | The ID of a cel or part, or an object reference to a cel, part, or list of either. |
 | `cel`         | `"bangs1"`  | The ID of a cel, or an object reference to a cel or list of cels. |
 | `list`        |             | An object reference to a list.                               |
@@ -50,6 +50,10 @@ Sets the specified variable, a symbol that is not already a command's name, to a
 `(<operator> <number> <number>)`
 
 The comparison operations `==`, `!=`, `<`, `<=`, `>`, and `>=` are available, and compare any two expression that evaluate to numbers with each other, returning `true` or `false` accordingly.
+
+`(and <numbers>)`
+
+Returns `true` if *all* operands are truthy. Evaluates each operand in turn until one is not truthy. See also `or`.
 
 `(altmap <cel or part>)`
 
@@ -142,6 +146,10 @@ Displays the given string (or string representation of any value, really) in a m
 `(nummapped <cel or part>)`
 
 If the argument is a cel, returns 1 if it's mapped, 0 otherwise. If the argument is a part, returns the number of component cels that are mapped.
+
+`(or <numbers>)`
+
+Returns `true` if *any* operands are truthy. Evaluates each operand in turn until one is truthy. See also `and`.
 
 `(part <part>)`
 

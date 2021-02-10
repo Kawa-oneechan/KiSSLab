@@ -493,7 +493,8 @@ namespace KiSSLab
 				Colors.LightBackground = Color.FromKnownColor(KnownColor.Window);
 				Colors.LighterBackground = Color.FromKnownColor(KnownColor.Window);
 				Colors.LightestBackground = Color.FromKnownColor(KnownColor.Window);
-				Colors.LightBorder = Color.FromKnownColor(KnownColor.WindowFrame);
+				Colors.LightBorder = Color.FromKnownColor(KnownColor.ControlLight);
+				Colors.DarkBorder = Color.FromKnownColor(KnownColor.ControlDark);
 				Colors.LightText = Color.FromKnownColor(KnownColor.ControlText);
 				Colors.DisabledText = Color.FromKnownColor(KnownColor.GrayText);
 				Colors.BlueHighlight = Color.FromKnownColor(KnownColor.HotTrack);

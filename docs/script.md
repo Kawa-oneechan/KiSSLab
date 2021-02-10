@@ -41,11 +41,11 @@ This means, of course, that these objects have properties, and you can access th
 
 `(<operator> <numbers>)`
 
-The math operations `+`, `-`, `/`, and `*` are available, and take any number of operands, which may be variables with numerical values, or function calls that return numbers.
+The math operations `+`, `-`, `/`, and `*` are available, and take any number of operands, which may be variables with numerical values, or function calls that return numbers, and then returns that number. The `%` modulo operator takes only two operands, while `++` and `--` take only one operand, a variable, and return that same variable.
 
 `(= <variable> <anything>)`
 
-Sets the specified variable, a symbol that is not already a command's name, to any legally-expressible value. Though `true` and `false` are technically variables, they are read-only.
+Sets the specified variable, a symbol that is not already a command's name, to any legally-expressible value. Though `true` and `false` are technically variables, they are read-only. There's also `%=`, which takes a variable and an operand, then sets that variable to itself modulo the operand.
 
 `(<operator> <number> <number>)`
 

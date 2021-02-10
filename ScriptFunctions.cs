@@ -75,10 +75,37 @@ namespace KiSSLab
 		public object Increment(params object[] args)
 		{
 			var key = args[0] as Symbol;
+			if (key == "true" || key == "false")
+				return key;
 			var val = (int)scriptVariables[key];
 			val++;
 			scriptVariables[key] = val;
-			return val;
+			return key;
+		}
+
+		[ScriptFunction("--")]
+		public object Decrement(params object[] args)
+		{
+			var key = args[0] as Symbol;
+			if (key == "true" || key == "false")
+				return key;
+			var val = (int)scriptVariables[key];
+			val--;
+			scriptVariables[key] = val;
+			return key;
+		}
+
+		[ScriptFunction("%=")]
+		public object ModAssign(params object[] args)
+		{
+			var key = Evaluate<Symbol>(args[0]);
+			if (key == "true" || key == "false")
+				return key;
+			var mod = Evaluate<int>(args[1]);
+			var val = (int)scriptVariables[key];
+			val %= mod;
+			scriptVariables[key] = val;
+			return key;
 		}
 
 		[ScriptFunction("==")]

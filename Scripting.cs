@@ -213,7 +213,13 @@ namespace KiSSLab
 			var somethingCollided = false;
 
 			if (held == null)
-				return;
+			{
+				if (cel == null)
+					return;
+				held = cel.Part;
+				if (held == null)
+					return;
+			}
 
 			//FIXDROP: applies to FIXED
 			//DROP: applies to all with a LESS THAN MAX FIX

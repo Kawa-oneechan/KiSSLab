@@ -143,7 +143,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DarkUI\Controls\ScrollValueEventArgs.cs" />
-    <Compile Include="DarkUI\Extensions\BitmapExtensions.cs" />
     <Compile Include="DarkUI\Extensions\IEnumerableExtensions.cs" />
     <Compile Include="DarkUI\Forms\DarkDialog.cs">
       <SubType>Form</SubType>
@@ -184,9 +183,6 @@
     </Compile>
     <Compile Include="DarkUI\Renderers\DarkMenuRenderer.cs" />
     <Compile Include="DarkUI\Renderers\DarkToolStripRenderer.cs" />
-    <Compile Include="DarkUI\Win32\ControlScrollFilter.cs" />
-    <Compile Include="DarkUI\Win32\Native.cs" />
-    <Compile Include="DarkUI\Win32\WindowsMessages.cs" />
     <Compile Include="Doll.cs" />
     <Compile Include="Editor.cs">
       <SubType>UserControl</SubType>
@@ -213,7 +209,9 @@
     <EmbeddedResource Include="DarkUI\Icons\DropdownIcons.resx" />
     <EmbeddedResource Include="DarkUI\Icons\MenuIcons.resx" />
     <EmbeddedResource Include="DarkUI\Icons\MessageBoxIcons.resx" />
-    <EmbeddedResource Include="DarkUI\Icons\ScrollIcons.resx" />
+    <EmbeddedResource Include="DarkUI\Icons\ScrollIcons.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

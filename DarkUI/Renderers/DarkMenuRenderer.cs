@@ -111,6 +111,8 @@ namespace DarkUI.Renderers
             {
                 
                 var bgColor = e.Item.Selected ? Colors.GreyHighlight : e.Item.BackColor;
+                //KAWA: hack for caption thingy
+                if (e.Item.Tag != null && e.Item.Tag.ToString() == "header") bgColor = e.Item.BackColor;
 
                 // Normal item
                 var rect = new Rectangle(2, 0, e.Item.Width - 3, e.Item.Height);

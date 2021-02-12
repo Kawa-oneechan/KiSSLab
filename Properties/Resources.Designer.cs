@@ -73,9 +73,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Colors {
+        internal static System.Drawing.Bitmap Colors_Dark {
             get {
-                object obj = ResourceManager.GetObject("Colors", resourceCulture);
+                object obj = ResourceManager.GetObject("Colors_Dark", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Copy {
+        internal static System.Drawing.Bitmap Colors_Light {
             get {
-                object obj = ResourceManager.GetObject("Copy", resourceCulture);
+                object obj = ResourceManager.GetObject("Colors_Light", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap CycleSets {
+        internal static System.Drawing.Bitmap Copy_Dark {
             get {
-                object obj = ResourceManager.GetObject("CycleSets", resourceCulture);
+                object obj = ResourceManager.GetObject("Copy_Dark", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Exit {
+        internal static System.Drawing.Bitmap Copy_Light {
             get {
-                object obj = ResourceManager.GetObject("Exit", resourceCulture);
+                object obj = ResourceManager.GetObject("Copy_Light", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Grid {
+        internal static System.Drawing.Bitmap CycleSets_Dark {
             get {
-                object obj = ResourceManager.GetObject("Grid", resourceCulture);
+                object obj = ResourceManager.GetObject("CycleSets_Dark", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Highlight {
+        internal static System.Drawing.Bitmap CycleSets_Light {
             get {
-                object obj = ResourceManager.GetObject("Highlight", resourceCulture);
+                object obj = ResourceManager.GetObject("CycleSets_Light", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Lock {
+        internal static System.Drawing.Bitmap Exit_Dark {
             get {
-                object obj = ResourceManager.GetObject("Lock", resourceCulture);
+                object obj = ResourceManager.GetObject("Exit_Dark", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +143,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Open {
+        internal static System.Drawing.Bitmap Exit_Light {
             get {
-                object obj = ResourceManager.GetObject("Open", resourceCulture);
+                object obj = ResourceManager.GetObject("Exit_Light", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +153,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Properties {
+        internal static System.Drawing.Bitmap Grid_Dark {
             get {
-                object obj = ResourceManager.GetObject("Properties", resourceCulture);
+                object obj = ResourceManager.GetObject("Grid_Dark", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +163,9 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Reset {
+        internal static System.Drawing.Bitmap Grid_Light {
             get {
-                object obj = ResourceManager.GetObject("Reset", resourceCulture);
+                object obj = ResourceManager.GetObject("Grid_Light", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -173,9 +173,139 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Unlock {
+        internal static System.Drawing.Bitmap Highlight_Dark {
             get {
-                object obj = ResourceManager.GetObject("Unlock", resourceCulture);
+                object obj = ResourceManager.GetObject("Highlight_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Highlight_Light {
+            get {
+                object obj = ResourceManager.GetObject("Highlight_Light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Lock_Dark {
+            get {
+                object obj = ResourceManager.GetObject("Lock_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Lock_Light {
+            get {
+                object obj = ResourceManager.GetObject("Lock_Light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Open_Dark {
+            get {
+                object obj = ResourceManager.GetObject("Open_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Open_Light {
+            get {
+                object obj = ResourceManager.GetObject("Open_Light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Properties_Dark {
+            get {
+                object obj = ResourceManager.GetObject("Properties_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Properties_Light {
+            get {
+                object obj = ResourceManager.GetObject("Properties_Light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Reset_Dark {
+            get {
+                object obj = ResourceManager.GetObject("Reset_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Reset_Light {
+            get {
+                object obj = ResourceManager.GetObject("Reset_Light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Undo_Dark {
+            get {
+                object obj = ResourceManager.GetObject("Undo_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Undo_Light {
+            get {
+                object obj = ResourceManager.GetObject("Undo_Light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Unlock_Dark {
+            get {
+                object obj = ResourceManager.GetObject("Unlock_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Unlock_Light {
+            get {
+                object obj = ResourceManager.GetObject("Unlock_Light", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

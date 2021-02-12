@@ -19,7 +19,6 @@ namespace KiSSLab
 		private Part held, dropped;
 		private Point heldOffset, fix;
 		private Point lastClick;
-		private Panel debug;
 
 		public Scene Scene;
 
@@ -31,25 +30,8 @@ namespace KiSSLab
 		public static SoundSystem Sound;
 		public static MyConfig Config;
 
-		//[System.Runtime.InteropServices.DllImport("Shell32.dll")]
-		//private static extern int SHChangeNotify(int eventId, int flags, IntPtr item1, IntPtr item2);
-
 		public Viewer(string[] args)
 		{
-			/*
-			var reg = (string)Registry.GetValue(@"HKEY_CLASSES_ROOT\.lcnf", "", "");
-			if (reg == null)
-			{
-				Registry.SetValue(@"HKEY_CLASSES_ROOT\.lcnf", "", "KiSSThingLCNF");
-				var myThing = Registry.ClassesRoot.CreateSubKey("KiSSThingLCNF");
-				myThing.SetValue("", "Kawa's KiSS Thing");
-				var openCommand = myThing.CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command");
-				openCommand.SetValue("", string.Format("\"{0}\" \"%1\"", Application.ExecutablePath));
-				myThing.CreateSubKey("DefaultIcon").SetValue("", string.Format("\"{0},1\"", Application.ExecutablePath));
-				SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
-			}
-			*/
-
 			InitializeComponent();
 
 			Config = new MyConfig(@"Kawa\KiSS Thing");
@@ -139,28 +121,7 @@ namespace KiSSLab
 				});
 			}
 			propertiesToolStripButton.Checked = Config.Editor == 1;
-
-			foreach (var e in editToolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
-			{
-				var newE = new ToolStripMenuItem()
-				{
-					Text = e.Text,
-					Image = e.Image,
-				};
-				//ugly hack lol
-				newE.Click += (s, ea) => {
-					for (var i = 0; i < editToolStripMenuItem.DropDownItems.Count; i++)
-					{
-						if (editToolStripMenuItem.DropDownItems[i].Text == ((ToolStripMenuItem)s).Text)
-						{
-							editToolStripMenuItem.DropDownItems[i].PerformClick();
-							break;
-						}
-					}
-				};
-				celContextMenu.Items.Add(newE);
-			}
-
+			
 			editor.Visible = Config.Editor == 1;
 			if (!editor.Visible)
 				screenContainerPanel.Width += editor.Width;
@@ -242,10 +203,8 @@ namespace KiSSLab
 			var part = Scene.GetPartFromPoint(realLocation, out cel);
 			if (part != null)
 			{
-				unfixToolStripMenuItem.Enabled = part.Locked;
-				refixToolStripMenuItem.Enabled = !part.Locked;
-				celContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(unfixToolStripMenuItem) + 2].Enabled = part.Locked;
-				celContextMenu.Items[editToolStripMenuItem.DropDownItems.IndexOf(refixToolStripMenuItem) + 2].Enabled = !part.Locked;
+				unfixToolStripMenuItem.Enabled = unfixContextMenuItem.Enabled = part.Locked;
+				refixToolStripMenuItem.Enabled = refixContextMenuItem.Enabled = !part.Locked;
 			}
 
 			editor.Pick(part, cel);
@@ -332,7 +291,7 @@ namespace KiSSLab
 			{
 				mainStatusStrip.Items[0].Text = string.Format("{0} » {1}", statusPart.ID, cel.ID);
 				mainStatusStrip.Items[1].Text = string.Format("{0} by {1}", statusPart.Position.X, statusPart.Position.Y);
-				mainStatusStrip.Items[2].Image = (statusPart.Locked || statusPart.Fix > 0) ? global::KiSSLab.Properties.Resources.Lock : global::KiSSLab.Properties.Resources.Unlock;
+				mainStatusStrip.Items[2].Image = (statusPart.Locked || statusPart.Fix > 0) ? refixToolStripMenuItem.Image : unfixToolStripMenuItem.Image;
 				mainStatusStrip.Items[3].Text = statusPart.Fix.ToString();
 			}
 			else
@@ -484,27 +443,40 @@ namespace KiSSLab
 			var wantLight = (int)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0);
 			if (wantLight == 1)
 			{
-				Colors.GreyBackground = Color.FromKnownColor(KnownColor.Control);
-				Colors.HeaderBackground = Color.FromKnownColor(KnownColor.Control);
-				Colors.BlueBackground = Color.FromKnownColor(KnownColor.ActiveCaption);
-				Colors.DarkBlueBackground = Color.FromKnownColor(KnownColor.ActiveCaption);
-				Colors.DarkBackground = Color.FromKnownColor(KnownColor.Control);
-				Colors.MediumBackground = Color.FromKnownColor(KnownColor.Control);
-				Colors.LightBackground = Color.FromKnownColor(KnownColor.Window);
-				Colors.LighterBackground = Color.FromKnownColor(KnownColor.Window);
-				Colors.LightestBackground = Color.FromKnownColor(KnownColor.Window);
-				Colors.LightBorder = Color.FromKnownColor(KnownColor.ControlLight);
-				Colors.DarkBorder = Color.FromKnownColor(KnownColor.ControlDark);
-				Colors.LightText = Color.FromKnownColor(KnownColor.ControlText);
-				Colors.DisabledText = Color.FromKnownColor(KnownColor.GrayText);
-				Colors.BlueHighlight = Color.FromKnownColor(KnownColor.HotTrack);
-				Colors.BlueSelection = Color.FromKnownColor(KnownColor.Highlight);
-				Colors.GreyHighlight = Color.FromKnownColor(KnownColor.ControlDark);
-				Colors.GreySelection = Color.FromKnownColor(KnownColor.ControlDark);
-				Colors.DarkGreySelection = Color.FromKnownColor(KnownColor.ControlDarkDark);
-				Colors.DarkBlueBorder = Color.FromKnownColor(KnownColor.WindowFrame);
-				Colors.LightBlueBorder = Color.FromKnownColor(KnownColor.ActiveCaption);
-				Colors.DarkBlueBorder = Color.FromKnownColor(KnownColor.Highlight);
+				Colors.GreyBackground = Color.FromArgb(240, 240, 240);
+				Colors.HeaderBackground = Color.FromArgb(240, 240, 240);
+				Colors.BlueBackground = Color.FromArgb(153, 180, 209);
+				Colors.DarkBlueBackground = Color.FromArgb(153, 180, 209);
+				Colors.DarkBackground = Color.FromArgb(240, 240, 240);
+				Colors.MediumBackground = Color.FromArgb(240, 240, 240);
+				Colors.LightBackground = Color.FromArgb(255, 255, 255);
+				Colors.LighterBackground = Color.FromArgb(255, 255, 255);
+				Colors.LightestBackground = Color.FromArgb(255, 255, 255);
+				Colors.LightBorder = Color.FromArgb(227, 227, 227);
+				Colors.DarkBorder = Color.FromArgb(160, 160, 160);
+				Colors.LightText = Color.FromArgb(0, 0, 0);
+				Colors.DisabledText = Color.FromArgb(109, 109, 109);
+				Colors.BlueHighlight = Color.FromArgb(0, 102, 204);
+				Colors.BlueSelection = Color.FromArgb(0, 120, 215);
+				Colors.GreyHighlight = Color.FromArgb(160, 160, 160);
+				Colors.GreySelection = Color.FromArgb(160, 160, 160);
+				Colors.DarkGreySelection = Color.FromArgb(105, 105, 105);
+				Colors.DarkBlueBorder = Color.FromArgb(0, 120, 215);
+				Colors.LightBlueBorder = Color.FromArgb(153, 180, 209);
+				Colors.DarkBlueBorder = Color.FromArgb(0, 120, 215);
+
+				openToolStripButton.Image = openToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Open_Light;
+				highlightToolStripButton.Image = showHighlightToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Highlight_Light;
+				gridToolStripButton.Image = alignToGridToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Grid_Light;
+				propertiesToolStripButton.Image = propertiesToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Properties_Light;
+				nextSetToolStripButton.Image = global::KiSSLab.Properties.Resources.CycleSets_Light;
+				nextPalToolStripButton.Image = global::KiSSLab.Properties.Resources.Colors_Light;
+				copyCelToolStripMenuItem.Image = copyCelContextMenuItem.Image = global::KiSSLab.Properties.Resources.Copy_Light;
+				exitToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Exit_Light;
+				reopenToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Reset_Light;
+				resetPositionToolStripMenuItem.Image = resetPositionContextMenuItem.Image = global::KiSSLab.Properties.Resources.Undo_Light;
+				unfixToolStripMenuItem.Image = unfixContextMenuItem.Image = global::KiSSLab.Properties.Resources.Unlock_Light;
+				refixToolStripMenuItem.Image = refixContextMenuItem.Image = global::KiSSLab.Properties.Resources.Lock_Light;
 			}
 			else
 			{
@@ -529,6 +501,19 @@ namespace KiSSLab
 				Colors.DarkBlueBorder = Color.FromArgb(51, 61, 78);
 				Colors.LightBlueBorder = Color.FromArgb(86, 97, 114);
 				Colors.ActiveControl = Color.FromArgb(159, 178, 196);
+
+				openToolStripButton.Image = openToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Open_Dark;
+				highlightToolStripButton.Image = showHighlightToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Highlight_Dark;
+				gridToolStripButton.Image = alignToGridToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Grid_Dark;
+				propertiesToolStripButton.Image = propertiesToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Properties_Dark;
+				nextSetToolStripButton.Image = global::KiSSLab.Properties.Resources.CycleSets_Dark;
+				nextPalToolStripButton.Image = global::KiSSLab.Properties.Resources.Colors_Dark;
+				copyCelToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Copy_Dark;
+				exitToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Exit_Dark;
+				reopenToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Reset_Dark;
+				resetPositionToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Undo_Dark;
+				unfixToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Unlock_Dark;
+				refixToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Lock_Dark;
 			}
 			editor.UpdateColors();
 			foreach (var dd in mainMenuStrip.Items.OfType<ToolStripMenuItem>())
@@ -548,7 +533,13 @@ namespace KiSSLab
 				dd.BackColor = Colors.GreyBackground;
 				dd.ForeColor = Colors.LightText;
 			}
+			foreach (var dd in celContextMenu.Items.OfType<ToolStripMenuItem>().Skip(1))
+			{
+				dd.BackColor = Colors.GreyBackground;
+			}
 			screenContainerPanel.BackColor = Colors.DarkBackground;
+			celMenuHeader.BackColor = Colors.BlueBackground;
+			celMenuHeader.ForeColor = Colors.LightText;
 		}
 
 		protected override void WndProc(ref Message m)
@@ -617,8 +608,8 @@ namespace KiSSLab
 
 			for (var i = 0; i < 10; i++)
 			{
-				mainToolStrip.Items.Find("s" + i.ToString(), false)[0].Visible = i < Scene.Sets;
-				mainToolStrip.Items.Find("p" + i.ToString(), false)[0].Visible = i < Scene.Palettes;
+				mainToolStrip.Items.Find("s" + i.ToString(), false)[0].Enabled = i < Scene.Sets;
+				mainToolStrip.Items.Find("p" + i.ToString(), false)[0].Enabled = i < Scene.Palettes;
 				((ToolStripButton)mainToolStrip.Items.Find("s" + i.ToString(), false)[0]).Checked = i == 0;
 				((ToolStripButton)mainToolStrip.Items.Find("p" + i.ToString(), false)[0]).Checked = i == 0;
 			}

@@ -106,19 +106,6 @@ namespace DarkUI.Renderers
             }
         }
 
-        protected override void OnRenderGrip(ToolStripGripRenderEventArgs e)
-        {
-            if (e.GripStyle == ToolStripGripStyle.Hidden)
-                return;
-
-            var g = e.Graphics;
-
-            using (var img = MenuIcons.grip.SetColor(Colors.LightBorder))
-            {
-                g.DrawImageUnscaled(img, new Point(e.AffectedBounds.Left, e.AffectedBounds.Top));
-            }
-        }
-
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
             var g = e.Graphics;

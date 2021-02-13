@@ -58,7 +58,7 @@ namespace DarkUI.Renderers
         {
             var g = e.Graphics;
 
-            var rect = new Rectangle(0, 1, e.Item.Width, e.Item.Height - 2);
+			var rect = new Rectangle(0, 0, e.Item.Width, 23); //e.Item.Height - 2);
 
             if (e.Item.Selected || e.Item.Pressed)
             {
@@ -80,7 +80,7 @@ namespace DarkUI.Renderers
                     }
                 }
 
-                if (castItem.Checked && castItem.Selected)
+                if (castItem.Selected)
                 {
                     var modRect = new Rectangle(rect.Left, rect.Top, rect.Width - 1, rect.Height - 1);
                     using (var p = new Pen(Colors.GreyHighlight))

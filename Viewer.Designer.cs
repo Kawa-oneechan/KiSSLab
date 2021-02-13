@@ -37,10 +37,10 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.resetPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.copyCelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.unfixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.refixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.resetPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showHighlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.alignToGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,6 +58,7 @@
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.nextPalToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+			this.nextZoomToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.mainStatusStrip = new DarkUI.Controls.DarkStatusStrip();
 			this.currentToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.positionToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -68,10 +69,10 @@
 			this.celContextMenu = new DarkUI.Controls.DarkContextMenu();
 			this.celMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+			this.resetPositionContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.copyCelContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.unfixContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.refixContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.resetPositionContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editor = new KiSSLab.Editor();
 			this.mainMenuStrip.SuspendLayout();
 			this.mainToolStrip.SuspendLayout();
@@ -182,6 +183,17 @@
 			this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
 			this.editToolStripMenuItem.Text = "&Edit";
 			// 
+			// resetPositionToolStripMenuItem
+			// 
+			this.resetPositionToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.resetPositionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.resetPositionToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Undo_Dark;
+			this.resetPositionToolStripMenuItem.Name = "resetPositionToolStripMenuItem";
+			this.resetPositionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+			this.resetPositionToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+			this.resetPositionToolStripMenuItem.Text = "&Reset Position";
+			this.resetPositionToolStripMenuItem.Click += new System.EventHandler(this.Reset_Click);
+			// 
 			// copyCelToolStripMenuItem
 			// 
 			this.copyCelToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -212,17 +224,6 @@
 			this.refixToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
 			this.refixToolStripMenuItem.Text = "Refix";
 			this.refixToolStripMenuItem.Click += new System.EventHandler(this.Refix_Click);
-			// 
-			// resetPositionToolStripMenuItem
-			// 
-			this.resetPositionToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.resetPositionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.resetPositionToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Undo_Dark;
-			this.resetPositionToolStripMenuItem.Name = "resetPositionToolStripMenuItem";
-			this.resetPositionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-			this.resetPositionToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-			this.resetPositionToolStripMenuItem.Text = "&Reset Position";
-			this.resetPositionToolStripMenuItem.Click += new System.EventHandler(this.Reset_Click);
 			// 
 			// toolsToolStripMenuItem
 			// 
@@ -303,7 +304,8 @@
             this.nextSetToolStripButton,
             this.toolStripSeparator4,
             this.nextPalToolStripButton,
-            this.toolStripSeparator5});
+            this.toolStripSeparator5,
+            this.nextZoomToolStripButton});
 			this.mainToolStrip.Location = new System.Drawing.Point(0, 24);
 			this.mainToolStrip.Name = "mainToolStrip";
 			this.mainToolStrip.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
@@ -412,6 +414,18 @@
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
 			this.toolStripSeparator5.Size = new System.Drawing.Size(6, 26);
 			// 
+			// nextZoomToolStripButton
+			// 
+			this.nextZoomToolStripButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.nextZoomToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.nextZoomToolStripButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.nextZoomToolStripButton.Image = global::KiSSLab.Properties.Resources.Zoom_Light;
+			this.nextZoomToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.nextZoomToolStripButton.Name = "nextZoomToolStripButton";
+			this.nextZoomToolStripButton.Size = new System.Drawing.Size(23, 23);
+			this.nextZoomToolStripButton.Text = "Next zoom";
+			this.nextZoomToolStripButton.Click += new System.EventHandler(this.NextZoom_Click);
+			// 
 			// mainStatusStrip
 			// 
 			this.mainStatusStrip.AutoSize = false;
@@ -519,6 +533,17 @@
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
 			this.toolStripSeparator6.Size = new System.Drawing.Size(186, 6);
 			// 
+			// resetPositionContextMenuItem
+			// 
+			this.resetPositionContextMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.resetPositionContextMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.resetPositionContextMenuItem.Image = global::KiSSLab.Properties.Resources.Undo_Dark;
+			this.resetPositionContextMenuItem.Name = "resetPositionContextMenuItem";
+			this.resetPositionContextMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+			this.resetPositionContextMenuItem.Size = new System.Drawing.Size(189, 22);
+			this.resetPositionContextMenuItem.Text = "&Reset Position";
+			this.resetPositionContextMenuItem.Click += new System.EventHandler(this.Reset_Click);
+			// 
 			// copyCelContextMenuItem
 			// 
 			this.copyCelContextMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -549,17 +574,6 @@
 			this.refixContextMenuItem.Size = new System.Drawing.Size(189, 22);
 			this.refixContextMenuItem.Text = "Refix";
 			this.refixContextMenuItem.Click += new System.EventHandler(this.Refix_Click);
-			// 
-			// resetPositionContextMenuItem
-			// 
-			this.resetPositionContextMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.resetPositionContextMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.resetPositionContextMenuItem.Image = global::KiSSLab.Properties.Resources.Undo_Dark;
-			this.resetPositionContextMenuItem.Name = "resetPositionContextMenuItem";
-			this.resetPositionContextMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-			this.resetPositionContextMenuItem.Size = new System.Drawing.Size(189, 22);
-			this.resetPositionContextMenuItem.Text = "&Reset Position";
-			this.resetPositionContextMenuItem.Click += new System.EventHandler(this.Reset_Click);
 			// 
 			// editor
 			// 
@@ -658,5 +672,6 @@
 		private System.Windows.Forms.ToolStripMenuItem refixContextMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem resetPositionContextMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+		private System.Windows.Forms.ToolStripButton nextZoomToolStripButton;
 	}
 }

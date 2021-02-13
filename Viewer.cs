@@ -98,7 +98,7 @@ namespace KiSSLab
 					Checked = (i == 0),
 				});
 			}
-			after++;
+			after = mainToolStrip.Items.IndexOf(nextZoomToolStripButton);
 			for (var i = 1; i <= 3; i++)
 			{
 				after++;
@@ -441,6 +441,11 @@ namespace KiSSLab
 		private void UpdateColors()
 		{
 			var wantLight = (int)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0);
+			
+			//Logic: AppsUseLightTheme is TRUE for LIGHT. Config.ForcedLight is 0 for MATCH, 1 for LIGHT, 2 for DARK so kinda the opposite.
+			if (Config.ForcedLight != 0)
+				wantLight = (Config.ForcedLight - 1) ^ 1;
+
 			if (wantLight == 1)
 			{
 				Colors.GreyBackground = Color.FromArgb(240, 240, 240);
@@ -775,6 +780,18 @@ namespace KiSSLab
 			((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
 		}
 
+		private void NextZoom_Click(object sender, EventArgs e)
+		{
+			((ToolStripButton)mainToolStrip.Items.Find("z" + Config.ZoomLevel.ToString(), false)[0]).Checked = false;
+			Config.ZoomLevel++;
+			if (Config.ZoomLevel == 4) Config.ZoomLevel = 1;
+			screenPictureBox.ClientSize = new Size(bitmap.Width * Config.ZoomLevel, bitmap.Height * Config.ZoomLevel);
+			((ToolStripButton)mainToolStrip.Items.Find("z" + Config.ZoomLevel.ToString(), false)[0]).Checked = true;
+			if (Scene != null) Scene.Zoom = Config.ZoomLevel;
+			Viewer_Resize(null, null);
+			DrawScene();
+		}
+
 		private void ShowEditor_Click(object sender, EventArgs e)
 		{
 			if (sender == propertiesToolStripMenuItem)
@@ -801,7 +818,6 @@ namespace KiSSLab
 			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 			((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
 		}
-
 	}
 
 	public class MyConfig : RegistryConfig
@@ -824,6 +840,8 @@ namespace KiSSLab
 		public int Editor { get; set; }
 		[Setting("")]
 		public string AutoCollide { get; set; }
+		[Setting(0)]
+		public int ForcedLight { get; set; }
 
 		public MyConfig(string path) : base(path) { }
 	}

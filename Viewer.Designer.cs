@@ -58,7 +58,8 @@
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.nextPalToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-			this.nextZoomToolStripButton = new System.Windows.Forms.ToolStripButton();
+			this.zoomToolStripLabel = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripZoomBar = new KiSSLab.ToolStripZoomBarItem();
 			this.mainStatusStrip = new DarkUI.Controls.DarkStatusStrip();
 			this.currentToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.positionToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -305,7 +306,8 @@
             this.toolStripSeparator4,
             this.nextPalToolStripButton,
             this.toolStripSeparator5,
-            this.nextZoomToolStripButton});
+            this.zoomToolStripLabel,
+            this.toolStripZoomBar});
 			this.mainToolStrip.Location = new System.Drawing.Point(0, 24);
 			this.mainToolStrip.Name = "mainToolStrip";
 			this.mainToolStrip.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
@@ -414,17 +416,22 @@
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
 			this.toolStripSeparator5.Size = new System.Drawing.Size(6, 26);
 			// 
-			// nextZoomToolStripButton
+			// zoomToolStripLabel
 			// 
-			this.nextZoomToolStripButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-			this.nextZoomToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.nextZoomToolStripButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-			this.nextZoomToolStripButton.Image = global::KiSSLab.Properties.Resources.Zoom_Light;
-			this.nextZoomToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.nextZoomToolStripButton.Name = "nextZoomToolStripButton";
-			this.nextZoomToolStripButton.Size = new System.Drawing.Size(23, 23);
-			this.nextZoomToolStripButton.Text = "Next zoom";
-			this.nextZoomToolStripButton.Click += new System.EventHandler(this.NextZoom_Click);
+			this.zoomToolStripLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.zoomToolStripLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+			this.zoomToolStripLabel.Image = global::KiSSLab.Properties.Resources.Zoom_Light;
+			this.zoomToolStripLabel.Name = "zoomToolStripLabel";
+			this.zoomToolStripLabel.Size = new System.Drawing.Size(16, 23);
+			// 
+			// toolStripZoomBar
+			// 
+			this.toolStripZoomBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+			this.toolStripZoomBar.Name = "toolStripZoomBar";
+			this.toolStripZoomBar.Size = new System.Drawing.Size(104, 23);
+			this.toolStripZoomBar.ToolTipText = "Zoom level";
+			this.toolStripZoomBar.Value = 1;
+			this.toolStripZoomBar.ValueChanged += new System.EventHandler(this.toolStripZoomBar_ValueChanged);
 			// 
 			// mainStatusStrip
 			// 
@@ -672,6 +679,7 @@
 		private System.Windows.Forms.ToolStripMenuItem refixContextMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem resetPositionContextMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-		private System.Windows.Forms.ToolStripButton nextZoomToolStripButton;
+		private ToolStripZoomBarItem toolStripZoomBar;
+		private System.Windows.Forms.ToolStripLabel zoomToolStripLabel;
 	}
 }

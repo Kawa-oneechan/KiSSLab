@@ -98,30 +98,10 @@ namespace KiSSLab
 					Checked = (i == 0),
 				});
 			}
-			after = mainToolStrip.Items.IndexOf(nextZoomToolStripButton);
-			for (var i = 1; i <= 3; i++)
-			{
-				after++;
-				mainToolStrip.Items.Insert(after, new ToolStripButton(
-					string.Format("×{0}", i), null, (s, e) =>
-					{
-						((ToolStripButton)mainToolStrip.Items.Find("z" + Config.ZoomLevel.ToString(), false)[0]).Checked = false;
-						Config.ZoomLevel = int.Parse(((ToolStripButton)s).Text.Substring(1));
-						screenPictureBox.ClientSize = new Size(bitmap.Width * Config.ZoomLevel, bitmap.Height * Config.ZoomLevel);
-						((ToolStripButton)s).Checked = true;
-						if (Scene != null) Scene.Zoom = Config.ZoomLevel;
-						Viewer_Resize(null, null);
-						DrawScene();
-					}, "z" + i.ToString()
-				)
-				{
-					ToolTipText = string.Format("Set zoom level to {0}", i),
-					DisplayStyle = ToolStripItemDisplayStyle.Text,
-					Checked = (i == Config.ZoomLevel),
-				});
-			}
 			propertiesToolStripButton.Checked = Config.Editor == 1;
-			
+
+			toolStripZoomBar.Value = Config.ZoomLevel;
+
 			editor.Visible = Config.Editor == 1;
 			if (!editor.Visible)
 				screenContainerPanel.Width += editor.Width;
@@ -482,6 +462,7 @@ namespace KiSSLab
 				resetPositionToolStripMenuItem.Image = resetPositionContextMenuItem.Image = global::KiSSLab.Properties.Resources.Undo_Light;
 				unfixToolStripMenuItem.Image = unfixContextMenuItem.Image = global::KiSSLab.Properties.Resources.Unlock_Light;
 				refixToolStripMenuItem.Image = refixContextMenuItem.Image = global::KiSSLab.Properties.Resources.Lock_Light;
+				zoomToolStripLabel.Image = global::KiSSLab.Properties.Resources.Zoom_Light;
 			}
 			else
 			{
@@ -519,6 +500,7 @@ namespace KiSSLab
 				resetPositionToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Undo_Dark;
 				unfixToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Unlock_Dark;
 				refixToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Lock_Dark;
+				zoomToolStripLabel.Image = global::KiSSLab.Properties.Resources.Zoom_Dark;
 			}
 			editor.UpdateColors();
 			foreach (var dd in mainMenuStrip.Items.OfType<ToolStripMenuItem>())
@@ -545,6 +527,7 @@ namespace KiSSLab
 			screenContainerPanel.BackColor = Colors.DarkBackground;
 			celMenuHeader.BackColor = Colors.BlueBackground;
 			celMenuHeader.ForeColor = Colors.LightText;
+			toolStripZoomBar.BackColor = Colors.GreyBackground;
 		}
 
 		protected override void WndProc(ref Message m)
@@ -780,18 +763,6 @@ namespace KiSSLab
 			((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
 		}
 
-		private void NextZoom_Click(object sender, EventArgs e)
-		{
-			((ToolStripButton)mainToolStrip.Items.Find("z" + Config.ZoomLevel.ToString(), false)[0]).Checked = false;
-			Config.ZoomLevel++;
-			if (Config.ZoomLevel == 4) Config.ZoomLevel = 1;
-			screenPictureBox.ClientSize = new Size(bitmap.Width * Config.ZoomLevel, bitmap.Height * Config.ZoomLevel);
-			((ToolStripButton)mainToolStrip.Items.Find("z" + Config.ZoomLevel.ToString(), false)[0]).Checked = true;
-			if (Scene != null) Scene.Zoom = Config.ZoomLevel;
-			Viewer_Resize(null, null);
-			DrawScene();
-		}
-
 		private void ShowEditor_Click(object sender, EventArgs e)
 		{
 			if (sender == propertiesToolStripMenuItem)
@@ -817,6 +788,15 @@ namespace KiSSLab
 			}
 			((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 			((ToolStripButton)mainToolStrip.Items.Find("p" + Scene.Palette.ToString(), false)[0]).Checked = true;
+		}
+
+		private void toolStripZoomBar_ValueChanged(object sender, EventArgs e)
+		{
+			Config.ZoomLevel = toolStripZoomBar.Value;
+			if (bitmap != null) screenPictureBox.ClientSize = new Size(bitmap.Width * Config.ZoomLevel, bitmap.Height * Config.ZoomLevel);
+			if (Scene != null) Scene.Zoom = Config.ZoomLevel;
+			Viewer_Resize(null, null);
+			DrawScene();
 		}
 	}
 
@@ -844,5 +824,36 @@ namespace KiSSLab
 		public int ForcedLight { get; set; }
 
 		public MyConfig(string path) : base(path) { }
+	}
+
+	[System.Windows.Forms.Design.ToolStripItemDesignerAvailability(System.Windows.Forms.Design.ToolStripItemDesignerAvailability.ToolStrip | System.Windows.Forms.Design.ToolStripItemDesignerAvailability.StatusStrip)]
+	public class ToolStripZoomBarItem : ToolStripControlHost
+	{
+		public event EventHandler ValueChanged;
+
+		public int Value
+		{
+			get { return ((TrackBar)this.Control).Value; }
+			set { ((TrackBar)this.Control).Value = value; }
+		}
+		public override Color BackColor
+		{
+			get { return ((TrackBar)this.Control).BackColor; }
+			set { ((TrackBar)this.Control).BackColor = value; }
+		}
+
+		public ToolStripZoomBarItem() : base(new TrackBar())
+		{
+			TrackBar tb = (TrackBar)this.Control;
+			tb.SetRange(1, 3);
+			tb.LargeChange = tb.SmallChange = 1;
+			tb.TickStyle = TickStyle.None;
+
+			tb.ValueChanged += (s, e) =>
+			{
+				if (ValueChanged != null)
+					ValueChanged(s, e);
+			};
+		}
 	}
 }

@@ -19,6 +19,8 @@ namespace KiSSLab
 		private Part held, dropped;
 		private Point heldOffset, fix;
 		private Point lastClick;
+		private Point? dragStart = null;
+		private Point startScroll;
 
 		public Scene Scene;
 
@@ -186,6 +188,11 @@ namespace KiSSLab
 				unfixToolStripMenuItem.Enabled = unfixContextMenuItem.Enabled = part.Locked;
 				refixToolStripMenuItem.Enabled = refixContextMenuItem.Enabled = !part.Locked;
 			}
+			else
+			{
+				dragStart = screenContainerPanel.PointToClient(screenPictureBox.PointToScreen(realLocation));
+				startScroll = screenContainerPanel.AutoScrollPosition;
+			}
 
 			editor.Pick(part, cel);
 			if (Hilight) DrawScene();
@@ -281,7 +288,21 @@ namespace KiSSLab
 			}
 
 			if (part == null)
-				Cursor = Cursors.Default;
+			{
+				if (dragStart == null)
+					Cursor = Cursors.Default;
+				else
+				{
+					Cursor = Cursors.SizeAll;
+					var dragPoint = screenContainerPanel.PointToClient(screenPictureBox.PointToScreen(realLocation));
+					if (screenContainerPanel.HorizontalScroll.Visible)
+					{
+						var x = -startScroll.X + (dragStart.Value.X - dragPoint.X);
+						var y = -startScroll.Y + (dragStart.Value.Y - dragPoint.Y);
+						screenContainerPanel.AutoScrollPosition = new Point(x, y);
+					}
+				}
+			}
 			else if (part.Locked)
 				Cursor = Cursors.Default;
 			else
@@ -294,6 +315,12 @@ namespace KiSSLab
 				return;
 			//if (drawing)
 			//	return;
+
+			if (dragStart != null)
+			{
+				dragStart = null;
+				screenContainerPanel.HorizontalScroll.Value = screenContainerPanel.HorizontalScroll.Value;
+			}
 
 			var eX = e.X / Scene.Zoom;
 			var eY = e.Y / Scene.Zoom;

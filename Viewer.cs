@@ -856,4 +856,36 @@ namespace KiSSLab
 			};
 		}
 	}
+
+	public class ControlScrollFilter : IMessageFilter
+	{
+		public bool PreFilterMessage(ref Message m)
+		{
+			switch (m.Msg)
+			{
+				case 0x020A: //WM.MOUSEWHEEL:
+				case 0x020E: //WM.MOUSEHWHEEL:
+				{
+					var hControlUnderMouse = Native.WindowFromPoint(new Point((int)m.LParam));
+
+					if (hControlUnderMouse == m.HWnd)
+						return false;
+
+					Native.SendMessage(hControlUnderMouse, (uint)m.Msg, m.WParam, m.LParam);
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		internal sealed class Native
+		{
+			[System.Runtime.InteropServices.DllImport("user32.dll")]
+			internal static extern IntPtr WindowFromPoint(Point point);
+
+			[System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+			internal static extern IntPtr SendMessage(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam);
+		}
+	}
 }

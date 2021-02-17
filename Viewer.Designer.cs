@@ -492,6 +492,7 @@
 			this.screenContainerPanel.Name = "screenContainerPanel";
 			this.screenContainerPanel.Size = new System.Drawing.Size(540, 475);
 			this.screenContainerPanel.TabIndex = 4;
+			this.screenContainerPanel.TabStop = true;
 			// 
 			// screenPictureBox
 			// 

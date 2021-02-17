@@ -148,6 +148,9 @@ namespace KiSSLab
 			for (var i = 0; i < 10; i++)
 				celMapCheckBoxes[i].Checked = cel.OnSets[i];
 			locked = false;
+
+			((Viewer)this.ParentForm).HilightedCel = cel;
+			((Viewer)this.ParentForm).DrawScene();
 		}
 
 		private void celOffTextBox_ValueChanged(object sender, EventArgs e)

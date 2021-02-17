@@ -10,6 +10,7 @@ namespace KiSSLab
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			Application.AddMessageFilter(new ControlScrollFilter());
 			Application.Run(new Viewer(args));
 		}
 	}

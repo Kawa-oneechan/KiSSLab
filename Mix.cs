@@ -8,7 +8,7 @@ using Bitmap = System.Drawing.Bitmap;
 
 namespace Kawa.Mix
 {
-	public static class Mix
+	public class Mix
 	{
 		private class MixFileEntry
 		{
@@ -18,14 +18,14 @@ namespace Kawa.Mix
 			public bool IsInFolder;
 		}
 
-		private static Dictionary<string, MixFileEntry> fileList;
+		private Dictionary<string, MixFileEntry> fileList;
 
-		public static void Reset()
+		public void Reset()
 		{
 			fileList = new Dictionary<string, MixFileEntry>();
 		}
 
-		public static void Load(string source)
+		public void Load(string source)
 		{
 			if (fileList == null)
 				Reset();
@@ -90,12 +90,12 @@ namespace Kawa.Mix
 			}
 		}
 
-		public static bool FileExists(string fileName)
+		public bool FileExists(string fileName)
 		{
 			return (fileList.ContainsKey(fileName));
 		}
 
-		public static Stream GetStream(string fileName)
+		public Stream GetStream(string fileName)
 		{
 			if (!fileList.ContainsKey(fileName))
 				throw new FileNotFoundException(string.Format("File {0} was not found.",  fileName));
@@ -113,14 +113,14 @@ namespace Kawa.Mix
 			return ret;
 		}
 
-		public static string GetString(string fileName)
+		public string GetString(string fileName)
 		{
 			if (!fileList.ContainsKey(fileName))
 				throw new FileNotFoundException(string.Format("File {0} was not found.", fileName));
 			return Encoding.UTF8.GetString(GetBytes(fileName));
 		}
 
-		public static Bitmap GetBitmap(string fileName)
+		public Bitmap GetBitmap(string fileName)
 		{
 			var raw = GetBytes(fileName);
 			using (var str = new MemoryStream(raw))
@@ -129,7 +129,7 @@ namespace Kawa.Mix
 			}
 		}
 
-		public static byte[] GetBytes(string fileName)
+		public byte[] GetBytes(string fileName)
 		{
 			if (!fileList.ContainsKey(fileName))
 				throw new FileNotFoundException(string.Format("File {0} was not found.", fileName));
@@ -166,7 +166,7 @@ namespace Kawa.Mix
 			return ret;
 		}
 
-		public static string[] GetFilesInPath(string path)
+		public string[] GetFilesInPath(string path)
 		{
 			var ret = new List<string>();
 			foreach (var entry in fileList.Values.Where(x => x.Filename.StartsWith(path)))
@@ -174,7 +174,7 @@ namespace Kawa.Mix
 			return ret.ToArray();
 		}
 		
-		public static void GetFileRange(string fileName, out int offset, out int length, out string mixFile)
+		public void GetFileRange(string fileName, out int offset, out int length, out string mixFile)
 		{
 			offset = -1;
 			length = -1;
@@ -187,7 +187,7 @@ namespace Kawa.Mix
 			mixFile = entry.Source;
 		}
 
-		public static string[] GetFilesWithPattern(string pattern)
+		public string[] GetFilesWithPattern(string pattern)
 		{
 			var ret = new List<string>();
 			var regex = new System.Text.RegularExpressions.Regex(pattern.Replace("*", "(.*)").Replace("\\", "\\\\"));

@@ -34,6 +34,8 @@ namespace KiSSLab
 
 		public List<Part> Parts { get; set; }
 		public List<Cel> Cels { get; set; }
+		public Part HighlightedPart { get; set; }
+		public Cel HighlightedCel { get; set; }
 
 		public int ScreenWidth { get; private set; }
 		public int ScreenHeight { get; private set; }

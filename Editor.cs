@@ -51,6 +51,11 @@ namespace KiSSLab
 			{
 				celMapCheckBoxes[i].Enabled = celMapCheckBoxes[i].Checked = false;
 			}
+
+			if (scene.HighlightedPart != null)
+				this.parts.SelectedItem = scene.HighlightedPart;
+			if (scene.HighlightedCel != null)
+				this.cels.SelectedItem = scene.HighlightedCel;
 		}
 
 		public void Pick(Part part, Cel cel)

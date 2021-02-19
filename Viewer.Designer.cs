@@ -65,8 +65,8 @@
 			this.positionToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lockToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.fixToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.screenContainerPanel = new System.Windows.Forms.Panel();
-			this.tabControl1 = new System.Windows.Forms.TabControl();
+			this.screenContainerPanel = new MyPanel();
+			this.tabControl1 = new MyTab();
 			this.celContextMenu = new DarkUI.Controls.DarkContextMenu();
 			this.celMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -497,7 +497,7 @@
 			this.tabControl1.Location = new System.Drawing.Point(0, 50);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(540, 27);
+			this.tabControl1.Size = new System.Drawing.Size(540, 24);
 			this.tabControl1.TabIndex = 0;
 			this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
 			// 
@@ -664,7 +664,7 @@
 		private System.Windows.Forms.ToolStripStatusLabel lockToolStripStatusLabel;
 		private System.Windows.Forms.ToolStripStatusLabel fixToolStripStatusLabel;
 
-		private System.Windows.Forms.Panel screenContainerPanel;
+		private MyPanel screenContainerPanel;
 		//private System.Windows.Forms.PictureBox screenPictureBox;
 		private Editor editor;
 		private System.Windows.Forms.ToolStripMenuItem copyCelContextMenuItem;
@@ -674,6 +674,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 		private ToolStripZoomBarItem toolStripZoomBar;
 		private System.Windows.Forms.ToolStripLabel zoomToolStripLabel;
-		private System.Windows.Forms.TabControl tabControl1;
+		private MyTab tabControl1;
 	}
 }

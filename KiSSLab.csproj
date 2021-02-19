@@ -191,6 +191,9 @@
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="fmod.cs" />
+    <Compile Include="MyTab.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="ScriptEvents.cs" />
     <Compile Include="ScriptFunctions.cs" />

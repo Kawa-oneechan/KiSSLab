@@ -49,7 +49,6 @@ namespace KiSSLab
 					toolStripZoomBar.Value = Scene.Zoom;
 			}
 		}
-		//public Scene Scene;
 		public Scene Scene
 		{
 			get
@@ -61,7 +60,36 @@ namespace KiSSLab
 		}
 		
 		public bool Hilight;
-		public Cel HilightedCel;
+		public Part HilightedPart
+		{
+			get
+			{
+				if (Scene == null)
+					return null;
+				return Scene.HighlightedPart;
+			}
+			set
+			{
+				if (Scene == null)
+					return;
+				Scene.HighlightedPart = value;
+			}
+		}
+		public Cel HilightedCel
+		{
+			get
+			{
+				if (Scene == null)
+					return null;
+				return Scene.HighlightedCel;
+			}
+			set
+			{
+				if (Scene == null)
+					return;
+				Scene.HighlightedCel = value;
+			}
+		}
 
 		private System.Windows.Forms.Timer AlarmTimer;
 		private string[] lastOpened;
@@ -699,7 +727,7 @@ namespace KiSSLab
 
 			lastOpened = new[] { source, configFile };
 
-			var newTab = new TabPage(configFile);
+			var newTab = new TabPage(Path.GetFileNameWithoutExtension(configFile));
 			newTab.Tag = screen;
 			tabControl1.TabPages.Add(newTab);
 			tabControl1.SelectedTab = newTab;

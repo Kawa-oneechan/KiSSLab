@@ -65,8 +65,8 @@
 			this.positionToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lockToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.fixToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.screenContainerPanel = new MyPanel();
-			this.tabControl1 = new MyTab();
+			this.screenContainerPanel = new KiSSLab.MyPanel();
+			this.viewersTabControl = new KiSSLab.MyTab();
 			this.celContextMenu = new DarkUI.Controls.DarkContextMenu();
 			this.celMenuHeader = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -485,21 +485,23 @@
 			// 
 			this.screenContainerPanel.AutoScroll = true;
 			this.screenContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.screenContainerPanel.Location = new System.Drawing.Point(0, 77);
+			this.screenContainerPanel.Location = new System.Drawing.Point(0, 74);
 			this.screenContainerPanel.Name = "screenContainerPanel";
-			this.screenContainerPanel.Size = new System.Drawing.Size(540, 448);
+			this.screenContainerPanel.Size = new System.Drawing.Size(540, 451);
 			this.screenContainerPanel.TabIndex = 4;
 			this.screenContainerPanel.TabStop = true;
 			// 
-			// tabControl1
+			// viewersTabControl
 			// 
-			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tabControl1.Location = new System.Drawing.Point(0, 50);
-			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(540, 24);
-			this.tabControl1.TabIndex = 0;
-			this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
+			this.viewersTabControl.CloseButtons = true;
+			this.viewersTabControl.Dock = System.Windows.Forms.DockStyle.Top;
+			this.viewersTabControl.Location = new System.Drawing.Point(0, 50);
+			this.viewersTabControl.Name = "viewersTabControl";
+			this.viewersTabControl.SelectedIndex = 0;
+			this.viewersTabControl.Size = new System.Drawing.Size(540, 24);
+			this.viewersTabControl.TabIndex = 0;
+			this.viewersTabControl.CloseClicked += new System.Windows.Forms.TabControlEventHandler(this.viewersTabControl_CloseClicked);
+			this.viewersTabControl.Selected += new System.Windows.Forms.TabControlEventHandler(this.viewersTabControl_Selected);
 			// 
 			// celContextMenu
 			// 
@@ -590,7 +592,7 @@
 			// 
 			this.ClientSize = new System.Drawing.Size(860, 560);
 			this.Controls.Add(this.screenContainerPanel);
-			this.Controls.Add(this.tabControl1);
+			this.Controls.Add(this.viewersTabControl);
 			this.Controls.Add(this.editor);
 			this.Controls.Add(this.mainToolStrip);
 			this.Controls.Add(this.mainMenuStrip);
@@ -674,6 +676,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 		private ToolStripZoomBarItem toolStripZoomBar;
 		private System.Windows.Forms.ToolStripLabel zoomToolStripLabel;
-		private MyTab tabControl1;
+		private MyTab viewersTabControl;
 	}
 }

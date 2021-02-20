@@ -34,6 +34,8 @@ namespace KiSSLab
 				if (activeScreen != null)
 					activeScreen.Hide();
 				activeScreen = value;
+				if (activeScreen == null)
+					return;
 				activeScreen.Show();
 				Viewer_Resize(null, null);
 				editor.SetScene(Scene);
@@ -192,7 +194,7 @@ namespace KiSSLab
 				OpenDoll(args[1], args[1]);
 
 			//open another for testing
-			OpenDoll(@"..\..\lettie", @"lettie.lisp");
+			//OpenDoll(@"..\..\lettie", @"lettie.lisp");
 		}
 
 		void Viewer_KeyUp(object sender, KeyEventArgs e)
@@ -209,7 +211,7 @@ namespace KiSSLab
 				((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 				DrawScene();
 			}
-			else if (e.Control && e.KeyValue == 9)
+			else if (viewersTabControl.TabCount == 1 && e.Control && e.KeyValue == 9)
 			{
 				if (e.Shift)
 					PreviousSet_Click(null, null);
@@ -463,18 +465,17 @@ namespace KiSSLab
 				cdlg.Filter = "Doll files|*.zip;*.lisp";
 				if (cdlg.ShowDialog() == DialogResult.Cancel)
 					return;
-				if (sender != openExpansionToolStripMenuItem)
-					Scene.Mix.Reset();
 				if (sender == openInNewToolStripMenuItem)
 				{
 					var newViewer = new Viewer(new[] { cdlg.FileName });
 					newViewer.Show();
 					return;
 				}
+				var expandTo = (sender == openExpansionToolStripMenuItem) ? Scene : null;
 				if (cdlg.FileName.EndsWith("lisp", StringComparison.CurrentCultureIgnoreCase))
-					OpenDoll(Path.GetDirectoryName(cdlg.FileName), Path.GetFileName(cdlg.FileName));
+					OpenDoll(Path.GetDirectoryName(cdlg.FileName), Path.GetFileName(cdlg.FileName), expandTo);
 				else
-					OpenDoll(cdlg.FileName, null);
+					OpenDoll(cdlg.FileName, null, expandTo);
 			}
 		}
 
@@ -662,11 +663,9 @@ namespace KiSSLab
 			screenPictureBox.Refresh();
 		}
 
-		public void OpenDoll(string source, string configFile)
+		public void OpenDoll(string source, string configFile, Scene expandTo = null)
 		{
-			Sound.StopEverything();
-
-			var mix = new Mix();
+			var mix = (expandTo == null) ? new Mix() : expandTo.Mix;
 			mix.Load(source);
 			if (configFile == null)
 			{
@@ -729,12 +728,18 @@ namespace KiSSLab
 
 			var newTab = new TabPage(Path.GetFileNameWithoutExtension(configFile));
 			newTab.Tag = screen;
-			tabControl1.TabPages.Add(newTab);
-			tabControl1.SelectedTab = newTab;
+			viewersTabControl.TabPages.Add(newTab);
+			viewersTabControl.SelectedTab = newTab;
 		}
 
 		void AlarmTimer_Tick(object sender, EventArgs e)
 		{
+			if (Scene == null)
+			{
+				AlarmTimer.Stop();
+				return;
+			}
+
 			var oneDied = false;
 			foreach (var t in Scene.Timers)
 			{
@@ -912,9 +917,22 @@ namespace KiSSLab
 			DrawScene();
 		}
 
-		private void tabControl1_Selected(object sender, TabControlEventArgs e)
+		private void viewersTabControl_Selected(object sender, TabControlEventArgs e)
 		{
-			screenPictureBox = tabControl1.SelectedTab.Tag as PictureBox;
+			if (e.TabPage == null)
+			{
+				screenPictureBox = null;
+				return;
+			}
+			screenPictureBox = e.TabPage.Tag as PictureBox;
+		}
+
+		private void viewersTabControl_CloseClicked(object sender, TabControlEventArgs e)
+		{
+			Sound.StopEverything();
+			var closingScreen = e.TabPage.Tag as PictureBox;
+			var closingScene = closingScreen.Tag as Scene;
+			viewersTabControl.TabPages.Remove(e.TabPage);
 		}
 	}
 

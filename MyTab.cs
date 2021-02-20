@@ -6,7 +6,8 @@ namespace KiSSLab
 {
 	class MyTab : TabControl
 	{
-		private const int nMargin = 5;
+		public event TabControlEventHandler CloseClicked;
+		public bool CloseButtons { get; set; }
 
 		public MyTab()
 		{
@@ -14,6 +15,11 @@ namespace KiSSLab
 			this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 			this.SetStyle(ControlStyles.DoubleBuffer, true);
 			this.SetStyle(ControlStyles.ResizeRedraw, true);
+
+			//if (CloseButtons)
+			{
+				this.Padding = new Point(32, 0);
+			}
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -34,23 +40,49 @@ namespace KiSSLab
 			var recBounds = this.GetTabRect(nIndex);
 			var tabTextArea = (RectangleF)this.GetTabRect(nIndex);
 			recBounds.Inflate(0, 1);
-
+			
 			var bSelected = (this.SelectedIndex == nIndex);
+
+			var fill = new SolidBrush(DarkUI.Config.Colors.BlueBackground);
+			var dark = new Pen(DarkUI.Config.Colors.DarkBlueBorder);
+			var light = new Pen(DarkUI.Config.Colors.LightBlueBorder);
+			var text = new SolidBrush(DarkUI.Config.Colors.LightText);
 
 			if (bSelected)
 			{
-				g.FillRectangle(new SolidBrush(DarkUI.Config.Colors.BlueBackground), recBounds);
-				g.DrawLine(new Pen(DarkUI.Config.Colors.DarkBlueBorder), recBounds.Right, recBounds.Top, recBounds.Right, recBounds.Bottom);
-				g.DrawLine(new Pen(DarkUI.Config.Colors.LightBlueBorder), recBounds.Left, recBounds.Top, recBounds.Right, recBounds.Top);
-				g.DrawLine(new Pen(DarkUI.Config.Colors.LightBlueBorder), recBounds.Left, recBounds.Top, recBounds.Left, recBounds.Bottom);
+				g.FillRectangle(fill, recBounds);
+				g.DrawLine(dark, recBounds.Right, recBounds.Top, recBounds.Right, recBounds.Bottom);
+				g.DrawLine(light, recBounds.Left, recBounds.Top, recBounds.Right, recBounds.Top);
+				g.DrawLine(light, recBounds.Left, recBounds.Top, recBounds.Left, recBounds.Bottom);
 			}
 
+			tabTextArea.Offset(8, 0);
 			var stringFormat = new StringFormat()
 			{
-				Alignment = StringAlignment.Center,
+				Alignment = StringAlignment.Near,
 				LineAlignment = StringAlignment.Center,
 			};
-			g.DrawString(tabPage.Text, Font, new SolidBrush(DarkUI.Config.Colors.LightText), tabTextArea, stringFormat);
+			g.DrawString(tabPage.Text, Font, text, tabTextArea, stringFormat);
+			if (bSelected && CloseButtons)
+			{
+				stringFormat.Alignment = StringAlignment.Far;
+				tabTextArea.Offset(-10, 0);
+				g.DrawString("×", Font, text, tabTextArea, stringFormat);
+			}
+		}
+
+		protected override void OnMouseClick(MouseEventArgs e)
+		{
+			base.OnMouseClick(e);
+
+			if (!CloseButtons)
+				return;
+			if (CloseClicked == null)
+				return;
+			var recBounds = this.GetTabRect(this.SelectedIndex);
+			var closeBox = new Rectangle(recBounds.Right - 10, recBounds.Top, 10, recBounds.Height);
+			if (closeBox.Contains(e.Location))
+				CloseClicked(this, new TabControlEventArgs(this.SelectedTab, this.SelectedIndex, TabControlAction.Deselecting));
 		}
 	}
 

@@ -141,30 +141,32 @@ namespace KiSSLab
 
 		public object Evaluate(object thing)
 		{
+			var workingWith = thing;
 			if (thing is List<object>)
 			{
 				var cmd = (List<object>)thing;
-				if (cmd[0] is List<object>)
+				workingWith = cmd[0];
+				if (workingWith is List<object>)
 				{
 					if (((List<object>)cmd[0]) is List<object>)
-						cmd[0] = Evaluate(cmd[0]);
+						workingWith = Evaluate(cmd[0]);
 				}
-				if (cmd[0] is Symbol)
+				if (workingWith is Symbol)
 				{
-					var form = (cmd[0] as Symbol).ToString();
+					var form = (workingWith as Symbol).ToString();
 					if (scriptFunctions.ContainsKey(form))
 					{
-						return ((System.Reflection.MethodInfo)scriptFunctions[form]).Invoke(this, new[] { cmd.Skip(1).ToArray() });
+						return mi.Invoke(this, new[] { cmd.Skip(1).ToArray() });
 					}
 					else if (scriptVariables.ContainsKey(form))
 					{
 						var obj = scriptVariables[form];
 						if (IsSafeObject(obj))
-							cmd[0] = obj;
+							workingWith = obj;
 					}
 				}
-				if (IsSafeObject(cmd[0]))
-					return Send(cmd[0], cmd);
+				if (IsSafeObject(workingWith))
+					return Send(workingWith, cmd);
 			}
 			else if (thing is Symbol)
 			{

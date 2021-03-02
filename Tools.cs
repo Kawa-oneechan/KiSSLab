@@ -92,9 +92,9 @@ namespace KiSSLab
 		/// </summary>
 		/// <param name="file">The name of the file to grab.</param>
 		/// <returns>Not exactly the *same* Bitmap.</returns>
-		public static Bitmap GrabClonedBitmap(string file)
+		public static Bitmap GrabClonedBitmap(string file, Kawa.Mix.Mix mix)
 		{
-			using (var jango = Kawa.Mix.Mix.GetBitmap(file))
+			using (var jango = mix.GetBitmap(file))
 			{
 				var boba = new Bitmap(jango.Width, jango.Height);
 				var gfx = Graphics.FromImage(boba);

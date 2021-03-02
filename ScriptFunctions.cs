@@ -486,7 +486,7 @@ namespace KiSSLab
 				return 0;
 			}
 			var file = Evaluate<string>(args[0]);
-			Viewer.Sound.PlayMusic(file);
+			Viewer.Sound.PlayMusic(Mix, file);
 			return 0;
 		}
 
@@ -494,7 +494,7 @@ namespace KiSSLab
 		public object Sound(params object[] args)
 		{
 			var file = Evaluate<string>(args[0]);
-			return Viewer.Sound.PlaySound(file);
+			return Viewer.Sound.PlaySound(Mix, file);
 		}
 
 		[ScriptFunction]

@@ -13,11 +13,11 @@ namespace KiSSLab
 			private FMOD.System system;
 			public FMOD.Sound InnerSound { get; private set; }
 			public FMOD.Channel Channel { get; private set; }
-			public Sound(string file, FMOD.System system)
+			public Sound(string file, Mix mix, FMOD.System system)
 			{
 				this.system = system;
 				FMOD.Sound ns = null;
-				var data = Mix.GetBytes(file);
+				var data = mix.GetBytes(file);
 				var fCSex = new FMOD.CreateSoundExInfo()
 				{
 					Size = 216,
@@ -84,15 +84,15 @@ namespace KiSSLab
 			musicChannel = null;
 		}
 
-		public void PlayMusic(string name)
+		public void PlayMusic(Mix mix, string name)
 		{
 			if (!Enabled)
 				return;
 
-			if (Mix.FileExists(name))
+			if (mix.FileExists(name))
 			{
 				StopMusic();
-				var data = Mix.GetBytes(name);
+				var data = mix.GetBytes(name);
 				var fCSex = new FMOD.CreateSoundExInfo()
 				{
 					Size = 216,
@@ -104,7 +104,7 @@ namespace KiSSLab
 			}
 		}
 
-		public Sound PlaySound(string name)
+		public Sound PlaySound(Mix mix, string name)
 		{
 			if (!Enabled)
 				return null;
@@ -113,9 +113,9 @@ namespace KiSSLab
 				return null;
 			if (!sounds.ContainsKey(name))
 			{
-				if (Mix.FileExists(name))
+				if (mix.FileExists(name))
 				{
-					sounds.Add(name, new Sound(name, system));
+					sounds.Add(name, new Sound(name, mix, system));
 				}
 				else
 				{

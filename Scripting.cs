@@ -156,6 +156,7 @@ namespace KiSSLab
 					var form = (workingWith as Symbol).ToString();
 					if (scriptFunctions.ContainsKey(form))
 					{
+						var mi = (System.Reflection.MethodInfo)scriptFunctions[form];
 						return mi.Invoke(this, new[] { cmd.Skip(1).ToArray() });
 					}
 					else if (scriptVariables.ContainsKey(form))

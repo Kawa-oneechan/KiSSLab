@@ -14,6 +14,8 @@ namespace KiSSLab
 {
 	public partial class Scene
 	{
+		public Mix Mix { get; private set; }
+		public Bitmap Bitmap { get; private set; }
 		public Viewer Viewer { get; private set; }
 
 		public int Set
@@ -32,6 +34,8 @@ namespace KiSSLab
 
 		public List<Part> Parts { get; set; }
 		public List<Cel> Cels { get; set; }
+		public Part HighlightedPart { get; set; }
+		public Cel HighlightedCel { get; set; }
 
 		public int ScreenWidth { get; private set; }
 		public int ScreenHeight { get; private set; }
@@ -58,8 +62,9 @@ namespace KiSSLab
 		private ImageAttributes attrs;
 		private Graphics gfx;
 
-		public Scene(Viewer viewer, string configFile)
+		public Scene(Viewer viewer, Mix mix, string configFile)
 		{
+			Mix = mix;
 			Viewer = viewer;
 
 			Parts = new List<Part>();
@@ -88,7 +93,7 @@ namespace KiSSLab
 
 			try
 			{
-				palette = Tools.GrabClonedBitmap("palettes.png");
+				palette = Tools.GrabClonedBitmap("palettes.png", Mix);
 				Palettes = palette.Height;
 			}
 			catch (Exception)
@@ -143,11 +148,11 @@ namespace KiSSLab
 							}
 							else if (bgi.Count == 1 && bgi[0] is string)
 							{
-								bg = Tools.GrabClonedBitmap(bgi[0].ToString() + ".png");
+								bg = Tools.GrabClonedBitmap(bgi[0].ToString() + ".png", Mix);
 							}
 							else if (bgi.Count == 2 && bgi[0] is string && bgi[1] is Symbol && bgi[1].ToString() == "tiled")
 							{
-								bg = new TextureBrush(Tools.GrabClonedBitmap(bgi[0].ToString() + ".png"));
+								bg = new TextureBrush(Tools.GrabClonedBitmap(bgi[0].ToString() + ".png", Mix));
 							}
 							backgrounds[bgs] = bg;
 							if (bgs == 0)
@@ -191,6 +196,8 @@ namespace KiSSLab
 				}
 			}
 			Sets++;
+
+			Bitmap = new Bitmap(ScreenWidth, ScreenHeight);
 		}
 
 		public Cel ParseCelForm(List<object> celItem)
@@ -294,7 +301,7 @@ namespace KiSSLab
 			//try to preload the image
 			try
 			{
-				image = Tools.GrabClonedBitmap(file + ".png"); //Mix.GetBitmap(file + ".png").ReleaseClone();
+				image = Tools.GrabClonedBitmap(file + ".png", Mix);
 			}
 			catch (System.IO.FileNotFoundException ex)
 			{
@@ -406,7 +413,7 @@ namespace KiSSLab
 			return ret;
 		}
 
-		public void DrawToBitmap(Bitmap bitmap)
+		public void DrawToBitmap()
 		{
 			if (palette != null)
 			{
@@ -422,7 +429,7 @@ namespace KiSSLab
 
 			if (gfx == null)
 			{
-				gfx = Graphics.FromImage(bitmap);
+				gfx = Graphics.FromImage(Bitmap);
 				gfx.InterpolationMode = InterpolationMode.NearestNeighbor;
 			}
 

@@ -15,17 +15,83 @@ namespace KiSSLab
 {
 	public partial class Viewer : DarkForm
 	{
-		private Bitmap bitmap;
+		//private Bitmap bitmap;
 		private Part held, dropped;
 		private Point heldOffset, fix;
 		private Point lastClick;
 		private Point? dragStart = null;
 		private Point startScroll;
 
-		public Scene Scene;
+		private PictureBox activeScreen;
+		private PictureBox screenPictureBox
+		{
+			get
+			{
+				return activeScreen;
+			}
+			set
+			{
+				if (activeScreen != null)
+					activeScreen.Hide();
+				activeScreen = value;
+				if (activeScreen == null)
+					return;
+				activeScreen.Show();
+				Viewer_Resize(null, null);
+				editor.SetScene(Scene);
 
+				for (var i = 0; i < 10; i++)
+				{
+					mainToolStrip.Items.Find("s" + i.ToString(), false)[0].Enabled = i < Scene.Sets;
+					mainToolStrip.Items.Find("p" + i.ToString(), false)[0].Enabled = i < Scene.Palettes;
+					((ToolStripButton)mainToolStrip.Items.Find("s" + i.ToString(), false)[0]).Checked = i == Scene.Set;
+					((ToolStripButton)mainToolStrip.Items.Find("p" + i.ToString(), false)[0]).Checked = i == Scene.Palette;
+				}
+				if (Scene.Zoom > 0)
+					toolStripZoomBar.Value = Scene.Zoom;
+			}
+		}
+		public Scene Scene
+		{
+			get
+			{
+				if (activeScreen == null)
+					return null;
+				return activeScreen.Tag as Scene;
+			}
+		}
+		
 		public bool Hilight;
-		public Cel HilightedCel;
+		public Part HilightedPart
+		{
+			get
+			{
+				if (Scene == null)
+					return null;
+				return Scene.HighlightedPart;
+			}
+			set
+			{
+				if (Scene == null)
+					return;
+				Scene.HighlightedPart = value;
+			}
+		}
+		public Cel HilightedCel
+		{
+			get
+			{
+				if (Scene == null)
+					return null;
+				return Scene.HighlightedCel;
+			}
+			set
+			{
+				if (Scene == null)
+					return;
+				Scene.HighlightedCel = value;
+			}
+		}
 
 		private System.Windows.Forms.Timer AlarmTimer;
 		private string[] lastOpened;
@@ -111,7 +177,6 @@ namespace KiSSLab
 			Viewer_Resize(null, null);
 			UpdateColors();
 
-			bitmap = new Bitmap(480, 400);
 			Sound = new SoundSystem();
 
 			AlarmTimer = new System.Windows.Forms.Timer();
@@ -127,6 +192,9 @@ namespace KiSSLab
 			}
 			else if (args.Length == 2)
 				OpenDoll(args[1], args[1]);
+
+			//open another for testing
+			//OpenDoll(@"..\..\lettie", @"lettie.lisp");
 		}
 
 		void Viewer_KeyUp(object sender, KeyEventArgs e)
@@ -143,7 +211,7 @@ namespace KiSSLab
 				((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = true;
 				DrawScene();
 			}
-			else if (e.Control && e.KeyValue == 9)
+			else if (viewersTabControl.TabCount == 1 && e.Control && e.KeyValue == 9)
 			{
 				if (e.Shift)
 					PreviousSet_Click(null, null);
@@ -154,6 +222,8 @@ namespace KiSSLab
 
 		void Viewer_Resize(object sender, EventArgs e)
 		{
+			if (screenPictureBox == null)
+				return;
 			Config.WindowState = (int)this.WindowState;
 			if (screenContainerPanel.ClientSize.Width > screenPictureBox.Width)
 				screenPictureBox.Left = (screenContainerPanel.ClientSize.Width / 2) - (screenPictureBox.Width / 2);
@@ -252,10 +322,10 @@ namespace KiSSLab
 					held.Position = new Point(0, held.Position.Y);
 				if (held.Position.Y < 0)
 					held.Position = new Point(held.Position.X, 0);
-				if (held.Position.X + held.Bounds.Width > bitmap.Width)
-					held.Position = new Point(bitmap.Width - held.Bounds.Width, held.Position.Y);
-				if (held.Position.Y + held.Bounds.Height > bitmap.Height)
-					held.Position = new Point(held.Position.X, bitmap.Height - held.Bounds.Height);
+				if (held.Position.X + held.Bounds.Width > Scene.Bitmap.Width)
+					held.Position = new Point(Scene.Bitmap.Width - held.Bounds.Width, held.Position.Y);
+				if (held.Position.Y + held.Bounds.Height > Scene.Bitmap.Height)
+					held.Position = new Point(held.Position.X, Scene.Bitmap.Height - held.Bounds.Height);
 
 				if (held.Fix > 0)
 				{
@@ -377,7 +447,7 @@ namespace KiSSLab
 			if (Scene == null)
 				return;
 			e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-			e.Graphics.DrawImage(bitmap, 0, 0, bitmap.Width * Scene.Zoom, bitmap.Height * Scene.Zoom);
+			e.Graphics.DrawImage(Scene.Bitmap, 0, 0, Scene.Bitmap.Width * Scene.Zoom, Scene.Bitmap.Height * Scene.Zoom);
 
 			/*
 			var pen = new Pen(Color.FromArgb(64, 255, 255, 255), 1);
@@ -395,18 +465,17 @@ namespace KiSSLab
 				cdlg.Filter = "Doll files|*.zip;*.lisp";
 				if (cdlg.ShowDialog() == DialogResult.Cancel)
 					return;
-				if (sender != openExpansionToolStripMenuItem)
-					Mix.Reset();
 				if (sender == openInNewToolStripMenuItem)
 				{
 					var newViewer = new Viewer(new[] { cdlg.FileName });
 					newViewer.Show();
 					return;
 				}
+				var expandTo = (sender == openExpansionToolStripMenuItem) ? Scene : null;
 				if (cdlg.FileName.EndsWith("lisp", StringComparison.CurrentCultureIgnoreCase))
-					OpenDoll(Path.GetDirectoryName(cdlg.FileName), Path.GetFileName(cdlg.FileName));
+					OpenDoll(Path.GetDirectoryName(cdlg.FileName), Path.GetFileName(cdlg.FileName), expandTo);
 				else
-					OpenDoll(cdlg.FileName, null);
+					OpenDoll(cdlg.FileName, null, expandTo);
 			}
 		}
 
@@ -574,10 +643,10 @@ namespace KiSSLab
 			if (Scene == null)
 				return;
 
-			Scene.DrawToBitmap(bitmap);
+			Scene.DrawToBitmap();
 			if (Hilight && HilightedCel != null)
 			{
-				using (var g = Graphics.FromImage(bitmap))
+				using (var g = Graphics.FromImage(Scene.Bitmap))
 				{
 					var cel = HilightedCel;
 					var part = cel.Part;
@@ -594,14 +663,13 @@ namespace KiSSLab
 			screenPictureBox.Refresh();
 		}
 
-		public void OpenDoll(string source, string configFile)
+		public void OpenDoll(string source, string configFile, Scene expandTo = null)
 		{
-			Sound.StopEverything();
-
-			Mix.Load(source);
+			var mix = (expandTo == null) ? new Mix() : expandTo.Mix;
+			mix.Load(source);
 			if (configFile == null)
 			{
-				var configFiles = Mix.GetFilesWithPattern("*.lisp");
+				var configFiles = mix.GetFilesWithPattern("*.lisp");
 				if (configFiles.Length == 0)
 				{
 					DarkMessageBox.ShowError("No configuration files found.", Application.ProductName);
@@ -619,7 +687,17 @@ namespace KiSSLab
 				}
 			}
 
-			Scene = new Scene(this, configFile);
+			var scene = new Scene(this, mix, configFile);
+			var screen = new PictureBox();
+			screen.BorderStyle = BorderStyle.FixedSingle;
+			screen.Tag = scene;
+			screen.Paint += Screen_Paint;
+			screen.MouseClick += Screen_MouseClick;
+			screen.MouseDown += Screen_MouseDown;
+			screen.MouseMove += Screen_MouseMove;
+			screen.MouseUp += Screen_MouseUp;
+			screenContainerPanel.Controls.Add(screen);
+			screenPictureBox = screen;
 
 			for (var i = 0; i < 10; i++)
 			{
@@ -632,8 +710,7 @@ namespace KiSSLab
 			Scene.Set = 0;
 			Scene.Zoom = Config.ZoomLevel;
 
-			bitmap = new Bitmap(Scene.ScreenWidth, Scene.ScreenHeight);
-			screenPictureBox.ClientSize = new Size(bitmap.Width * Scene.Zoom, bitmap.Height * Scene.Zoom);
+			screenPictureBox.ClientSize = new Size(Scene.Bitmap.Width * Scene.Zoom, Scene.Bitmap.Height * Scene.Zoom);
 			editor.SetScene(Scene);
 			Viewer_Resize(null, null);
 			this.Text = string.Format("{0} - {1}", Application.ProductName, configFile);
@@ -648,10 +725,21 @@ namespace KiSSLab
 			AlarmTimer.Start();
 
 			lastOpened = new[] { source, configFile };
+
+			var newTab = new TabPage(Path.GetFileNameWithoutExtension(configFile));
+			newTab.Tag = screen;
+			viewersTabControl.TabPages.Add(newTab);
+			viewersTabControl.SelectedTab = newTab;
 		}
 
 		void AlarmTimer_Tick(object sender, EventArgs e)
 		{
+			if (Scene == null)
+			{
+				AlarmTimer.Stop();
+				return;
+			}
+
 			var oneDied = false;
 			foreach (var t in Scene.Timers)
 			{
@@ -820,10 +908,31 @@ namespace KiSSLab
 		private void toolStripZoomBar_ValueChanged(object sender, EventArgs e)
 		{
 			Config.ZoomLevel = toolStripZoomBar.Value;
-			if (bitmap != null) screenPictureBox.ClientSize = new Size(bitmap.Width * Config.ZoomLevel, bitmap.Height * Config.ZoomLevel);
-			if (Scene != null) Scene.Zoom = Config.ZoomLevel;
+			if (Scene != null)
+			{
+				if (Scene.Bitmap != null) screenPictureBox.ClientSize = new Size(Scene.Bitmap.Width * Config.ZoomLevel, Scene.Bitmap.Height * Config.ZoomLevel);
+				Scene.Zoom = Config.ZoomLevel;
+			}
 			Viewer_Resize(null, null);
 			DrawScene();
+		}
+
+		private void viewersTabControl_Selected(object sender, TabControlEventArgs e)
+		{
+			if (e.TabPage == null)
+			{
+				screenPictureBox = null;
+				return;
+			}
+			screenPictureBox = e.TabPage.Tag as PictureBox;
+		}
+
+		private void viewersTabControl_CloseClicked(object sender, TabControlEventArgs e)
+		{
+			Sound.StopEverything();
+			var closingScreen = e.TabPage.Tag as PictureBox;
+			var closingScene = closingScreen.Tag as Scene;
+			viewersTabControl.TabPages.Remove(e.TabPage);
 		}
 	}
 

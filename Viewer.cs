@@ -934,6 +934,20 @@ namespace KiSSLab
 			var closingScene = closingScreen.Tag as Scene;
 			viewersTabControl.TabPages.Remove(e.TabPage);
 		}
+
+		public void HandleScrollWheel(int wParam)
+		{
+			var delta = (int)wParam >> 16;
+			var shift = (int)wParam & 0xFFFF;
+			Console.WriteLine(shift);
+			if (delta != 0 && shift == 8)
+			{
+				if (delta < 0 && toolStripZoomBar.Value > 1)
+					toolStripZoomBar.Value--;
+				else if (delta > 0 && toolStripZoomBar.Value < 3)
+					toolStripZoomBar.Value++;
+			}
+		}
 	}
 
 	public class MyConfig : RegistryConfig
@@ -1006,6 +1020,8 @@ namespace KiSSLab
 
 					if (hControlUnderMouse == m.HWnd)
 						return false;
+
+					((Viewer)Application.OpenForms[0]).HandleScrollWheel((int)m.WParam);
 
 					Native.SendMessage(hControlUnderMouse, (uint)m.Msg, m.WParam, m.LParam);
 					return true;

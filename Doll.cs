@@ -62,11 +62,20 @@ namespace KiSSLab
 		private ImageAttributes attrs;
 		private Graphics gfx;
 
+		public string ConfigFile;
+		public Mix ExpandedFrom;
+		public string MixSource;
+
 		public Scene(Viewer viewer, Mix mix, string configFile)
 		{
+			ConfigFile = configFile;
 			Mix = mix;
 			Viewer = viewer;
+			Reload();
+		}
 
+		public void Reload()
+		{
 			Parts = new List<Part>();
 			Cels = new List<Cel>();
 
@@ -103,7 +112,7 @@ namespace KiSSLab
 			}
 
 			HashCodes = new Dictionary<int, string>();
-			var sex = new SExpression(Mix.GetString(configFile));
+			var sex = new SExpression(Mix.GetString(ConfigFile));
 			var data = ((List<object>)sex.Data)[0] as List<object>;
 
 			foreach (var item in data)
@@ -187,6 +196,7 @@ namespace KiSSLab
 			}
 
 			//Determine max set count
+			Sets = 0;
 			foreach (var cel in Cels)
 			{
 				for (var i = 0; i < 10; i++)
@@ -198,6 +208,7 @@ namespace KiSSLab
 			Sets++;
 
 			Bitmap = new Bitmap(ScreenWidth, ScreenHeight);
+			gfx = null;
 		}
 
 		public Cel ParseCelForm(List<object> celItem)

@@ -688,6 +688,8 @@ namespace KiSSLab
 			}
 
 			var scene = new Scene(this, mix, configFile);
+			scene.MixSource = source;
+			//scene.ExpandedFrom = expandTo.Mix;
 			var screen = new PictureBox();
 			screen.BorderStyle = BorderStyle.FixedSingle;
 			screen.Tag = scene;
@@ -815,7 +817,40 @@ namespace KiSSLab
 
 		private void ReOpen_Click(object sender, EventArgs e)
 		{
-			OpenDoll(lastOpened[0], lastOpened[1]);
+			//OpenDoll(lastOpened[0], lastOpened[1]);
+
+			var lastSet = Scene.Set;
+			var lastPal = Scene.Palette;
+
+			Scene.Mix.Reset();
+			Scene.Mix.Load(Scene.MixSource);
+			Scene.Reload();
+			//screenPictureBox.Tag = Scene;
+			//screenPictureBox.ClientSize = new Size(Scene.Bitmap.Width * Scene.Zoom, Scene.Bitmap.Height * Scene.Zoom);
+			editor.SetScene(Scene);
+			//Viewer_Resize(null, null);
+			
+			if (Scene.Events.ContainsKey("initialize"))
+				Scene.RunEvent(Scene.Events["initialize"]);
+			if (Scene.Events.ContainsKey("begin"))
+				Scene.RunEvent(Scene.Events["begin"]);
+
+			if (lastSet != Scene.Set && lastSet < Scene.Sets)
+				Scene.Set = lastSet;
+			if (lastPal != Scene.Palette && lastPal < Scene.Palettes)
+				Scene.Palette = lastPal;
+
+			for (var i = 0; i < 10; i++)
+			{
+				mainToolStrip.Items.Find("s" + i.ToString(), false)[0].Enabled = i < Scene.Sets;
+				mainToolStrip.Items.Find("p" + i.ToString(), false)[0].Enabled = i < Scene.Palettes;
+				((ToolStripButton)mainToolStrip.Items.Find("s" + i.ToString(), false)[0]).Checked = i == lastSet;
+				((ToolStripButton)mainToolStrip.Items.Find("p" + i.ToString(), false)[0]).Checked = i == lastPal;
+			}
+
+			DrawScene();
+
+			//AlarmTimer.Start();
 		}
 
 		private void CopyCel_Click(object sender, EventArgs e)

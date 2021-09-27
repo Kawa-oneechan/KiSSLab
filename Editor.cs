@@ -75,6 +75,8 @@ namespace KiSSLab
 					cels.SelectedItem = cel;
 				((Viewer)this.ParentForm).HilightedCel = cel;
 			}
+			else
+				((Viewer)this.ParentForm).HilightedCel = null;
 		}
 
 		#region More darkmode lightswitch

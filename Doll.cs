@@ -226,6 +226,12 @@ namespace KiSSLab
 			var newFix = false;
 			var mapped = true;
 			var ghosted = false;
+			var labelText = "";
+			var labelWidth = 0;
+			var labelFont = new Font("Tahoma", 8);
+			var labelColor = Color.Black;
+
+			var celType = "";
 
 			for (var i = 0; i < celItem.Count; i++)
 			{
@@ -240,6 +246,12 @@ namespace KiSSLab
 							file = celItem[i] as string;
 							if (id == "") id = file;
 							if (partof == "") partof = id;
+							celType = "pic";
+						}
+						break;
+					case "label":
+						{
+							celType = "label";
 						}
 						break;
 					case "id":
@@ -306,18 +318,64 @@ namespace KiSSLab
 						break;
 					case "group":
 						break;
+					case "text":
+						{
+							i++;
+							labelText = celItem[i] as string;
+						}
+						break;
+					case "width":
+						{
+							i++;
+							labelWidth = (int)celItem[i];
+						}
+						break;
+					case "color":
+						{
+							i++;
+							var bgi = celItem[i] as List<object>;
+							if (bgi.Count == 3 && bgi[0] is int && bgi[1] is int && bgi[2] is int)
+							{
+								labelColor = Color.FromArgb((int)bgi[0], (int)bgi[1], (int)bgi[2]);
+							}
+						}
+						break;
+					case "font":
+						{
+							i++;
+							var f = labelFont.Name;
+							var p = labelFont.Size;
+							if (celItem[i] is string)
+							{
+								f = celItem[i] as string;
+							}
+							else if (celItem[i] is List<object>)
+							{
+								var bgi = celItem[i] as List<object>;
+								f = bgi[0] as string;
+								if (bgi.Count > 1)
+								{
+									p = (int)bgi[1];
+								}
+							}
+							labelFont = new Font(f, p);
+						}
+						break;
 				}
 			}
 
 			//try to preload the image
-			try
+			if (celType == "pic")
 			{
-				image = Tools.GrabClonedBitmap(file + ".png", Mix);
-			}
-			catch (System.IO.FileNotFoundException ex)
-			{
-				DarkUI.Forms.DarkMessageBox.ShowWarning(ex.Message, Application.ProductName);
-				return null;
+				try
+				{
+					image = Tools.GrabClonedBitmap(file + ".png", Mix);
+				}
+				catch (System.IO.FileNotFoundException ex)
+				{
+					DarkUI.Forms.DarkMessageBox.ShowWarning(ex.Message, Application.ProductName);
+					return null;
+				}
 			}
 
 			//find the partof object
@@ -381,6 +439,21 @@ namespace KiSSLab
 				Opacity = alpha,
 				Ghost = ghosted,
 			};
+			if (celType == "label")
+			{
+				c = new TextCel(this)
+				{
+					Text = labelText,
+					Width = labelWidth,
+					Color = labelColor,
+					Font = labelFont,
+					Visible = mapped,
+					ID = id,
+					Opacity = alpha,
+					Ghost = ghosted,
+				};
+				((TextCel)c).Draw();
+			}
 			foreach (var s in on)
 			{
 				if (!char.IsDigit(s))
@@ -466,7 +539,9 @@ namespace KiSSLab
 
 				try
 				{
-					gfx.DrawImage(cel.Image, new Rectangle(cel.Part.Position.X + cel.Offset.X, cel.Part.Position.Y + cel.Offset.Y, cel.Image.Width, cel.Image.Height), 0, 0, cel.Image.Width, cel.Image.Height, GraphicsUnit.Pixel, attrs);
+					gfx.DrawImage(cel.Image,
+						new Rectangle(cel.Part.Position.X + cel.Offset.X, cel.Part.Position.Y + cel.Offset.Y, cel.Image.Width, cel.Image.Height),
+						0, 0, cel.Image.Width, cel.Image.Height, GraphicsUnit.Pixel, attrs);
 				}
 				catch (Exception)
 				{ }
@@ -504,6 +579,44 @@ namespace KiSSLab
 		public override string ToString()
 		{
 			return string.Format("{0}", ID);
+		}
+	}
+
+	public class TextCel : Cel
+	{
+		private string _text;
+		private int height;
+
+		[ScriptProperty]
+		public string Text { get { return _text; } set { _text = value; Draw(); } }
+		public Font Font { get; set; }
+		public int Width { get; set; }
+		public SolidBrush Brush { get; private set; }
+		public Color Color { get { return Brush.Color; } set { Brush.Color = value; } }
+		public TextCel(Scene scene) : base(scene)
+		{
+			Brush = new SolidBrush(Color.Black);
+			Font = new Font("Tahoma", 9);
+		}
+		public void Draw()
+		{
+			if (Image == null || Width != Image.Width)
+			{
+				if (Image == null) Image = new Bitmap(1024, 1024);
+				using (var gfx = Graphics.FromImage(Image))
+				{
+					var size = gfx.MeasureString(Text, Font, Width);
+					if (Width == 0) Width = (int)(size.Width + 1);
+					height = (int)(size.Height + 1);
+				}
+				Image = new Bitmap(Width, height);
+			}
+			using (var gfx = Graphics.FromImage(Image))
+			{
+				gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+				gfx.Clear(Color.Transparent);
+				gfx.DrawString(Text, Font, Brush, new RectangleF(0, 0, Width, height));
+			}
 		}
 	}
 

@@ -230,6 +230,7 @@ namespace KiSSLab
 			var labelWidth = 0;
 			var labelFont = new Font("Tahoma", 8);
 			var labelColor = Color.Black;
+			var labelCenter = false;
 
 			var celType = "";
 
@@ -345,6 +346,7 @@ namespace KiSSLab
 							i++;
 							var f = labelFont.Name;
 							var p = labelFont.Size;
+							var s = FontStyle.Regular;
 							if (celItem[i] is string)
 							{
 								f = celItem[i] as string;
@@ -357,8 +359,20 @@ namespace KiSSLab
 								{
 									p = (int)bgi[1];
 								}
+								if (bgi.Count > 2)
+								{
+									for (var j = 2; j < bgi.Count; j++)
+									{
+										if (bgi[j] is Symbol && (Symbol)bgi[j] == "bold")
+											s |= FontStyle.Bold;
+										if (bgi[j] is Symbol && (Symbol)bgi[j] == "italic")
+											s |= FontStyle.Italic;
+										if (bgi[j] is Symbol && (Symbol)bgi[j] == "center")
+											labelCenter = true;
+									}
+								}
 							}
-							labelFont = new Font(f, p);
+							labelFont = new Font(f, p, s);
 						}
 						break;
 				}
@@ -443,15 +457,16 @@ namespace KiSSLab
 			{
 				c = new TextCel(this)
 				{
-					Text = labelText,
 					Width = labelWidth,
 					Color = labelColor,
 					Font = labelFont,
+					Centered = labelCenter,
 					Visible = mapped,
 					ID = id,
 					Opacity = alpha,
 					Ghost = ghosted,
 				};
+				((TextCel)c).Text = labelText;
 				((TextCel)c).Draw();
 			}
 			foreach (var s in on)
@@ -591,6 +606,7 @@ namespace KiSSLab
 		public string Text { get { return _text; } set { _text = value; Draw(); } }
 		public Font Font { get; set; }
 		public int Width { get; set; }
+		public bool Centered { get; set; }
 		public SolidBrush Brush { get; private set; }
 		public Color Color { get { return Brush.Color; } set { Brush.Color = value; } }
 		public TextCel(Scene scene) : base(scene)
@@ -600,22 +616,19 @@ namespace KiSSLab
 		}
 		public void Draw()
 		{
-			if (Image == null || Width != Image.Width)
-			{
-				if (Image == null) Image = new Bitmap(1024, 1024);
-				using (var gfx = Graphics.FromImage(Image))
-				{
-					var size = gfx.MeasureString(Text, Font, Width);
-					if (Width == 0) Width = (int)(size.Width + 1);
-					height = (int)(size.Height + 1);
-				}
-				Image = new Bitmap(Width, height);
-			}
+			if (Image == null) Image = new Bitmap(1024, 1024);
 			using (var gfx = Graphics.FromImage(Image))
 			{
-				gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+				var size = gfx.MeasureString(Text, Font, Width);
+				if (Width == 0) Width = (int)(size.Width + 1);
+				height = (int)(size.Height + 1);
+			}
+			Image = new Bitmap(Width, height);
+			using (var gfx = Graphics.FromImage(Image))
+			{
+				gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 				gfx.Clear(Color.Transparent);
-				gfx.DrawString(Text, Font, Brush, new RectangleF(0, 0, Width, height));
+				gfx.DrawString(Text, Font, Brush, new RectangleF(0, 0, Width, height), new StringFormat() { Alignment = Centered ? StringAlignment.Center : StringAlignment.Near });
 			}
 		}
 	}

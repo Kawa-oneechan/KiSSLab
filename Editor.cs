@@ -32,6 +32,11 @@ namespace KiSSLab
 				setCheck.CheckedChanged += new EventHandler(celMappedCheckBox_CheckedChanged);
 				flowLayoutPanel2.Controls.Add(setCheck);
 			}
+
+			foreach (var font in FontFamily.Families)
+			{
+				celLabelFont.Items.Add(font.Name);
+			}
 		}
 
 		public void SetScene(Scene scene)
@@ -152,6 +157,22 @@ namespace KiSSLab
 			celVisibleCheckBox.Checked = cel.Visible;
 			celGhostedCheckBox.Checked = cel.Ghost;
 			celOpacityTrackBar.Value = cel.Opacity;
+
+			celLabelText.Visible = celLabelFont.Visible = celLabelSize.Visible = celLabelBold.Visible = celLabelItalic.Visible = celLabelCenter.Visible = darkLabel5.Visible = darkLabel6.Visible = this.cels.SelectedItem is TextCel;
+			celFilenameTextBox.Visible = darkLabel3.Visible = !(this.cels.SelectedItem is TextCel);
+			if (celLabelText.Visible)
+			{
+				var textcel = (TextCel)this.cels.SelectedItem;
+				celLabelText.Text = textcel.Text;
+				celLabelFont.Text = textcel.Font.Name;
+				celLabelSize.Value = (int)textcel.Font.Size;
+				celLabelBold.Checked = textcel.Font.Style.HasFlag(FontStyle.Bold);
+				celLabelItalic.Checked = textcel.Font.Style.HasFlag(FontStyle.Italic);
+				celLabelCenter.Checked = textcel.Centered;
+			}
+
+			//celSectionPanel.Height = celLabelText.Visible ? 300  : 270;
+
 			for (var i = 0; i < 10; i++)
 				celMapCheckBoxes[i].Checked = cel.OnSets[i];
 			locked = false;
@@ -202,5 +223,63 @@ namespace KiSSLab
 			var cel = (Cel)this.cels.SelectedItem;
 			cel.Ghost = celGhostedCheckBox.Checked;
 		}
+
+		private void celLabelText_TextChanged(object sender, EventArgs e)
+		{
+			if (locked) return;
+			var cel = (TextCel)this.cels.SelectedItem;
+			cel.Text = celLabelText.Text;
+			((Viewer)this.ParentForm).DrawScene();
+		}
+
+		private void celLabelFont_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (locked) return;
+			var cel = (TextCel)this.cels.SelectedItem;
+			cel.Font = new Font(celLabelFont.Text, cel.Font.Size, cel.Font.Style);
+			cel.Draw();
+			((Viewer)this.ParentForm).DrawScene();
+		}
+
+		private void celLabelSize_ValueChanged(object sender, EventArgs e)
+		{
+			if (locked) return;
+			var cel = (TextCel)this.cels.SelectedItem;
+			cel.Font = new Font(cel.Font.Name, (int)celLabelSize.Value, cel.Font.Style);
+			cel.Draw();
+			((Viewer)this.ParentForm).DrawScene();
+		}
+
+		private void celLabelBold_CheckedChanged(object sender, EventArgs e)
+		{
+			if (locked) return;
+			var cel = (TextCel)this.cels.SelectedItem;
+			var newStyle = cel.Font.Style & ~FontStyle.Bold;
+			if (celLabelBold.Checked) newStyle |= FontStyle.Bold;
+			cel.Font = new Font(cel.Font.Name, cel.Font.Size, newStyle);
+			cel.Draw();
+			((Viewer)this.ParentForm).DrawScene();
+		}
+
+		private void celLabelItalic_CheckedChanged(object sender, EventArgs e)
+		{
+			if (locked) return;
+			var cel = (TextCel)this.cels.SelectedItem;
+			var newStyle = cel.Font.Style & ~FontStyle.Italic;
+			if (celLabelItalic.Checked) newStyle |= FontStyle.Italic;
+			cel.Font = new Font(cel.Font.Name, cel.Font.Size, newStyle);
+			cel.Draw();
+			((Viewer)this.ParentForm).DrawScene();
+		}
+
+		private void celLabelCenter_CheckedChanged(object sender, EventArgs e)
+		{
+			if (locked) return;
+			var cel = (TextCel)this.cels.SelectedItem;
+			cel.Centered = celLabelCenter.Checked;
+			cel.Draw();
+			((Viewer)this.ParentForm).DrawScene();
+		}
+
 	}
 }

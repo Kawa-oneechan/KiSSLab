@@ -880,6 +880,8 @@ namespace KiSSLab
 			else
 				Scene.Set = 0;
 			if (dropped != null) dropped.LastCollidedWith = null;
+			foreach (var part in Scene.Parts)
+				part.LastCollidedWith = null;
 			var maybe = string.Format("set|{0}", Scene.Set);
 			if (Scene.Events.ContainsKey(maybe))
 				Scene.RunEvent(Scene.Events[maybe]);

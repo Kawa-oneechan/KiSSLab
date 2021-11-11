@@ -430,6 +430,50 @@ namespace KiSSLab
 		}
 
 		/// <summary>
+		/// Returns true if a part is colliding with a given other part.
+		/// </summary>
+		[ScriptFunction("colliding?")]
+		public object IsColliding(params object[] args)
+		{
+			object checkThis = CelsOrPart(args[0]);
+			object checkThat = CelsOrPart(args[1]);
+			if (checkThis == null || checkThat == null)
+				return null;
+
+			if (checkThis is List<object>) checkThis = (Cel)((List<object>)checkThis)[0];
+			if (checkThat is List<object>) checkThat = (Cel)((List<object>)checkThat)[0];
+
+			var thisPart = (checkThis is Cel) ? ((Cel)checkThis).Part : (Part)checkThis;
+			var thatPart = (checkThat is Cel) ? ((Cel)checkThat).Part : (Part)checkThat;
+
+
+			//if (checkThis is Part && checkThat is Part)
+			//	return Tools.Overlap(thisPart.Position, thatPart.Position, thisPart.Bounds, thatPart.Bounds);
+
+			if (!Tools.Overlap(thisPart.Position, thatPart.Position, thisPart.Bounds, thatPart.Bounds))
+				return false;
+
+			if (checkThis is Part)
+			{
+				if (checkThat is Part)
+					return Tools.PixelOverlap(thisPart, thatPart);
+
+				foreach (var cA in thisPart.Cels)
+					if (Tools.PixelOverlap(thisPart, thatPart, cA, (Cel)checkThat))
+						return true;
+			}
+			else if (checkThat is Part)
+			{
+				foreach (var cB in thatPart.Cels)
+					if (Tools.PixelOverlap(thisPart, thatPart, (Cel)checkThis, cB))
+						return true;
+			}
+			else
+				return Tools.PixelOverlap(thisPart, thatPart, (Cel)checkThis, (Cel)checkThat);
+			return false;
+		}
+
+		/// <summary>
 		/// Returns the number of component cels of an object that are mapped.
 		/// </summary>
 		[ScriptFunction]

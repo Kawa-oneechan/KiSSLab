@@ -29,7 +29,7 @@ namespace KiSSLab
 			if (!Visible)
 				return;
 
-			e.Graphics.Clear(this.Parent.BackColor);
+			e.Graphics.Clear(DarkUI.Config.Colors.GreyBackground);
 
 			for (var i = 0; i < this.TabCount; i++)
 				DrawTab(e.Graphics, this.TabPages[i], i);

@@ -255,6 +255,13 @@ namespace KiSSLab
 							celType = "label";
 						}
 						break;
+					case "button":
+						{
+							i++;
+							file = celItem[i] as string;
+							celType = "button";
+						}
+						break;
 					case "id":
 						{
 							i++;
@@ -379,7 +386,7 @@ namespace KiSSLab
 			}
 
 			//try to preload the image
-			if (celType == "pic")
+			if (celType == "pic" || celType == "button")
 			{
 				try
 				{
@@ -469,6 +476,18 @@ namespace KiSSLab
 				((TextCel)c).Text = labelText;
 				((TextCel)c).Draw();
 			}
+			if (celType == "button")
+			{
+				c = new ButtonCel(this, c)
+				{
+					Visible = mapped,
+					ID = id,
+					Opacity = alpha,
+					Ghost = ghosted,
+				};
+				((ButtonCel)c).Draw();
+			}
+
 			foreach (var s in on)
 			{
 				if (!char.IsDigit(s))
@@ -629,6 +648,50 @@ namespace KiSSLab
 				gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 				gfx.Clear(Color.Transparent);
 				gfx.DrawString(Text, Font, Brush, new RectangleF(0, 0, Width, height), new StringFormat() { Alignment = Centered ? StringAlignment.Center : StringAlignment.Near });
+			}
+		}
+	}
+
+	public class ButtonCel : Cel
+	{
+		private Bitmap glyph;
+		private int state;
+		public int State
+		{
+			get
+			{
+				return state;
+			}
+			set
+			{
+				if (value != state)
+				{
+					state = value;
+					Draw();
+				}
+				state = value;
+			}
+		}
+		public ButtonCel(Scene scene, Cel original) : base(scene)
+		{
+			glyph = original.Image;
+			Image = new Bitmap(glyph.Width + 8, glyph.Height + 8);
+		}
+		public void Draw()
+		{
+			using (var gfx = Graphics.FromImage(Image))
+			{
+				var fill = DarkUI.Config.Colors.LightBackground;
+				var border = DarkUI.Config.Colors.GreySelection;
+
+				if (state == 1) //pressed
+					fill = DarkUI.Config.Colors.DarkBackground;
+				else if (state == 2) //hovered
+					fill = DarkUI.Config.Colors.LighterBackground;
+
+				gfx.Clear(fill);
+				gfx.DrawRectangle(new Pen(border), 0, 0, Image.Width - 1, Image.Height - 1);
+				gfx.DrawImageUnscaled(glyph, 4, 4);
 			}
 		}
 	}

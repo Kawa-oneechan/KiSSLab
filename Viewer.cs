@@ -21,6 +21,7 @@ namespace KiSSLab
 		private Point lastClick;
 		private Point? dragStart = null;
 		private Point startScroll;
+		private ButtonCel lastButton = null;
 
 		private PictureBox activeScreen;
 		private PictureBox screenPictureBox
@@ -264,6 +265,12 @@ namespace KiSSLab
 				startScroll = screenContainerPanel.AutoScrollPosition;
 			}
 
+			if (lastButton != null && lastButton == cel && lastButton.State == 2)
+			{
+				lastButton.State = 1;
+				DrawScene();
+			}
+
 			editor.Pick(part, cel);
 			if (Hilight) DrawScene();
 
@@ -357,6 +364,27 @@ namespace KiSSLab
 				mainStatusStrip.Items[2].Image = null;
 			}
 
+			if (cel != null && cel is ButtonCel)
+			{
+				if (lastButton != null && lastButton != cel)
+					lastButton.State = 0;
+				if (lastButton != cel)
+				{
+					lastButton = (ButtonCel)cel;
+					if (lastButton.State == 0)
+					{
+						lastButton.State = 2;
+						DrawScene();
+					}
+				}
+			}
+			else if (lastButton != null)
+			{
+				lastButton.State = 0;
+				lastButton = null;
+				DrawScene();
+			}
+
 			if (part == null)
 			{
 				if (dragStart == null)
@@ -417,6 +445,12 @@ namespace KiSSLab
 			{
 				dropped = held;
 				held = null;
+			}
+
+			if (lastButton != null && lastButton == HilightedCel && lastButton.State == 1)
+			{
+				lastButton.State = 2;
+				DrawScene();
 			}
 
 			Scene.Viewer.DrawScene();

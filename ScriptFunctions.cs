@@ -474,6 +474,56 @@ namespace KiSSLab
 		}
 
 		/// <summary>
+		/// Returns true if a part is colliding with a given other part, pixel-imperfectly
+		/// </summary>
+		[ScriptFunction("inside?")]
+		public object IsInside(params object[] args)
+		{
+			object checkThis = CelsOrPart(args[0]);
+			object checkThat = CelsOrPart(args[1]);
+			if (checkThis == null || checkThat == null)
+				return null;
+
+			if (checkThis is List<object>) checkThis = (Cel)((List<object>)checkThis)[0];
+			if (checkThat is List<object>) checkThat = (Cel)((List<object>)checkThat)[0];
+
+			var thisPart = (checkThis is Cel) ? ((Cel)checkThis).Part : (Part)checkThis;
+			var thatPart = (checkThat is Cel) ? ((Cel)checkThat).Part : (Part)checkThat;
+
+			if (!Tools.Overlap(thisPart.Position, thatPart.Position, thisPart.Bounds, thatPart.Bounds))
+				return false;
+
+			if (checkThis is Part)
+			{
+				if (checkThat is Part)
+					return Tools.Overlap(thisPart.Position, thatPart.Position, thisPart.Bounds, thatPart.Bounds);
+
+				foreach (var cA in thisPart.Cels)
+					if (Tools.Overlap(
+						new Point(thisPart.Position.X + cA.Offset.X, thisPart.Position.Y + cA.Offset.Y),
+						new Point(thatPart.Position.X + ((Cel)checkThat).Offset.X, thatPart.Position.Y + ((Cel)checkThat).Offset.Y),
+						cA.Image.Size, ((Cel)checkThat).Image.Size))
+						return true;
+			}
+			else if (checkThat is Part)
+			{
+				foreach (var cB in thatPart.Cels)
+					if (Tools.Overlap(
+						new Point(thisPart.Position.X + ((Cel)checkThis).Offset.X, thisPart.Position.Y + ((Cel)checkThis).Offset.Y),
+						new Point(thatPart.Position.X + cB.Offset.X, thatPart.Position.Y + cB.Offset.Y),
+						((Cel)checkThis).Image.Size, cB.Image.Size))
+						return true;
+			}
+			else
+				return Tools.Overlap(
+						new Point(thisPart.Position.X + ((Cel)checkThis).Offset.X, thisPart.Position.Y + ((Cel)checkThis).Offset.Y),
+						new Point(thatPart.Position.X + ((Cel)checkThat).Offset.X, thatPart.Position.Y + ((Cel)checkThat).Offset.Y),
+						((Cel)checkThis).Image.Size, ((Cel)checkThat).Image.Size);
+
+			return false;
+		}
+
+		/// <summary>
 		/// Returns the number of component cels of an object that are mapped.
 		/// </summary>
 		[ScriptFunction]

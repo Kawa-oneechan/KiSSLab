@@ -706,6 +706,10 @@ namespace KiSSLab
 		public Point[] InitialPositions { get; set; }
 		public Point InitialPosition { get { return InitialPositions[scene.Set]; } set { InitialPositions[scene.Set] = value; } }
 		[ScriptProperty]
+		public int X { get { return Position.X; } set { Position = new Point(value, Position.Y); } }
+		[ScriptProperty]
+		public int Y { get { return Position.Y; } set { Position = new Point(Position.X, value); } }
+		[ScriptProperty]
 		public int Fix { get; set; }
 		[ScriptProperty]
 		public int InitialFix { get; set; }

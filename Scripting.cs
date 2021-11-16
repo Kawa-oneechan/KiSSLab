@@ -172,7 +172,11 @@ namespace KiSSLab
 			else if (thing is Symbol)
 			{
 				//Handle variables
-				if (scriptVariables.ContainsKey((Symbol)thing))
+				if ((Symbol)thing == "set")
+					return Set;
+				else if ((Symbol)thing == "pal")
+					return Palette;
+				else if (scriptVariables.ContainsKey((Symbol)thing))
 					return scriptVariables[(Symbol)thing];
 				return thing;
 			}

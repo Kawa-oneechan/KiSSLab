@@ -67,7 +67,12 @@ namespace KiSSLab
 			var val = Evaluate(args[1]);
 			if (key == "true" || key == "false")
 				return key;
-			scriptVariables[key] = val;
+			else if (key == "set")
+				return ChangeSet(val);
+			else if (key == "pal")
+				return ChangeCol(val);
+			else
+				scriptVariables[key] = val;
 			return key;
 		}
 
@@ -549,10 +554,10 @@ namespace KiSSLab
 			return 0;
 		}
 
-		[ScriptFunction]
+		//[ScriptFunction]
 		public object ChangeCol(params object[] args)
 		{
-			var col = rand.Next(Evaluate<int>(args[0]));
+			var col = Evaluate<int>(args[0]);
 			if (col < 0) col = 0;
 			if (col >= Viewer.Scene.Palettes) col = Viewer.Scene.Palettes - 1;
 			Viewer.Scene.Palette = col;
@@ -560,10 +565,10 @@ namespace KiSSLab
 			return 0;
 		}
 
-		[ScriptFunction]
+		//[ScriptFunction]
 		public object ChangeSet(params object[] args)
 		{
-			var set = rand.Next(Evaluate<int>(args[0]));
+			var set = Evaluate<int>(args[0]);
 			if (set < 0) set = 0;
 			if (set >= Viewer.Scene.Sets) set = Viewer.Scene.Sets - 1;
 			Viewer.Scene.Set = set;

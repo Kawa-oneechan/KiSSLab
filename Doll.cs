@@ -702,13 +702,11 @@ namespace KiSSLab
 		[ScriptProperty]
 		public List<Cel> Cels { get; set; }
 		public Point[] Positions { get; set; }
+		[ScriptProperty]
 		public Point Position { get { return Positions[scene.Set]; } set { Positions[scene.Set] = value; } }
 		public Point[] InitialPositions { get; set; }
+		[ScriptProperty]
 		public Point InitialPosition { get { return InitialPositions[scene.Set]; } set { InitialPositions[scene.Set] = value; } }
-		[ScriptProperty]
-		public int X { get { return Position.X; } set { Position = new Point(value, Position.Y); } }
-		[ScriptProperty]
-		public int Y { get { return Position.Y; } set { Position = new Point(Position.X, value); } }
 		[ScriptProperty]
 		public int Fix { get; set; }
 		[ScriptProperty]

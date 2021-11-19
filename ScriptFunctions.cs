@@ -176,8 +176,10 @@ namespace KiSSLab
 		[ScriptFunction("==")]
 		public object Equal(params object[] args)
 		{
-			var a = Evaluate<int>(args[0]);
-			var b = Evaluate<int>(args[1]);
+			var a = Evaluate(args[0]);
+			var b = Evaluate(args[1]);
+			if (a is string)
+				return ((string)a).Equals(b.ToString());
 			return a == b;
 		}
 

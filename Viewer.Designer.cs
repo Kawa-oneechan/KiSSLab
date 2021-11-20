@@ -605,6 +605,7 @@
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Viewer_FormClosing);
 			this.ResizeEnd += new System.EventHandler(this.Viewer_ResizeEnd);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Viewer_KeyUp);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Viewer_KeyDown);
 			this.Move += new System.EventHandler(this.Viewer_Move);
 			this.Resize += new System.EventHandler(this.Viewer_Resize);
 			this.mainMenuStrip.ResumeLayout(false);

@@ -214,6 +214,13 @@ namespace KiSSLab
 			return true;
 		}
 
+		public bool RunEvent(string ev)
+		{
+			if (Events.ContainsKey(ev))
+				return RunEvent(Events[ev]);
+			return false;
+		}
+
 		public void Release(Part held, Cel cel)
 		{
 			//var somethingHappened = false;
@@ -233,35 +240,31 @@ namespace KiSSLab
 			//RELEASE: always applies
 			var fix = held.Locked ? "fixdrop" : "drop";
 			var maybe = string.Format("{0}|{1}", fix, cel.ID);
-			if (Events.ContainsKey(maybe))
+			if (RunEvent(maybe))
 			{
-				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
 			}
 			else
 			{
 				maybe = string.Format("{0}|{1}", fix, held.ID);
-				if (Events.ContainsKey(maybe))
+				if (RunEvent(maybe))
 				{
-					RunEvent(Events[maybe]);
 					Viewer.DrawScene();
 					return;
 				}
 			}
 			maybe = string.Format("release|{0}", cel.ID);
-			if (Events.ContainsKey(maybe))
+			if (RunEvent(maybe))
 			{
-				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
 			}
 			else
 			{
 				maybe = string.Format("release|{0}", held.ID);
-				if (Events.ContainsKey(maybe))
+				if (RunEvent(maybe))
 				{
-					RunEvent(Events[maybe]);
 					Viewer.DrawScene();
 					return;
 				}
@@ -328,38 +331,38 @@ namespace KiSSLab
 			//PRESS: always applies
 			var fix = held.Locked ? "fixcatch" : "catch";
 			var maybe = string.Format("{0}|{1}", fix, cel.ID);
-			if (Events.ContainsKey(maybe))
+			if (RunEvent(maybe))
 			{
-				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 				return;
 			}
 			else
 			{
 				maybe = string.Format("{0}|{1}", fix, held.ID);
-				if (Events.ContainsKey(maybe))
+				if (RunEvent(maybe))
 				{
-					RunEvent(Events[maybe]);
 					Viewer.DrawScene();
 					return;
 				}
 			}
 			maybe = string.Format("press|{0}", cel.ID);
-			if (Events.ContainsKey(maybe))
+			if (RunEvent(maybe))
 			{
-				RunEvent(Events[maybe]);
 				Viewer.DrawScene();
 			}
 			else
 			{
 				maybe = string.Format("press|{0}", held.ID);
-				if (Events.ContainsKey(maybe))
-				{
-					RunEvent(Events[maybe]);
+				if (RunEvent(maybe))
 					Viewer.DrawScene();
-					return;
-				}
 			}
+		}
+
+		public void Key(bool up, string key)
+		{
+			var maybe = string.Format("key{1}|{0}", key, up ? "release" : "press");
+			if (RunEvent(maybe))
+				Viewer.DrawScene();
 		}
 	}
 

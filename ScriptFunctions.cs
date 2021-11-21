@@ -357,7 +357,7 @@ namespace KiSSLab
 					return null;
 				}
 				var b = c[0];
-				if ((bool)Equal(a, b))
+				if ((c[0] is Symbol && (Symbol)c[0] == "else") || (bool)Equal(a, b))
 				{
 					for (var j = 1; j < c.Count; j++)
 						ret = Evaluate(c[j]);

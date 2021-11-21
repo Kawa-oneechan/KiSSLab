@@ -322,6 +322,76 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
+		public object Cond(params object[] args)
+		{
+			object ret = null;
+			for (var i = 0; i < args.Length; i++)
+			{
+				var c = args[i] as List<object>;
+				if (c == null)
+				{
+					Notify("Malformed cond statement.");
+					return null;
+				}
+				if ((c[0] is Symbol && (Symbol)c[0] == "else") || Evaluate<bool>(c[0]))
+				{
+					for (var j = 1; j < c.Count; j++)
+						ret = Evaluate(c[j]);
+					return ret;
+				}
+			}
+			return ret;
+		}
+
+		[ScriptFunction]
+		public object Switch(params object[] args)
+		{
+			object ret = null;
+			var a = args[0];
+			for (var i = 1; i < args.Length; i++)
+			{
+				var c = args[i] as List<object>;
+				if (c == null)
+				{
+					Notify("Malformed switch statement.");
+					return null;
+				}
+				var b = c[0];
+				if ((bool)Equal(a, b))
+				{
+					for (var j = 1; j < c.Count; j++)
+						ret = Evaluate(c[j]);
+					return ret;
+				}
+			}
+			return ret;
+		}
+
+		[ScriptFunction]
+		public object SwitchTo(params object[] args)
+		{
+			object ret = null;
+			var a = args[0];
+			var b = 0;
+			for (var i = 1; i < args.Length; i++, b++)
+			{
+				var c = args[i] as List<object>;
+				if (c == null)
+				{
+					Notify("Malformed switchto statement.");
+					return null;
+				}
+				if ((bool)Equal(a, b))
+				{
+					for (var j = 0; j < c.Count; j++)
+						ret = Evaluate(c[j]);
+					return ret;
+				}
+			}
+			return ret;
+		}
+	
+		[ScriptFunction]
 		public object ForEach(params object[] args)
 		{
 			var what = args[0] as List<object>;

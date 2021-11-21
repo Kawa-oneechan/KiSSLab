@@ -180,6 +180,8 @@ namespace KiSSLab
 			var b = Evaluate(args[1]);
 			if (a is string)
 				return ((string)a).Equals(b.ToString());
+			if (a is int && b is int)
+				return (int)a == (int)b;
 			return a == b;
 		}
 

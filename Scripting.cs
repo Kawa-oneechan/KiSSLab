@@ -221,6 +221,11 @@ namespace KiSSLab
 			return false;
 		}
 
+		public bool RunEvent(string ev, params object[] args)
+		{
+			return RunEvent(string.Format(ev, args));
+		}
+
 		public void Release(Part held, Cel cel)
 		{
 			//var somethingHappened = false;
@@ -239,31 +244,27 @@ namespace KiSSLab
 			//DROP: applies to all with a LESS THAN MAX FIX
 			//RELEASE: always applies
 			var fix = held.Fix > 0 ? "fixdrop" : "drop";
-			var maybe = string.Format("{0}|{1}", fix, cel.ID);
-			if (RunEvent(maybe))
+			if (RunEvent("{0}|{1}", fix, cel.ID))
 			{
 				Viewer.DrawScene();
 				return;
 			}
 			else
 			{
-				maybe = string.Format("{0}|{1}", fix, held.ID);
-				if (RunEvent(maybe))
+				if (RunEvent("{0}|{1}", fix, held.ID))
 				{
 					Viewer.DrawScene();
 					return;
 				}
 			}
-			maybe = string.Format("release|{0}", cel.ID);
-			if (RunEvent(maybe))
+			if (RunEvent("release|{0}", cel.ID))
 			{
 				Viewer.DrawScene();
 				return;
 			}
 			else
 			{
-				maybe = string.Format("release|{0}", held.ID);
-				if (RunEvent(maybe))
+				if (RunEvent("release|{0}", held.ID))
 				{
 					Viewer.DrawScene();
 					return;
@@ -278,7 +279,7 @@ namespace KiSSLab
 				{
 					scriptVariables["#a"] = held.ID;
 					scriptVariables["#b"] = other.ID;
-					maybe = string.Format("collide|{0}|{1}", held.ID, other.ID);
+					var maybe = string.Format("collide|{0}|{1}", held.ID, other.ID);
 
 					if (!string.IsNullOrWhiteSpace(Viewer.Config.AutoCollide) && other.ID == Viewer.Config.AutoCollide)
 						Clipboard.SetText(string.Format("((collide \"{0}\" \"{1}\") (moverel {2} {3}))", held.ID, other.ID, held.Position.X - other.Position.X, held.Position.Y - other.Position.Y));
@@ -329,39 +330,35 @@ namespace KiSSLab
 			//FIXCATCH: applies to FIXED
 			//CATCH: applies to all with a LESS THAN MAX FIX
 			//PRESS: always applies
-			var fix = held.Locked ? "fixcatch" : "catch";
-			var maybe = string.Format("{0}|{1}", fix, cel.ID);
-			if (RunEvent(maybe))
+			var fix = held.Fix > 0 ? "fixcatch" : "catch";
+			if (RunEvent("{0}|{1}", fix, cel.ID))
 			{
 				Viewer.DrawScene();
 				return;
 			}
 			else
 			{
-				maybe = string.Format("{0}|{1}", fix, held.ID);
-				if (RunEvent(maybe))
+				if (RunEvent("{0}|{1}", fix, held.ID))
 				{
 					Viewer.DrawScene();
 					return;
 				}
 			}
-			maybe = string.Format("press|{0}", cel.ID);
-			if (RunEvent(maybe))
+			if (RunEvent("press|{0}", cel.ID))
 			{
 				Viewer.DrawScene();
 			}
 			else
 			{
-				maybe = string.Format("press|{0}", held.ID);
-				if (RunEvent(maybe))
+				if (RunEvent("press|{0}", held.ID))
 					Viewer.DrawScene();
 			}
 		}
 
 		public void Key(bool up, string key)
 		{
-			var maybe = string.Format("key{1}|{0}", key, up ? "release" : "press");
-			if (RunEvent(maybe))
+			//TODO: consider passing key as a meta variable instead, encourage switch use.
+			if (RunEvent("key{1}|{0}", key, up ? "release" : "press"))
 				Viewer.DrawScene();
 		}
 	}

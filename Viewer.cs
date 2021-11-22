@@ -15,6 +15,8 @@ namespace KiSSLab
 {
 	public partial class Viewer : DarkForm
 	{
+		private const int FixSnap = 4;
+
 		//private Bitmap bitmap;
 		private Part held, dropped;
 		private Point heldOffset, fix;
@@ -290,19 +292,6 @@ namespace KiSSLab
 				{
 					held = part;
 					heldOffset = new Point(eX - part.Position.X, eY - part.Position.Y);
-					if (held.Fix > 0)
-					{
-						held.Fix--;
-						if (held.Fix == 0)
-						{
-							var maybe = string.Format("unfix|{0}", cel);
-							if (!Scene.RunEvent(maybe))
-							{
-								maybe = string.Format("unfix|{0}", held);
-								Scene.RunEvent(maybe);
-							}
-						}
-					}
 					fix = new Point(part.Position.X, part.Position.Y);
 				}
 			}
@@ -342,8 +331,18 @@ namespace KiSSLab
 
 				if (held.Fix > 0)
 				{
-					if (Tools.Distance(fix, held.Position) > 16)
+					if (Tools.Distance(fix, held.Position) > FixSnap)
 					{
+						held.Fix--;
+						if (held.Fix == 0)
+						{
+							var maybe = string.Format("unfix|{0}", HilightedCel);
+							if (!Scene.RunEvent(maybe))
+							{
+								maybe = string.Format("unfix|{0}", held);
+								Scene.RunEvent(maybe);
+							}
+						}
 						held.Position = new Point(fix.X, fix.Y);
 						held = null;
 					}
@@ -465,6 +464,21 @@ namespace KiSSLab
 			if (eLocation.Equals(lastClick) && HilightedCel != null)
 			{
 				//Scene.Click(HilightedCel);
+			}
+
+			if (held != null && held.Fix > 0)
+			{
+				held.Position = new Point(fix.X, fix.Y);
+				held.Fix--;
+				if (held.Fix == 0)
+				{
+					var maybe = string.Format("unfix|{0}", HilightedCel);
+					if (!Scene.RunEvent(maybe))
+					{
+						maybe = string.Format("unfix|{0}", held);
+						Scene.RunEvent(maybe);
+					}
+				}
 			}
 
 			/*

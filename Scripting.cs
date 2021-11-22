@@ -238,7 +238,7 @@ namespace KiSSLab
 			//FIXDROP: applies to FIXED
 			//DROP: applies to all with a LESS THAN MAX FIX
 			//RELEASE: always applies
-			var fix = held.Locked ? "fixdrop" : "drop";
+			var fix = held.Fix > 0 ? "fixdrop" : "drop";
 			var maybe = string.Format("{0}|{1}", fix, cel.ID);
 			if (RunEvent(maybe))
 			{

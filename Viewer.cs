@@ -417,10 +417,10 @@ namespace KiSSLab
 			if (part == null)
 			{
 				if (dragStart == null)
-					Cursor = Cursors.Default;
+					activeScreen.Cursor = Cursors.Default;
 				else
 				{
-					Cursor = Cursors.SizeAll;
+					activeScreen.Cursor = Cursors.SizeAll;
 					var dragPoint = screenContainerPanel.PointToClient(screenPictureBox.PointToScreen(realLocation));
 					if (screenContainerPanel.HorizontalScroll.Visible)
 					{
@@ -431,9 +431,9 @@ namespace KiSSLab
 				}
 			}
 			else if (part.Locked)
-				Cursor = Cursors.Default;
+				activeScreen.Cursor = Cursors.Default;
 			else
-				Cursor = Cursors.Hand;
+				activeScreen.Cursor = Cursors.Hand;
 		}
 
 		private void Screen_MouseUp(object sender, MouseEventArgs e)

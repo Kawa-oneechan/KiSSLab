@@ -45,6 +45,7 @@
 			this.showHighlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.alignToGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.xRayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainToolStrip = new DarkUI.Controls.DarkToolStrip();
@@ -205,7 +206,8 @@
 			this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showHighlightToolStripMenuItem,
             this.alignToGridToolStripMenuItem,
-            this.propertiesToolStripMenuItem});
+            this.propertiesToolStripMenuItem,
+            this.xRayToolStripMenuItem});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
 			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
 			this.toolsToolStripMenuItem.Text = "&Tools";
@@ -235,6 +237,15 @@
 			this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
 			this.propertiesToolStripMenuItem.Text = "Properties";
 			this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.ShowEditor_Click);
+			// 
+			// xRayToolStripMenuItem
+			// 
+			this.xRayToolStripMenuItem.CheckOnClick = true; 
+			this.xRayToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Xray_Dark;
+			this.xRayToolStripMenuItem.Name = "xRayToolStripMenuItem";
+			this.xRayToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+			this.xRayToolStripMenuItem.Text = "X-Ray";
+			this.xRayToolStripMenuItem.Click += new System.EventHandler(this.xRayToolStripMenuItem_Click);
 			// 
 			// helpToolStripMenuItem
 			// 
@@ -600,5 +611,6 @@
 		private ToolStripZoomBarItem toolStripZoomBar;
 		private System.Windows.Forms.ToolStripLabel zoomToolStripLabel;
 		private MyTab viewersTabControl;
+		private System.Windows.Forms.ToolStripMenuItem xRayToolStripMenuItem;
 	}
 }

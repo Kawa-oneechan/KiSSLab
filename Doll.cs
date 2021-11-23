@@ -569,6 +569,8 @@ namespace KiSSLab
 				if (cel.Opacity == 0)
 					continue;
 				matrix[3][3] = cel.Opacity / 256.0f;
+				if (Viewer.XRay)
+					matrix[3][3] *= 0.5f;
 				attrs.SetColorMatrix(new ColorMatrix(matrix));
 
 				try

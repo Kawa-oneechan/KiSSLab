@@ -313,6 +313,26 @@ namespace KiSSLab.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Xray_Dark {
+            get {
+                object obj = ResourceManager.GetObject("Xray_Dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Xray_Light {
+            get {
+                object obj = ResourceManager.GetObject("Xray_Light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Zoom_Dark {
             get {
                 object obj = ResourceManager.GetObject("Zoom_Dark", resourceCulture);

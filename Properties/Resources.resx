@@ -199,4 +199,10 @@
   <data name="Zoom_Light" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Zoom_Light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Xray_Dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Xray_Dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Xray_Light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Xray_Light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

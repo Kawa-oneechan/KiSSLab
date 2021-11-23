@@ -102,6 +102,8 @@ namespace KiSSLab
 		public static SoundSystem Sound;
 		public static MyConfig Config;
 
+		public static bool XRay;
+
 		public Viewer(string[] args)
 		{
 			InitializeComponent();
@@ -630,6 +632,7 @@ namespace KiSSLab
 				unfixToolStripMenuItem.Image = unfixContextMenuItem.Image = global::KiSSLab.Properties.Resources.Unlock_Light;
 				refixToolStripMenuItem.Image = refixContextMenuItem.Image = global::KiSSLab.Properties.Resources.Lock_Light;
 				zoomToolStripLabel.Image = global::KiSSLab.Properties.Resources.Zoom_Light;
+				xRayToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Xray_Light;
 			}
 			else
 			{
@@ -668,6 +671,7 @@ namespace KiSSLab
 				unfixToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Unlock_Dark;
 				refixToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Lock_Dark;
 				zoomToolStripLabel.Image = global::KiSSLab.Properties.Resources.Zoom_Dark;
+				xRayToolStripMenuItem.Image = global::KiSSLab.Properties.Resources.Xray_Dark;
 			}
 			editor.UpdateColors();
 			foreach (var dd in mainMenuStrip.Items.OfType<ToolStripMenuItem>())
@@ -1042,6 +1046,12 @@ namespace KiSSLab
 				else if (delta > 0 && toolStripZoomBar.Value < 3)
 					toolStripZoomBar.Value++;
 			}
+		}
+
+		private void xRayToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			XRay = xRayToolStripMenuItem.Checked;
+			DrawScene();
 		}
 	}
 

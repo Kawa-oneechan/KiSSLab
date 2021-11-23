@@ -266,8 +266,8 @@ namespace KiSSLab
 			var part = Scene.GetPartFromPoint(realLocation, out cel);
 			if (part != null)
 			{
-				unfixToolStripMenuItem.Enabled = unfixContextMenuItem.Enabled = part.Locked;
-				refixToolStripMenuItem.Enabled = refixContextMenuItem.Enabled = !part.Locked;
+				unfixToolStripMenuItem.Enabled = unfixContextMenuItem.Enabled = part.Fix > 0;
+				refixToolStripMenuItem.Enabled = refixContextMenuItem.Enabled = part.Fix < 0 && part.InitialFix > 0;
 			}
 			else
 			{

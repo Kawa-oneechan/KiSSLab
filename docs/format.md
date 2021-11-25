@@ -31,7 +31,7 @@ As such:
 ````clojure
 (cels
     (file "pants") ; Defines a part "pants", with a cel "pants", using "pants.png", starting in the top-left corner.
-	(file "hair" partof "body") ; Defines a part "body", with a cel "hair", using "hair.png".
+    (file "hair" partof "body") ; Defines a part "body", with a cel "hair", using "hair.png".
     (file "front-arm" partof "body") ; Adds a cel "front-arm", using "front-arm.png", to the "body" part that "hair" started.
     (file "body" id "main-body" partof "body") ; Adds a cel "main-body", using "body.png", to the "body" part.
     
@@ -42,7 +42,7 @@ As such:
 )
 ````
 
-The  `pos` argument is a little intricate. It can take a single two-value -- `pos (16 16)` -- and the part will appear on that exact spot in all ten sets, or it can take a list of position values, one for each set, in which case:
+The `pos` argument is a little intricate. It can take a single two-value -- `pos (16 16)` -- and the part will appear on that exact spot in all ten sets, or it can take a list of position values, one for each set, in which case:
 
 * An `(x y)` coordinate pair works as it should, setting the part's position for that set.
 * An `(x y >)` coordinate pair with a `>` added copies that position to all further sets. `pos (12 34)` is in fact equivalent to `pos ((12 34 >))`.
@@ -71,10 +71,10 @@ As a series
 
 ```clojure
 (background  ;<-from-> <---to---> deg
-	(gradient 39 89 91 34 204 221 45) ;set 0, also used for sets 4-10 if available
-	(gradient 24 24 24 103 33 68) ;set 1, 90 degrees is implied
-	("party")
-	(34 204 221)
+    (gradient 39 89 91 34 204 221 45) ;set 0, also used for sets 4-10 if available
+    (gradient 24 24 24 103 33 68) ;set 1, 90 degrees is implied
+    ("party")
+    (34 204 221)
 )
 ```
 
@@ -89,7 +89,7 @@ Simply specifies which sets a cel should appear on if the `on` argument is not u
 (cels
     (file "magic-wand") ; Appears on sets 0, 1, 2, and 3, but not 4 and higher.
     ; Imagine more cels here, all of them without an `on`.
-	(file "balloon" on "2") ; Only appears on set 2, none of the others.
+    (file "balloon" on "2") ; Only appears on set 2, none of the others.
 )
 ```
 
@@ -101,34 +101,34 @@ The `events` form likewise takes a list, this time of event structures. Each eve
 
 ```clojure
 (
-	(screen 640 400) ;sets the playfield size
+    (screen 640 400) ;sets the playfield size
     (background 100 149 237) ;sets the background color
     ;(background gradient 100 149 237 67 100 160 45) ;use a gradient at a 45-degree angle as the background
-	(cels
-		(file "shorts" offset (0 2) pos (240 94))
-		(file "shirt" offset (0 2) pos (240 16))
-		(file "suit" id "bathing suit" pos ((240 140) (260 160) (280 180)) on "012")
-		(file "leftleg" pos (200 128))
-		(file "rightleg" pos (160 128))
-		(file "bottom" pos (73 131) fix 4)
-		(file "top" pos (61 92) fix 4)
-		(file "base" pos (4 4) locked)
-		(file "shorts_" partof "shorts" offset (6 0))
-		(file "shirt_" partof "shirt" offset (27 0))
-	)
-	(events
+    (cels
+        (file "shorts" offset (0 2) pos (240 94))
+        (file "shirt" offset (0 2) pos (240 16))
+        (file "suit" id "bathing suit" pos ((240 140) (260 160) (280 180)) on "012")
+        (file "leftleg" pos (200 128))
+        (file "rightleg" pos (160 128))
+        (file "bottom" pos (73 131) fix 4)
+        (file "top" pos (61 92) fix 4)
+        (file "base" pos (4 4) locked)
+        (file "shorts_" partof "shorts" offset (6 0))
+        (file "shirt_" partof "shirt" offset (27 0))
+    )
+    (events
         ; Long form, specifying the same parts again.
-		((collide "bathing suit" "base")
-			(moverel "bathing suit" "base" 57 66)
+        ((collide "bathing suit" "base")
+            (moverel "bathing suit" "base" 57 66)
         )
         ; Short form -- whatever collided is implied for the moverel command.
-		((collide "shirt" "base") (moverel 54 59))
-		((collide "shorts" "base") (moverel 66 121))
-		((collide "top" "base") (moverel 57 88))
-		((collide "bottom" "base") (moverel 69 127))
-		((collide "rightleg" "base") (moverel 25 140))
-		((collide "leftleg" "base") (moverel 54 231))
-	)
+        ((collide "shirt" "base") (moverel 54 59))
+        ((collide "shorts" "base") (moverel 66 121))
+        ((collide "top" "base") (moverel 57 88))
+        ((collide "bottom" "base") (moverel 69 127))
+        ((collide "rightleg" "base") (moverel 25 140))
+        ((collide "leftleg" "base") (moverel 54 231))
+    )
 )
 
 ```

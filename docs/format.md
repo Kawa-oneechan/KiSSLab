@@ -17,8 +17,8 @@ The `cels` form takes a list with the following items:
 * `partof`: the ID of another cel, used to build multi-cel parts.
 * `pos`: the starting position for the part. See below.
 * `offset`: a two-value list to specify an extra offset for this cel as part of a multi-cel part, so you can crop your PNG files.
-* `fix`: a value determining how many attempts are needed before the part comes off and can be moved freely. A value of 9999 or higher makes it permanently stuck.
-* `locked`: a clearer alternative to `fix 9999` that does not take any arguments.
+* `fix`: a value determining how many attempts are needed before the part comes off and can be moved freely. A value of 100 or higher makes it permanently stuck, but the `max-fix` form can replace this value.
+* `locked`: a clearer alternative to `fix 100` that does not take any arguments.
 * `alpha`: a value from 0 to 255 to determine the opacity of the cel. PNG already allows this but this lets you *change* the cel's opacity on the fly.
 * `ghost`: when set, the cel can't be clicked at all.
 * `unmapped`: makes the cel start out invisible, as if you used an `unmap` command in the `initialize` script event.
@@ -49,6 +49,21 @@ The `pos` argument is a little intricate. It can take a single two-value -- `pos
 * A single `*` copies the coordinate for the first set. If this *is* the first set, it's equal to `(0 0)`.
 
 Therefore, an expression like `pos ((556 22) (561 76) (561 76) (316 88 >) (561 76))` would set the first set's coordinates to 556 by 22, the second and third to 561 by 76, the fourth to 316 by 88, the fifth to 561 by 76 again, and the sixth through tenth to 316 by 88 again, because that one had a `>`.
+
+#### Other types of cels
+
+If, instead of `file` you start a cel off with `label` or `button`, you can make arbitrary text labels and icon buttons.
+
+For a text label:
+
+* `text`: the text to show. There is no default.
+* `width`: the maximum width of the text before it tries to wrap to a new line. By default, it'll just try to fit the whole line.
+* `color`: a three-value list with the RGB values to draw the text in. Defaults to black.
+* `font`: either a single string specifying the font name (`font "Impact"`) or a list with a font name and point size, or font name, size, and any combination of the symbols `bold`, `italic`, and `center`.
+
+For a button, the very next thing needs to be an image file, like with `file`. This will be the image shown on the button, and the button will extend four pixels in all directions. Buttons act just like cels, but will automatically display "hot" and "pressed" states.
+
+Both of these special cels *are still cels*, and as such they too have IDs, can be a part of something bigger, be fixed, appear only on certain sets, and have alpha blending applied.
 
 ### `background`
 
@@ -92,6 +107,10 @@ Simply specifies which sets a cel should appear on if the `on` argument is not u
     (file "balloon" on "2") ; Only appears on set 2, none of the others.
 )
 ```
+
+### `max-fix`
+
+Allows you to specify another value to stand for "absolutely unmovable". As stated, this is 100 by default.
 
 ### `events`
 

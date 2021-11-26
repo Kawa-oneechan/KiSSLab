@@ -12,7 +12,7 @@ Because of this, especially the difficulty in creating `cel` files, Kawa decided
 
 * Uses regular `png` files instead of `cel`, and `zip` files instead of  `lzh`. Therefore, no specialized tools are needed to create a doll.
 * Supports Windows 10 dark and light modes.
-* Scripting capability roughly equal to FKiSS level 1, plus nice things like conditional expressions of arbitrary complexity and functions that can return values.
+* Scripting capability roughly equal to FKiSS level 3, plus nice things like conditional expressions of arbitrary complexity and functions that can return values.
 * Quick reload to speed up doll development.
 * Supports a great many sound file formats via FMOD (optionally).
 

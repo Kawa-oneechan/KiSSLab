@@ -295,6 +295,12 @@ namespace KiSSLab
 		}
 
 		[ScriptFunction]
+		public object Trim(params object[] args)
+		{
+			return Evaluate(args[0]).ToString().Trim();
+		}
+
+		[ScriptFunction]
 		public object If(params object[] args)
 		{
 			var expression = Evaluate<bool>(args[0]);
@@ -390,14 +396,26 @@ namespace KiSSLab
 			}
 			return ret;
 		}
-	
+
+		[ScriptFunction]
+		public object Range(params object[] args)
+		{
+			var start = Evaluate<int>(args[0]);
+			var end = Evaluate<int>(args[1]);
+			var ret = new List<object>();
+			for (var i = start; i <= end; i++)
+				ret.Add(i);
+			return ret;
+		}
+
 		[ScriptFunction]
 		public object ForEach(params object[] args)
 		{
-			var what = args[0] as List<object>;
-			var list = Evaluate<List<object>>(what[0]);
-			var iterator = what[1] as Symbol;
-			var block = args.Skip(1).ToList();
+			var list = Evaluate(args[0]) as List<object>;
+			if (list == null)
+				return null;
+			var iterator = args[1] as Symbol;
+			var block = args.Skip(2).ToList();
 			object ret = null;
 			foreach (var item in list)
 			{

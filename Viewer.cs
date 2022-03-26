@@ -25,6 +25,7 @@ namespace KiSSLab
 		private Point startScroll;
 		private ButtonCel lastButton = null;
 		private Cel lastCelPointed = null;
+		private Cursor dragCursor = null;
 
 		private PictureBox activeScreen;
 		private PictureBox screenPictureBox
@@ -186,6 +187,9 @@ namespace KiSSLab
 			AlarmTimer.Interval = 5;
 			AlarmTimer.Tick += new EventHandler(AlarmTimer_Tick);
 
+			var dragCursorMemoryStream = new MemoryStream(global::KiSSLab.Properties.Resources.dragging);
+			dragCursor = new Cursor(dragCursorMemoryStream);
+
 			if (args.Length == 1)
 			{
 				if (args[0].EndsWith("lisp", StringComparison.CurrentCultureIgnoreCase))
@@ -320,6 +324,8 @@ namespace KiSSLab
 			if (held != null)
 			{
 				held.Position = new Point(eX - heldOffset.X, eY - heldOffset.Y);
+
+				activeScreen.Cursor = dragCursor;
 
 				if (held.Position.X < 0)
 					held.Position = new Point(0, held.Position.Y);

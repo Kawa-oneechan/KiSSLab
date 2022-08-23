@@ -1,0 +1,125 @@
+### Level 1
+- [x] alarm(num)
+- [x] begin()
+- [x] catch(obj/cel)
+- [x] col(num)
+- [x] drop(obj/cel)
+- [ ] end
+- [x] fixcatch(obj/cel)
+- [x] fixdrop(obj/cel)
+- [x] initialize
+- [ ] ~never~
+- [x] press(obj/cel)
+- [x] release(obj/cel)
+- [x] set(num)
+- [x] unfix(obj/cel)
+- [x] altmap(obj/cel)
+- [x] changecol(num)
+- [x] changeset(num)
+- [ ] ~debug(str)~
+- [x] map(obj/cel)
+- [x] move(obj,val,val)
+- [ ] ~nop~
+- [ ] ~quit~
+- [x] randomtimer(,val,val)
+- [x] sound(file)
+- [ ] ~shell(cmd)~
+- [x] timer(id,val)
+- [x] transparent(obj/cel,val)
+- [x] unmap(obj/cel)
+- [ ] ~viewport(val,val)~
+- [ ] ~windowsize(val,val)~
+
+### Level 2
+- [ ] apart(cel,cel)
+- [X] collide(cel,cel)
+- [X] in(obj,obj)
+- [ ] out(obj,obj)
+- [ ] stillin(obj,obj)
+- [ ] stillout(obj,obj)
+- [ ] ~version(num)~
+- [X] iffixed(obj,val,val)
+- [X] ifmapped(cel,val,val)
+- [ ] ifmoved(cel,val,val)
+- [X] ifnotfixed(obj,val,val)
+- [X] ifnotmapped(cel,val,val)
+- [ ] ifnotmoved(cel,val,val)
+- [X] movebyx(obj,obj,val)
+- [X] movebyy(obj,obj,val)
+- [X] moverandx(obj,val,val)
+- [X] moverandy(obj,val,val)
+- [X] moveto(obj,val,val)
+- [X] movetorand(obj)
+- [X] music(file)
+- [X] notify(text)
+- [X] setfix(obj,val)
+
+### Level 3
+- [ ] ~label(num)~
+- [ ] ~overflow~
+- [X] add(var,val,val)
+- [X] div(var,val,val)
+- [X] else
+- [X] endif
+- [ ] ~exitevent~
+- [ ] ghost(obj/cel,bool)
+- [ ] ~gosub(val)~
+- [ ] ~gosubrandom(val)~
+- [ ] ~goto(var/num)~
+- [X] ifequal(val,val)
+- [X] ifgreaterthan(val,val)
+- [X] iflessthan(val,val)
+- [X] ifnotequal(val,val)
+- [X] let(var,val)
+- [ ] letcatch(var)
+- [X] letcollide(var,cel,cel)
+- [X] letfix(var,obj)
+- [X] letinside(var,obj,obj)
+- [X] letmapped(var,cel)
+- [ ] letmousex(var)
+- [ ] letmousey(var)
+- [X] letobjectx(var,obj)
+- [X] letobjecty(var,obj)
+- [X] letpal(var)
+- [X] letset(var)
+- [X] lettransparent(var,cel)
+- [X] mod(var,val,val)
+- [X] mul(var,val,val)
+- [X] random(var,val,val)
+- [X] sub(var,val,val)
+
+### Level 4
+- [ ] ~detached(obj)~
+- [X] keypress(key)
+- [X] keyrelease(key)
+- [X] mousein(ogc)
+- [X] mouseout(ogc)
+- [ ] ~attach(obj,obj)~
+- [ ] deletevalue(token)
+- [ ] ~detach(obj)~
+- [X] elseifequal(val,val)
+- [X] elseifgreaterthan(val,val)
+- [X] elseiflessthan(val,val)
+- [X] elseifnotequal(val,val)
+- [ ] ~exitloop~
+- [ ] ~glue(obj,obj)~
+- [ ] ~letchild(var,obj)~
+- [ ] ~letframe(var,group)~
+- [ ] ~letheight(var,obj)~
+- [X] letinitx(var,obj)
+- [X] letinity(var,obj)
+- [ ] ~letkcf(var,obj/cel)~
+- [ ] letkeys(var,keys)
+- [ ] letkeymap(var,keys)
+- [ ] ~letparent(var,obj)~
+- [ ] ~letsibling(var,obj)~
+- [ ] ~lettimer(var,timer)~
+- [ ] ~letwidth(var,obj)~
+- [ ] loadvalue(var,token)
+- [ ] ~repeat(id,val,var)~
+- [ ] restrictx(obj,val,val)
+- [ ] restricty(obj,val,val)
+- [ ] savevalue(token,val)
+- [ ] ~setframe(group,val)~
+- [ ] ~setkcf(obj/cel,val)~
+- [ ] valuepool(name)

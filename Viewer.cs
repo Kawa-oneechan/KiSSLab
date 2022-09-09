@@ -206,6 +206,8 @@ namespace KiSSLab
 
 		void Viewer_KeyUp(object sender, KeyEventArgs e)
 		{
+			if (Scene == null)
+				return;
 			if (e.Control && (e.KeyValue >= 48 && e.KeyValue <= 57))
 			{
 				((ToolStripButton)mainToolStrip.Items.Find("s" + Scene.Set.ToString(), false)[0]).Checked = false;
@@ -233,6 +235,8 @@ namespace KiSSLab
 
 		void Viewer_KeyDown(object sender, KeyEventArgs e)
 		{
+			if (Scene == null)
+				return;
 			if (!e.Control)
 				Scene.Key(false, e.KeyCode.ToString().ToLowerInvariant());
 		}

@@ -1,5 +1,6 @@
 bin/
 lettie/
+newlettie/
 obj/
 sauce/
 *.cachefile
